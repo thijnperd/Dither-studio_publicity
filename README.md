@@ -10,49 +10,75 @@ manager, no server. GitHub Pages serves this folder as it is.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The page: a pinned stage the scroll drives, the film with its own controls, the chapter strip, the proofs band, the download band |
+| `index.html` | The page: a pinned stage the scroll drives, the chapter strip, the proofs band, the download band |
 | `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF` |
-| `site.js` | The scroll stage, the film controls, the ghost pointer demonstration, the GSAP layer |
-| `assets/film.mp4` | The film. 40 s, 1920 × 1080, h264, 24 fps, 27 MB |
-| `assets/film-scrub.mp4` | The same film at 1280 × 720, 8 MB, keyed every 12 frames, for the scroll stage |
-| `assets/poster.png` | Its poster frame, used as the `og:image` and as the first frame both videos show |
+| `site.js` | The scroll stage, the chapter jumps, the ghost pointer demonstration, the GSAP layer |
+| `assets/film.mp4` | The film. 40 s, 1920 × 1080, h264, 24 fps, 27 MB. The archival copy, linked from the colophon |
+| `assets/film-scrub.mp4` | The same film at 1280 × 720, 8 MB, keyed every 12 frames. This is the one the page plays |
+| `assets/poster.png` | Its poster frame, used as the `og:image` and as the stage's first frame |
 | `assets/proof-*.png` | Two proofs from the app's own engine |
 | `404.html` | The designed not-found page |
 
 ## How the page works
 
-- **The film is the scroll.** The stage pins for about three and a half screens;
-  scroll position is the playhead, so the film runs forwards and backwards as you
-  scroll. Six captions cross-fade at the montage's real beats, and the corner
-  readout names the chapter and the time.
-- **A second encode feeds that stage.** Scrubbing a video means seeking it, and
-  seeking an ordinary h264 file means decoding from the last keyframe, which
-  stutters when the playhead jumps. `assets/film-scrub.mp4` is the same film
-  re-encoded at 720p with a keyframe every 12 frames (`-g 12 -sc_threshold 0`),
-  so every half second is independently decodable:
+- **The film is the scroll, and the scroll is the only control.** The stage pins
+  for three and a half screens and the scroll position is the playhead, so the
+  film runs forwards and backwards under the wheel. Five captions cross-fade at
+  the montage's real beats, and the corner readout names the chapter and the
+  time.
+- **There is no second player.** The film cannot be restarted, replayed or
+  scrubbed with a widget, on purpose: one control surface, one film. The chapter
+  strip below the stage does not play anything either. Each button tweens the
+  page to the scroll position that corresponds to that frame, so the film
+  follows the page.
+- **A second encode feeds the stage.** Scrubbing means seeking, and seeking an
+  ordinary h264 file means decoding from the last keyframe, which stutters when
+  the playhead jumps. `assets/film-scrub.mp4` is 720p with a keyframe every 12
+  frames (`-g 12 -sc_threshold 0`), so every half second is independently
+  decodable:
   ```bash
   ffmpeg -i assets/film.mp4 -an -vf "scale=1280:-2:flags=lanczos" \
     -c:v libx264 -preset veryfast -crf 25 -g 12 -keyint_min 12 \
     -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-scrub.mp4
   ```
-- **The watch section is the same film, answering to you.** A real `<video>`
-  element, so play, pause, scrubbing, keyboard seeking and full screen are the
-  browser's own behaviour rather than a reinvention.
-- **The ghost pointer** demonstrates those controls: it moves to Play, presses
-  it, jumps to the fourth chapter, drags the scrubber and hovers the download
-  button. It is a demonstration of a pointer, drawn as one (lapis arrow, ivory
-  label); the native cursor is never hidden. Any real input stops it, and
-  *Show me again* restarts it.
-- **The chapters** are the montage's real beats. Their times come from the film's
-  own scene table (`hook 0, source 5, press 11, type 20, many 26.6, close 33.4`),
-  so a chapter lands on the frame it describes.
+- **The ghost pointer** moves to the second chapter, presses it, and then points
+  at the download button, so the page demonstrates its own interaction. It is a
+  demonstration of a pointer, drawn as one (lapis arrow, ivory label); the
+  native cursor is never hidden. Any real input stops it, and *Show me again*
+  restarts it.
 - **The counts** in the proofs band are the app's catalogue lengths: 46
   algorithms, 24 palettes, 13 effects, 11 tone maps, 21 recipes.
-- **Reduced motion** unpins the stage into a readable list, turns off the ghost
-  and leaves every control working.
+- **Reduced motion** unpins the stage into a readable list, turns off the ghost,
+  and leaves the chapter jumps as plain jumps.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
-no cookies, no analytics and no third-party fonts.
+no cookies, no analytics and no third-party fonts. Labels are set in the text
+face, not in monospace.
+
+## The deslop passes
+
+Two checkers run over this page, and both must be clean before a publish.
+
+```bash
+# the AI-tells scanner from https://github.com/yetone/kill-ai-slop
+# installed at ~/.claude/skills/kill-ai-slop
+node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
+
+# the design detector from the impeccable skill
+~/.claude/skills/impeccable/scripts/impeccable detect --json index.html
+```
+
+`kill-ai-slop` reports 35 tells; two hits here are deliberate and carry scoped
+`deslop-ignore-next-line` comments in `style.css` with the reason on the line:
+the spotlight vignette over the film (the page's whole visual idea is a
+spotlight, and the gradient is what keeps a caption legible on a bright frame)
+and the 50% radius on the pointer ripple (a click reads as a ring, not a card).
+Everything it did catch was fixed: eleven monospace labels moved to the text
+face, and the loader, the player and their CSS were deleted.
+
+`impeccable` reports only `cramped-padding` on the hairline grids whose cells
+already carry 16 to 24 px of padding, which is a false positive on that
+construction.
 
 ## The film's source
 
@@ -70,7 +96,8 @@ cp publicity/out/poster.png                <this repo>/assets/poster.png
 
 Re-render it whenever the app's interface changes, or the film will show a
 window that no longer exists. If the scene times move, update `CHAPTERS` in
-`site.js`: the scroll stage and the chapter strip both read it.
+`site.js`: the scroll stage, the corner readout and the chapter strip all read
+it.
 
 ## Deploying
 
@@ -92,11 +119,11 @@ npx serve .            # or: python -m http.server 8080
 ```
 
 Open `http://localhost:8080/` and confirm: the stage pins while you scroll and
-the film advances with it (the corner timecode follows), a chapter seeks in the
-watch section, the scrubber drags, the ghost runs once and stops when you move,
-and the page holds up at 390 px wide. Serve with a Range-capable server: Python's
-`http.server` ignores `Range`, so the video cannot seek and the stage will look
-frozen.
+the film advances with it (the corner timecode follows), a chapter button moves
+the page and the film together, the ghost runs once and stops when you move, no
+video can be replayed anywhere on the page, and the layout holds at 390 px wide.
+Serve with a Range-capable server: Python's `http.server` ignores `Range`, so
+the video cannot seek and the stage will look frozen.
 
 ## Licence
 

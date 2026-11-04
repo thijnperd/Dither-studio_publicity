@@ -18,7 +18,7 @@
 </head>
 <body class="no-js">
 
-<a class="skip" href="#film">Skip to the controls</a>
+<a class="skip" href="#stage">Skip to the film</a>
 <div class="rule-progress" aria-hidden="true"><i id="scrollbar"></i></div>
 
 <div class="loader" id="loader" aria-hidden="true">
@@ -32,7 +32,7 @@
     Dither Studio
   </a>
   <nav class="masthead__nav" aria-label="Sections">
-    <a href="#film">Film</a>
+    <a href="#stage">Film</a>
     <a href="#chapters">Chapters</a>
     <a href="#proofs">Proofs</a>
     <a class="masthead__take" href="#take">Take it home</a>
@@ -43,7 +43,7 @@
 
   <div class="opening">
     <h1>Let there<br>be pixels.</h1>
-    <p class="opening__lede">An offline press for images: forty-six dither algorithms, twenty-four palettes, type set in characters. Scroll, and the film below runs with you.</p>
+    <p class="opening__lede">An offline press for images: forty-six dither algorithms, twenty-four palettes, type set in characters. The film below is the press running, and your scroll is its playhead.</p>
     <p class="opening__cue"><i aria-hidden="true"></i>Scroll to run the film</p>
   </div>
 
@@ -82,59 +82,10 @@
     </div>
   </section>
 
-  <section class="watch" id="film" aria-labelledby="watch-title">
-    <div class="watch__head">
-      <h2 id="watch-title">Watch it straight through</h2>
-      <p>The scroll above is a preview. Here the film answers to you: play it, scrub it, jump to a beat, or run it full screen.</p>
-    </div>
-
-    <figure class="screen">
-      <div class="screen__frame" id="frame">
-        <span class="tick tick--tl" aria-hidden="true"></span>
-        <span class="tick tick--tr" aria-hidden="true"></span>
-        <span class="tick tick--bl" aria-hidden="true"></span>
-        <span class="tick tick--br" aria-hidden="true"></span>
-        <video id="video" poster="assets/poster.png" preload="metadata" playsinline muted
-               width="1920" height="1080">
-          <source src="assets/film.mp4" type="video/mp4">
-          <p>Your browser cannot play this film. <a href="assets/film.mp4">Download it instead</a>.</p>
-        </video>
-        <button class="screen__start" id="play" type="button" aria-label="Play the film">
-          <span class="screen__startIcon" aria-hidden="true"></span>
-          <span class="screen__startLabel">Play the film</span>
-        </button>
-      </div>
-
-      <div class="controls">
-        <button class="ctl ctl--play" id="toggle" type="button" aria-controls="video">
-          <span class="ctl__glyph" aria-hidden="true"></span><span id="toggleLabel">Play</span>
-        </button>
-
-        <div class="scrub" id="scrub" role="slider" tabindex="0"
-             aria-label="Position in the film" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"
-             aria-valuetext="0 of 40 seconds">
-          <div class="scrub__track"><i class="scrub__fill" id="fill"></i></div>
-          <span class="scrub__knob" id="knob"></span>
-        </div>
-
-        <p class="time" id="time"><span id="now">00:00</span> / 00:40</p>
-
-        <button class="ctl" id="fs" type="button">Full screen</button>
-      </div>
-
-      <figcaption class="screen__note">Every window in this film was captured from the running app, and every proof is the engine's own output. Nothing here is a mock-up.</figcaption>
-    </figure>
-
-    <div class="coach" id="coach">
-      <p class="coach__line" id="hint">A ghost arrow is about to show you these controls. Touch anything and it steps aside.</p>
-      <button class="coach__again" id="again" type="button" hidden>Show me again</button>
-    </div>
-  </section>
-
   <section class="chapters" id="chapters" aria-labelledby="chapters-title">
     <div class="chapters__head">
       <h2 id="chapters-title">Six chapters, in the film's own order</h2>
-      <p>Each one is a real beat of the montage, not a marker dropped on a timeline for decoration. Click a chapter and the film joins it there.</p>
+      <p>Each one is a real beat of the montage, not a marker dropped on a timeline for decoration. Pick a chapter and the page carries you to that frame of the film above.</p>
     </div>
     <ol class="chapters__list" id="chapterlist">
       <li><button type="button" data-at="0" data-name="The press">
@@ -162,6 +113,11 @@
         <span class="chapters__name">The mark</span>
         <span class="chapters__what">The press stops, and says what it is.</span></button></li>
     </ol>
+
+    <div class="coach" id="coach">
+      <p class="coach__line" id="hint">A ghost arrow is about to show you what these chapters do. Touch anything and it steps aside.</p>
+      <button class="coach__again" id="again" type="button" hidden>Show me again</button>
+    </div>
   </section>
 
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
@@ -206,7 +162,7 @@
 </main>
 
 <div class="ghost" id="ghost" aria-hidden="true">
-  <span class="ghost__note" id="ghostnote">Press play</span>
+  <span class="ghost__note" id="ghostnote">Jump to a chapter</span>
   <svg class="ghost__arrow" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true">
     <path d="M2 2 L2 25 L8.4 19 L12.6 28 L16.4 26.2 L12.2 17.4 L20 17.2 Z"
           fill="#7E93BE" stroke="#0B0D12" stroke-width="1.4"/>

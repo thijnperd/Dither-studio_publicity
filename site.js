@@ -1,7 +1,7 @@
 /* Dither Studio publicity site.
-   Three layers: the scroll stage (the film answers to the scroll wheel), the
-   watch section (the film answers to the visitor), and a ghost pointer that
-   demonstrates the second one. Everything visual runs on GSAP's ticker. */
+   The film has exactly one control surface: the scroll. Chapters move the
+   scroll, the ghost pointer demonstrates that, and nothing on the page can
+   restart the film. Everything visual runs on GSAP's ticker. */
 
 (function () {
   'use strict';
@@ -24,16 +24,15 @@
     [33.4, 'The mark']
   ];
 
-  /* ================= the scroll stage ================= */
-
   var stage = $('stage');
   var stageVideo = $('scrubvideo');
   var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
   var stageChapter = $('stagechapter');
   var stageTime = $('stagetime');
   var stageRule = $('stagerule');
+  var pinTrigger = null;
 
-  var lastSeek = 0;
+  /* ================= the scroll stage ================= */
 
   function paintStage(progress) {
     if (!stageVideo) return;
@@ -56,128 +55,38 @@
     }
   }
 
-  /* the first frame is the poster, then the film's own first frame once it is ready */
   if (stageVideo) {
     stageVideo.addEventListener('loadedmetadata', function () { paintStage(0); });
-    stageVideo.addEventListener('seeking', function () {
-      lastSeek = performance.now();
-    });
     stageVideo.pause();
   }
 
-  /* ================= the watch section ================= */
+  /* ================= chapters move the scroll ================= */
 
-  var video = $('video');
-  var frame = $('frame');
-  var play = $('play');
-  var toggle = $('toggle');
-  var toggleLabel = $('toggleLabel');
-  var scrub = $('scrub');
-  var fill = $('fill');
-  var knob = $('knob');
-  var nowLabel = $('now');
-  var ghost = $('ghost');
-  var ghostNote = $('ghostnote');
-  var hint = $('hint');
-  var again = $('again');
-
-  var demo = null;
-  var takeOver = false;
-
-  function clock(seconds) {
-    var s = Math.max(0, Math.min(DURATION, seconds || 0));
-    return '00:' + String(Math.floor(s)).padStart(2, '0');
+  function jumpTo(seconds) {
+    var ratio = Math.max(0, Math.min(1, seconds / DURATION));
+    if (!pinTrigger) {
+      /* no pin (reduced motion, or the script was cut short): the stage is a list */
+      stage.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      return;
+    }
+    var destination = pinTrigger.start + (pinTrigger.end - pinTrigger.start) * ratio;
+    if (!hasGsap || reduce) {
+      window.scrollTo(0, destination);
+      return;
+    }
+    /* a tweened scroll, so the film scrubs along with the page instead of teleporting */
+    var proxy = { at: window.scrollY };
+    gsap.to(proxy, {
+      at: destination,
+      duration: 1.05,
+      ease: 'power2.inOut',
+      overwrite: true,
+      onUpdate: function () { window.scrollTo(0, proxy.at); }
+    });
   }
-
-  function paintProgress() {
-    var t = video.currentTime || 0;
-    var ratio = Math.min(1, t / DURATION);
-    fill.style.transform = 'scaleX(' + ratio.toFixed(4) + ')';
-    knob.style.transform = 'translateX(' + (ratio * scrub.clientWidth).toFixed(1) + 'px)';
-    nowLabel.textContent = clock(t);
-    scrub.setAttribute('aria-valuenow', t.toFixed(1));
-    scrub.setAttribute('aria-valuetext', Math.floor(t) + ' of 40 seconds');
-  }
-
-  function setPlaying(isPlaying) {
-    document.body.classList.toggle('is-playing', isPlaying);
-    toggleLabel.textContent = isPlaying ? 'Pause' : 'Play';
-    play.hidden = isPlaying;
-  }
-
-  function start() {
-    var attempt = video.play();
-    if (attempt && attempt.catch) attempt.catch(function () { setPlaying(false); });
-  }
-
-  function stop() { video.pause(); setPlaying(false); }
-
-  function togglePlay() { if (video.paused) start(); else stop(); }
-
-  function seek(seconds) {
-    video.currentTime = Math.max(0, Math.min(DURATION, seconds));
-    paintProgress();
-  }
-
-  video.addEventListener('timeupdate', paintProgress);
-  video.addEventListener('loadedmetadata', function () {
-    if (video.duration && Math.abs(video.duration - DURATION) > 0.5) DURATION = video.duration;
-    paintProgress();
-    hideLoader();
-  });
-  video.addEventListener('play', function () { setPlaying(true); });
-  video.addEventListener('pause', function () { setPlaying(false); });
-  video.addEventListener('ended', function () { setPlaying(false); });
-
-  play.addEventListener('click', start);
-  toggle.addEventListener('click', togglePlay);
-  frame.addEventListener('dblclick', start);
-
-  var dragging = false;
-
-  function scrubTo(clientX) {
-    var box = scrub.getBoundingClientRect();
-    var ratio = (clientX - box.left) / box.width;
-    seek(Math.max(0, Math.min(1, ratio)) * DURATION);
-  }
-
-  scrub.addEventListener('pointerdown', function (event) {
-    dragging = true;
-    scrub.setPointerCapture(event.pointerId);
-    scrubTo(event.clientX);
-  });
-  scrub.addEventListener('pointermove', function (event) {
-    if (dragging) scrubTo(event.clientX);
-  });
-  scrub.addEventListener('pointerup', function (event) {
-    dragging = false;
-    if (scrub.hasPointerCapture(event.pointerId)) scrub.releasePointerCapture(event.pointerId);
-  });
-  scrub.addEventListener('keydown', function (event) {
-    var step = event.shiftKey ? 5 : 1;
-    if (event.key === 'ArrowRight') { seek(video.currentTime + step); event.preventDefault(); }
-    if (event.key === 'ArrowLeft') { seek(video.currentTime - step); event.preventDefault(); }
-    if (event.key === 'Home') { seek(0); event.preventDefault(); }
-    if (event.key === 'End') { seek(DURATION - 0.1); event.preventDefault(); }
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.target.closest('#scrub') || event.target.closest('a')) return;
-    if (event.key === ' ') { togglePlay(); event.preventDefault(); }
-  });
-
-  var fs = $('fs');
-  fs.addEventListener('click', function () {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else if (frame.requestFullscreen) frame.requestFullscreen();
-  });
 
   document.querySelectorAll('#chapterlist button').forEach(function (button) {
-    button.addEventListener('click', function () {
-      seek(parseFloat(button.dataset.at));
-      start();
-      $('film').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-    });
+    button.addEventListener('click', function () { jumpTo(parseFloat(button.dataset.at)); });
   });
 
   var download = $('download');
@@ -209,8 +118,16 @@
   }
   /* never let the curtain outstay the content under it */
   setTimeout(hideLoader, 1200);
+  window.addEventListener('load', hideLoader);
 
   /* ================= the ghost pointer ================= */
+
+  var ghost = $('ghost');
+  var ghostNote = $('ghostnote');
+  var hint = $('hint');
+  var again = $('again');
+  var demo = null;
+  var takeOver = false;
 
   function centre(el) {
     var box = el.getBoundingClientRect();
@@ -230,43 +147,25 @@
 
   function runDemo() {
     if (!hasGsap || reduce || takeOver || demo) return;
-    var chapter = document.querySelectorAll('#chapterlist button')[3];
+    var chapter = document.querySelectorAll('#chapterlist button')[1];
 
     demo = gsap.timeline({
       onStart: function () { ghost.style.opacity = 1; },
       onComplete: function () { endDemo(); }
     });
 
-    demo.call(say, ['Press play']);
-    demo.to(ghost, { x: centre(toggle).x, y: centre(toggle).y, duration: 0.1 });
-    demo.to(ghost, { x: centre(play).x, y: centre(play).y, duration: 1.05, ease: 'power3.inOut' });
-    demo.to(ghost, { scale: 0.88, duration: 0.1 });
-    demo.call(function () { rippleAt(centre(play)); start(); });
-    demo.to(ghost, { scale: 1, duration: 0.16 });
-    demo.to({}, { duration: 2.4 });
-
     demo.call(say, ['Jump to a chapter']);
-    demo.to(ghost, { x: centre(chapter).x, y: centre(chapter).y, duration: 1.0, ease: 'power3.inOut' });
+    demo.to(ghost, { x: centre(chapter).x, y: centre(chapter).y, duration: 1.15, ease: 'power3.inOut' });
     demo.to(ghost, { scale: 0.88, duration: 0.1 });
-    demo.call(function () { rippleAt(centre(chapter)); seek(20); start(); });
-    demo.to(ghost, { scale: 1, duration: 0.16 });
-    demo.to({}, { duration: 2.0 });
-
-    demo.call(say, ['Drag the print']);
-    var track = scrub.getBoundingClientRect();
-    demo.to(ghost, { x: track.left + track.width * 0.2, y: track.top + track.height / 2, duration: 0.9, ease: 'power3.inOut' });
-    demo.to(ghost, {
-      x: track.left + track.width * 0.74,
-      duration: 2.2,
-      ease: 'none',
-      onUpdate: function () {
-        var ratio = (ghost._gsap.x - track.left) / track.width;
-        seek(Math.max(0, Math.min(1, ratio)) * DURATION);
-      }
+    demo.call(function () {
+      rippleAt(centre(chapter));
+      chapter.click();
     });
+    demo.to(ghost, { scale: 1, duration: 0.16 });
+    demo.to({}, { duration: 2.6 });
 
     demo.call(say, ['Take it home']);
-    demo.to(ghost, { x: centre(download).x, y: centre(download).y, duration: 1.1, ease: 'power3.inOut' });
+    demo.to(ghost, { x: centre(download).x, y: centre(download).y, duration: 1.2, ease: 'power3.inOut' });
     demo.to(download, { scale: 1.03, duration: 0.25, ease: 'power2.out', yoyo: true, repeat: 1 });
     demo.to({}, { duration: 1.2 });
   }
@@ -289,7 +188,7 @@
   again.addEventListener('click', function () {
     takeOver = false;
     again.hidden = true;
-    hint.textContent = 'A ghost arrow is about to show you these controls. Touch anything and it steps aside.';
+    hint.textContent = 'A ghost arrow is about to show you what these chapters do. Touch anything and it steps aside.';
     if (!hasGsap) return;
     gsap.set(ghost, { x: 40, y: window.innerHeight * 0.7, scale: 1 });
     runDemo();
@@ -299,7 +198,7 @@
     window.addEventListener(type, function (event) {
       if (event.target.closest && event.target.closest('#again')) return;
       if (event.target.closest && event.target.closest('.masthead')) return;
-      stopDemo('Your turn. The controls above do exactly what the arrow was doing.');
+      stopDemo('Your turn. A chapter button moves the page and the film together, exactly as the arrow did.');
     }, { passive: true });
   });
 
@@ -309,7 +208,7 @@
     var mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', function () {
-      /* the stage: pinned for three screens, the scroll position is the playhead */
+      /* the stage: pinned for three and a half screens, the scroll is the playhead */
       var stageTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: stage,
@@ -322,6 +221,7 @@
           onUpdate: function (self) { paintStage(self.progress); }
         }
       });
+      pinTrigger = stageTimeline.scrollTrigger;
 
       /* a ruler of 100 units; the beats sit at their real frame's position */
       stageTimeline.to({}, { duration: 100 });
@@ -355,7 +255,6 @@
         y: 26, opacity: 0, duration: 1, stagger: 0.08, ease: 'power3.out', delay: 0.15
       });
 
-      /* scroll rule */
       gsap.to('#scrollbar', {
         scaleX: 1,
         ease: 'none',
@@ -363,7 +262,7 @@
       });
 
       /* reveals, one treatment per role */
-      document.querySelectorAll('.watch__head > *, .screen, .coach, .chapters__list li, .proof, .stats > div, .take > *, .colophon > *').forEach(function (el) {
+      document.querySelectorAll('.chapters__head > *, .chapters__list li, .coach, .proof, .stats > div, .take > *, .colophon > *').forEach(function (el) {
         gsap.from(el, {
           y: 20, opacity: 0, duration: 0.8, ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 90%', once: true }
@@ -382,20 +281,18 @@
         });
       });
 
-      /* the ghost only runs while the watch section is on screen */
+      /* the ghost only runs while the chapter strip is on screen */
       ScrollTrigger.create({
-        trigger: '.watch',
-        start: 'top 55%',
-        end: 'bottom 40%',
+        trigger: '.chapters',
+        start: 'top 60%',
+        end: 'bottom 60%',
         onEnter: function () { if (!takeOver) runDemo(); },
         onEnterBack: function () { if (!takeOver) runDemo(); },
         onLeave: function () { if (demo) { demo.pause(); } },
         onLeaveBack: function () { if (demo) { demo.pause(); } }
       });
 
-      return function () {
-        if (demo) { demo.kill(); demo = null; }
-      };
+      return function () { if (demo) { demo.kill(); demo = null; } };
     });
 
     mm.add('(prefers-reduced-motion: reduce)', function () {
@@ -406,28 +303,22 @@
       gsap.set('.beat', { autoAlpha: 1, y: 0 });
       paintStage(0);
     });
-  } else if (reduce || !hasScroll) {
+  } else {
     paintStage(0);
   }
 
-  paintProgress();
-  window.addEventListener('resize', paintProgress);
-
   /* a hook for the checks */
   window.__publicity = {
-    seek: seek,
+    jumpTo: jumpTo,
     stageTo: paintStage,
     state: function () {
       return {
-        time: video.currentTime,
-        playing: !video.paused,
-        duration: DURATION,
-        ghostVisible: Number(getComputedStyle(ghost).opacity) > 0.1,
-        chapters: document.querySelectorAll('#chapterlist button').length,
+        stageTime: stageVideo ? +stageVideo.currentTime.toFixed(2) : null,
+        chapter: stageChapter ? stageChapter.textContent : null,
         beats: beats.length,
-        stageTime: stageVideo ? stageVideo.currentTime : null,
-        stagePinned: !!(hasScroll && ScrollTrigger.isScrolling()),
-        pinSpacer: !!document.querySelector('.pin-spacer'),
+        pinned: !!pinTrigger,
+        videosOnPage: document.querySelectorAll('video').length,
+        ghostVisible: Number(getComputedStyle(ghost).opacity) > 0.1,
         takenOver: takeOver
       };
     }
