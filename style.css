@@ -106,11 +106,14 @@ main > section, #top { scroll-margin-top: 4.75rem; }
   text-decoration: none;
 }
 
-/* the app's own mark, at its native 32 grid so the pixels stay square */
+/* the film's own mark, in the tile the close card gives it: the same 46/196
+   radius on a 1px edge */
 .masthead__logo {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   flex: none;
+  border-radius: 9px;
+  border: 1px solid var(--line);
 }
 
 .masthead__nav {
@@ -143,7 +146,7 @@ main > section, #top { scroll-margin-top: 4.75rem; }
 
 @media (max-width: 620px) {
   .masthead__nav a:not(.masthead__take) { display: none; }
-  .masthead__logo { width: 28px; height: 28px; }
+  .masthead__logo { width: 36px; height: 36px; border-radius: 8px; }
 }
 
 /* ---------- opening ---------- */

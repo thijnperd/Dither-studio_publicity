@@ -13,8 +13,9 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `index.html` | The page: a pinned stage the scroll drives, the chapter strip, the proofs band, the download band |
 | `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF` |
 | `site.js` | The scroll stage, the chapter jumps, the ghost pointer demonstration, the section state in the masthead, the GSAP layer |
-| `assets/icon.svg` | The app's own icon, unchanged, at its native 32 px grid: this is the masthead mark and the favicon |
-| `assets/icon-192.png` | The same icon as the Apple touch icon |
+| `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
+| `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
+| `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
 | `assets/film.mp4` | The film. 40 s, 1920 × 1080, h264, 24 fps, 27 MB. The archival copy, linked from the colophon |
 | `assets/film-scrub.mp4` | The same film at 1280 × 720, 8 MB, keyed every 12 frames. This is the one the page plays |
 | `assets/poster.png` | Its poster frame, used as the `og:image` and as the stage's first frame |
@@ -153,8 +154,8 @@ npx serve .            # or: python -m http.server 8080
 Open `http://localhost:8080/` and confirm: the stage pins while you scroll and
 the film advances with it, a chapter button moves the page and the film
 together, the ghost runs once and stops when you move, no video can be replayed
-anywhere on the page, no timecode appears anywhere, the app icon is in the
-masthead and the browser tab, and the layout holds at 390 px wide.
+anywhere on the page, no timecode appears anywhere, the film's own mark is in
+the masthead and the browser tab, and the layout holds at 390 px wide.
 Serve with a Range-capable server: Python's `http.server` ignores `Range`, so
 the video cannot seek and the stage will look frozen.
 
