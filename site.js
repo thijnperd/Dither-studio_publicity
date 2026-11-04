@@ -308,8 +308,6 @@
     var mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', function () {
-      var lastBeat = beats[beats.length - 1];
-
       /* the stage: pinned for three screens, the scroll position is the playhead */
       var stageTimeline = gsap.timeline({
         scrollTrigger: {
@@ -327,15 +325,16 @@
       /* a ruler of 100 units; the beats sit at their real frame's position */
       stageTimeline.to({}, { duration: 100 });
 
+      /* Each caption belongs to one montage beat and leaves before the next.
+         The last one clears out before the close, because the film's own end
+         card is the payoff and two headlines in one frame is one too many. */
       beats.forEach(function (beat, index) {
         var at = (CHAPTERS[index][0] / DURATION) * 100;
-        var isLast = beat === lastBeat;
-        gsap.set(beat, { autoAlpha: 0, y: 26 });
+        var next = CHAPTERS[index + 1] ? CHAPTERS[index + 1][0] : 33.4;
+        var out = Math.min(100, (next / DURATION) * 100 - 4);
+        gsap.set(beat, { autoAlpha: 0, y: 24 });
         stageTimeline.to(beat, { autoAlpha: 1, y: 0, duration: 3.5, ease: 'power2.out' }, at);
-        if (!isLast) {
-          var out = Math.min(100, (CHAPTERS[index + 1][0] / DURATION) * 100 - 4);
-          stageTimeline.to(beat, { autoAlpha: 0, y: -20, duration: 3.5, ease: 'power2.in' }, Math.max(at + 4, out));
-        }
+        stageTimeline.to(beat, { autoAlpha: 0, y: -16, duration: 3.5, ease: 'power2.in' }, Math.max(at + 4, out));
       });
 
       /* the aperture opens as the film runs */
