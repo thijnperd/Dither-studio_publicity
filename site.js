@@ -197,17 +197,18 @@
     loadDone = true;
     if (!hasGsap) { loader.remove(); return; }
     gsap.timeline()
-      .to(loadcount, { duration: 0.35, innerText: 100, snap: { innerText: 1 }, ease: 'none' })
-      .to(loader, { duration: 0.45, opacity: 0, ease: 'power2.inOut' })
+      .to(loadcount, { duration: 0.2, innerText: 100, snap: { innerText: 1 }, ease: 'none' })
+      .to(loader, { duration: 0.3, opacity: 0, ease: 'power2.inOut' })
       .set(loader, { display: 'none' });
   }
 
   if (hasGsap) {
     gsap.fromTo(loadcount, { innerText: 0 }, {
-      duration: 1.1, innerText: 96, snap: { innerText: 1 }, ease: 'power1.out'
+      duration: 0.7, innerText: 96, snap: { innerText: 1 }, ease: 'power1.out'
     });
   }
-  setTimeout(hideLoader, 1900);
+  /* never let the curtain outstay the content under it */
+  setTimeout(hideLoader, 1200);
 
   /* ================= the ghost pointer ================= */
 
