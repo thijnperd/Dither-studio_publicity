@@ -4,38 +4,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dither Studio · the launch film</title>
-<meta name="description" content="Scroll and the film runs with you. Forty seconds of the Dither Studio press: 46 dither algorithms, 24 palettes, type set in characters. Free, offline, Windows and macOS.">
+<meta name="description" content="A dithering press that runs on your own computer: 46 algorithms, 24 palettes, and a text mode. Scroll the launch film and it runs with you.">
 <meta name="theme-color" content="#0B0D12">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Dither Studio · the launch film">
-<meta property="og:description" content="Scroll and the film runs with you. Then take the app.">
+<meta property="og:description" content="Scroll the launch film and it runs with you. Then take the app.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.png">
+<meta property="og:image:alt" content="A frame from the film: a painting dissolving into a dither.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B0D12'/%3E%3Crect x='6' y='6' width='8' height='8' fill='%23EFEADF'/%3E%3Crect x='18' y='6' width='4' height='4' fill='%237E93BE'/%3E%3Crect x='6' y='18' width='4' height='4' fill='%237E93BE'/%3E%3Crect x='14' y='14' width='12' height='12' fill='%23EFEADF'/%3E%3C/svg%3E">
+<meta name="twitter:title" content="Dither Studio · the launch film">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="no-js">
 
 <a class="skip" href="#stage">Skip to the film</a>
-<div class="rule-progress" aria-hidden="true"><i id="scrollbar"></i></div>
-
-<div class="loader" id="loader" aria-hidden="true">
-  <span class="loader__word">Dither Studio</span>
-  <span class="loader__count"><i id="loadcount">00</i></span>
-</div>
 
 <header class="masthead">
   <a class="masthead__mark" href="#top">
-    <span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <img class="masthead__logo" src="assets/icon.svg" alt="" width="32" height="32">
     Dither Studio
   </a>
   <nav class="masthead__nav" aria-label="Sections">
     <a href="#stage">Film</a>
     <a href="#chapters">Chapters</a>
     <a href="#proofs">Proofs</a>
-    <a class="masthead__take" href="#take">Take it home</a>
+    <a class="masthead__take" href="#take">Download</a>
   </nav>
 </header>
 
@@ -43,8 +40,13 @@
 
   <div class="opening">
     <h1>Let there<br>be pixels.</h1>
-    <p class="opening__lede">An offline press for images: forty-six dither algorithms, twenty-four palettes, type set in characters. The film below is the press running, and your scroll is its playhead.</p>
-    <p class="opening__cue"><i aria-hidden="true"></i>Scroll to run the film</p>
+    <p class="opening__lede">A dithering press that runs on your computer. It ships forty-six algorithms and twenty-four palettes, and it can print the same proof as characters instead of pixels.</p>
+    <p class="opening__cue">
+      <svg viewBox="0 0 12 22" width="12" height="22" aria-hidden="true">
+        <path d="M6 0 V20 M1 15 L6 20.5 L11 15" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      Scroll to run the film
+    </p>
   </div>
 
   <section class="stage" id="stage" aria-label="The film, driven by scroll">
@@ -55,106 +57,94 @@
     <div class="beats" id="beats">
       <div class="beat">
         <h2>A sheet goes in.</h2>
-        <p>The press reads it, cuts it into chunks, and decides what every chunk is made of.</p>
+        <p>The press reads it, cuts it into chunks, and decides what each chunk is made of.</p>
       </div>
       <div class="beat">
-        <h2>Three paintings ship inside.</h2>
-        <p>The Creation of Adam, Tor's Fight with the Giants, Oedipus and the Sphinx. Pick one, or bring your own.</p>
+        <h2>Three paintings inside.</h2>
+        <p>The Creation of Adam, Tor's Fight with the Giants, and Oedipus and the Sphinx come with the app. Your own image works too.</p>
       </div>
       <div class="beat">
         <h2>Forty-six algorithms.</h2>
-        <p>Ordered screens, clustered dots, noise, error diffusion, and mixing plans that hold a tone exactly.</p>
+        <p>Ordered screens, clustered dots, noise, error diffusion, and mixing plans that hold a flat tone to a measured average.</p>
       </div>
       <div class="beat">
         <h2>Or characters.</h2>
-        <p>The same proof, set as type. The paper and the ink follow the palette you chose.</p>
+        <p>The same proof set as type. Paper and ink come from the palette you picked.</p>
       </div>
       <div class="beat">
         <h2>One image, many readings.</h2>
-        <p>A denser screen is a different account of the same painting. The tone survives; the texture becomes the subject.</p>
+        <p>A denser screen keeps the average tone and changes the grain.</p>
       </div>
-    </div>
-
-    <div class="stage__hud">
-      <span class="stage__chapter" id="stagechapter">The press</span>
-      <span class="stage__rule" aria-hidden="true"><i id="stagerule"></i></span>
-      <span class="stage__count"><span id="stagetime">00:00</span> / 00:40</span>
     </div>
   </section>
 
   <section class="chapters" id="chapters" aria-labelledby="chapters-title">
     <div class="chapters__head">
-      <h2 id="chapters-title">Six chapters, in the film's own order</h2>
-      <p>Each one is a real beat of the montage, not a marker dropped on a timeline for decoration. Pick a chapter and the page carries you to that frame of the film above.</p>
+      <h2 id="chapters-title">The film in six stops</h2>
+      <p>Press a stop and the page scrolls to that moment in the film above.</p>
     </div>
     <ol class="chapters__list" id="chapterlist">
       <li><button type="button" data-at="0" data-name="The press">
-        <span class="chapters__num">00:00</span>
         <span class="chapters__name">The press</span>
-        <span class="chapters__what">A single sheet goes through, and comes out as ink.</span></button></li>
+        <span class="chapters__what">One sheet goes through and comes out as ink.</span></button></li>
       <li><button type="button" data-at="5" data-name="The source">
-        <span class="chapters__num">00:05</span>
         <span class="chapters__name">The source</span>
-        <span class="chapters__what">Three paintings ship inside the app. The rail picks between them.</span></button></li>
+        <span class="chapters__what">The paintings that come with the app, and the rail that picks between them.</span></button></li>
       <li><button type="button" data-at="11" data-name="The run">
-        <span class="chapters__num">00:11</span>
         <span class="chapters__name">The run</span>
         <span class="chapters__what">The console at speed: algorithms, palettes, the effects stack.</span></button></li>
       <li><button type="button" data-at="20" data-name="The type">
-        <span class="chapters__num">00:20</span>
         <span class="chapters__name">The type</span>
-        <span class="chapters__what">The same proof, printed as characters instead of pixels.</span></button></li>
+        <span class="chapters__what">The same proof printed as characters.</span></button></li>
       <li><button type="button" data-at="26.6" data-name="Many readings">
-        <span class="chapters__num">00:26</span>
         <span class="chapters__name">Many readings</span>
-        <span class="chapters__what">One painting, three accounts: ordered, noisy, hand-picked.</span></button></li>
+        <span class="chapters__what">One painting in three screens: ordered, noisy, hand-picked.</span></button></li>
       <li><button type="button" data-at="33.4" data-name="The mark">
-        <span class="chapters__num">00:33</span>
         <span class="chapters__name">The mark</span>
-        <span class="chapters__what">The press stops, and says what it is.</span></button></li>
+        <span class="chapters__what">The press stops on its own mark.</span></button></li>
     </ol>
 
     <div class="coach" id="coach">
-      <p class="coach__line" id="hint">A ghost arrow is about to show you what these chapters do. Touch anything and it steps aside.</p>
+      <p class="coach__line" id="hint" aria-live="polite">The arrow shows what a chapter does. Touch anything and it stands down.</p>
       <button class="coach__again" id="again" type="button" hidden>Show me again</button>
     </div>
   </section>
 
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
     <div class="proofs__head">
-      <h2 id="proofs-title">What the press can do, counted</h2>
-      <p>These numbers are the catalogues the app ships with. Nothing is a target or an aspiration; they are the arrays in the engine, and the tests assert against them.</p>
+      <h2 id="proofs-title">The press, in numbers</h2>
+      <p>These are the catalogues inside the engine. The tests count them, so what is on this page is what the app ships.</p>
     </div>
 
     <dl class="stats" id="stats">
-      <div><dt>Algorithms</dt><dd data-count="46">46</dd></div>
-      <div><dt>Palettes</dt><dd data-count="24">24</dd></div>
-      <div><dt>Effects</dt><dd data-count="13">13</dd></div>
-      <div><dt>Tone maps</dt><dd data-count="11">11</dd></div>
-      <div><dt>Recipes</dt><dd data-count="21">21</dd></div>
+      <div><dt>Algorithms</dt><dd>46</dd></div>
+      <div><dt>Palettes</dt><dd>24</dd></div>
+      <div><dt>Effects</dt><dd>13</dd></div>
+      <div><dt>Tone maps</dt><dd>11</dd></div>
+      <div><dt>Presets</dt><dd>21</dd></div>
     </dl>
 
     <div class="proofs__pair">
       <figure class="proof">
-        <img src="assets/proof-thor.png" alt="A dither of Thor's fight with the giants, in a dense ordered palette." width="800" height="600" loading="lazy">
-        <figcaption><b>Tor's Fight with the Giants.</b> Ordered screen, dense palette, the colour held to the ink list.</figcaption>
+        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="800" height="600" loading="lazy">
+        <figcaption><b>Tor's Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette's colours.</figcaption>
       </figure>
       <figure class="proof">
-        <img src="assets/proof-bloom.png" alt="A dither of the same kind of scene in a blue palette with heavy texture." width="800" height="600" loading="lazy">
-        <figcaption><b>Another reading.</b> Same painting, a different screen: the tone survives, the texture becomes the subject.</figcaption>
+        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="800" height="600" loading="lazy">
+        <figcaption><b>The same painting, a coarser screen.</b> The average tone stays where it was and the grain does the rest.</figcaption>
       </figure>
     </div>
   </section>
 
   <section class="take" id="take" aria-labelledby="take-title">
     <h2 id="take-title">Take the press home</h2>
-    <p class="take__lede">One installer, no account, no network. It runs from your own machine and writes ordinary PNG files.</p>
+    <p class="take__lede">The installer is the whole app. It works offline and saves PNG files to your disk.</p>
     <div class="take__actions">
       <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span id="downloadLabel">Download for Windows</span>
         <span class="button__meta">Version 0.2.5 · 107 MB</span>
       </a>
-      <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">All releases, portable exe and disk images</a>
+      <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
     </div>
     <p class="take__fine">Windows or macOS. The build is unsigned, so SmartScreen may ask once; the release page says what to click.</p>
   </section>
@@ -170,13 +160,13 @@
 </div>
 
 <footer class="colophon">
-  <p class="colophon__spec">Film: 40 s · 1920 × 1080 · h264 · 24 fps · drawn as an HTML page and captured frame by frame</p>
+  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps. Drawn as an HTML page and captured frame by frame.</p>
   <p class="colophon__links">
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
-  <p class="colophon__note">Motion by GSAP. The scroll stage plays a second encode of the film, keyed every half second so it seeks cleanly. No cookies, no analytics, no fonts fetched from a third party.</p>
+  <p class="colophon__note">Motion runs on GSAP, and the stage plays a second encode keyed every half second so the film seeks cleanly. No cookies, no analytics, no fonts from a third party.</p>
 </footer>
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>

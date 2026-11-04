@@ -12,7 +12,9 @@ manager, no server. GitHub Pages serves this folder as it is.
 |---|---|
 | `index.html` | The page: a pinned stage the scroll drives, the chapter strip, the proofs band, the download band |
 | `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF` |
-| `site.js` | The scroll stage, the chapter jumps, the ghost pointer demonstration, the GSAP layer |
+| `site.js` | The scroll stage, the chapter jumps, the ghost pointer demonstration, the section state in the masthead, the GSAP layer |
+| `assets/icon.svg` | The app's own icon, unchanged, at its native 32 px grid: this is the masthead mark and the favicon |
+| `assets/icon-192.png` | The same icon as the Apple touch icon |
 | `assets/film.mp4` | The film. 40 s, 1920 × 1080, h264, 24 fps, 27 MB. The archival copy, linked from the colophon |
 | `assets/film-scrub.mp4` | The same film at 1280 × 720, 8 MB, keyed every 12 frames. This is the one the page plays |
 | `assets/poster.png` | Its poster frame, used as the `og:image` and as the stage's first frame |
@@ -24,8 +26,10 @@ manager, no server. GitHub Pages serves this folder as it is.
 - **The film is the scroll, and the scroll is the only control.** The stage pins
   for three and a half screens and the scroll position is the playhead, so the
   film runs forwards and backwards under the wheel. Five captions cross-fade at
-  the montage's real beats, and the corner readout names the chapter and the
-  time.
+  the montage's real beats.
+- **There is no readout.** No timecode, no progress rule, no chapter timer, no
+  numbered markers: the film is watched, not measured. The chapter strip names
+  its six stops and nothing else.
 - **There is no second player.** The film cannot be restarted, replayed or
   scrubbed with a widget, on purpose: one control surface, one film. The chapter
   strip below the stage does not play anything either. Each button tweens the
@@ -71,14 +75,43 @@ node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
 `kill-ai-slop` reports 35 tells; two hits here are deliberate and carry scoped
 `deslop-ignore-next-line` comments in `style.css` with the reason on the line:
 the spotlight vignette over the film (the page's whole visual idea is a
-spotlight, and the gradient is what keeps a caption legible on a bright frame)
-and the 50% radius on the pointer ripple (a click reads as a ring, not a card).
+spotlight, and the gradient is what keeps a caption legible on a bright frame)  and the 50% radius on the pointer ripple (a click reads as a ring, not a card).
 Everything it did catch was fixed: eleven monospace labels moved to the text
-face, and the loader, the player and their CSS were deleted.
+face, the player and its CSS were deleted, the `01/02/03` markers came off the
+chapter cards (tell 30, decorative numbering), and the load curtain went
+altogether.
 
 `impeccable` reports only `cramped-padding` on the hairline grids whose cells
 already carry 16 to 24 px of padding, which is a false positive on that
 construction.
+
+## The copy, and why it reads like this
+
+The page is checked against [Wikipedia's *Signs of AI writing*](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing):
+no negative parallelisms (*not X, but Y*), no rhetorical rule of three, no
+"-ing" analysis tails, no puffery about significance, no em dashes (zero in
+`index.html`), no words from the overused-vocabulary list. Every claim is a
+number the app can be tested against. Enumerations that survive are real
+inventories: the three paintings that ship, the algorithm families that exist.
+
+## Motion
+
+The rules are Emil Kowalski's ([emilkowal.ski](https://emilkowal.ski), the
+`emil-design-eng` skill):
+
+- An animation has to explain something. The film scrub, the caption changes,
+  the pointer demonstration and the press feedback do; scroll-triggered fades on
+every heading do not, so they were removed, along with the counting numbers.
+- Nothing animates on load. The words are the page; a stalled transition must
+  never be what keeps them off screen.
+- Under 300 ms for interface motion: presses 120–160 ms, chapter jumps 600 ms
+  because they are navigation.
+- Strong curves, not the built-in easings: `cubic-bezier(0.23, 1, 0.32, 1)` for
+  entries and colour, `cubic-bezier(0.77, 0, 0.175, 1)` for on-screen movement.
+- `transform`, `opacity` and colour only; hover styles sit behind
+  `@media (hover: hover) and (pointer: fine)`; every pressable element answers
+  with `scale(0.98)`.
+- `prefers-reduced-motion` still unpins the stage into a readable list.
 
 ## The film's source
 
@@ -96,8 +129,7 @@ cp publicity/out/poster.png                <this repo>/assets/poster.png
 
 Re-render it whenever the app's interface changes, or the film will show a
 window that no longer exists. If the scene times move, update `CHAPTERS` in
-`site.js`: the scroll stage, the corner readout and the chapter strip all read
-it.
+`site.js`: the caption timing and the chapter jumps both read it.
 
 ## Deploying
 
@@ -119,9 +151,10 @@ npx serve .            # or: python -m http.server 8080
 ```
 
 Open `http://localhost:8080/` and confirm: the stage pins while you scroll and
-the film advances with it (the corner timecode follows), a chapter button moves
-the page and the film together, the ghost runs once and stops when you move, no
-video can be replayed anywhere on the page, and the layout holds at 390 px wide.
+the film advances with it, a chapter button moves the page and the film
+together, the ghost runs once and stops when you move, no video can be replayed
+anywhere on the page, no timecode appears anywhere, the app icon is in the
+masthead and the browser tab, and the layout holds at 390 px wide.
 Serve with a Range-capable server: Python's `http.server` ignores `Range`, so
 the video cannot seek and the stage will look frozen.
 
