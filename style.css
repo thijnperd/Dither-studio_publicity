@@ -265,7 +265,7 @@ img, video { max-width: 100%; display: block; }
   position: absolute;
   left: 0;
   bottom: 0;
-  max-width: 27ch;
+  width: min(30rem, 72vw);
   text-align: left;
   visibility: hidden;
   opacity: 0;
@@ -280,7 +280,7 @@ img, video { max-width: 100%; display: block; }
 }
 .beat p {
   margin: 0.6rem 0 0;
-  max-width: 30ch;
+  max-width: 34ch;
   color: var(--ink);
   opacity: 0.76;
   font-size: clamp(0.85rem, 1.05vw, 0.96rem);
