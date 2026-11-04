@@ -1,7 +1,7 @@
 /* Dither Studio publicity site.
-   Two jobs: drive the film honestly, and let a ghost pointer demonstrate the
-   controls until the visitor takes over. Everything visual runs on GSAP's
-   ticker; the only loops are the video's own time updates. */
+   Three layers: the scroll stage (the film answers to the scroll wheel), the
+   watch section (the film answers to the visitor), and a ghost pointer that
+   demonstrates the second one. Everything visual runs on GSAP's ticker. */
 
 (function () {
   'use strict';
@@ -9,6 +9,64 @@
   document.body.classList.remove('no-js');
 
   var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap = typeof window.gsap !== 'undefined';
+  var hasScroll = hasGsap && typeof window.ScrollTrigger !== 'undefined';
+  if (hasScroll) gsap.registerPlugin(ScrollTrigger);
+
+  var DURATION = 40;
+  var CHAPTERS = [
+    [0, 'The press'],
+    [5, 'The source'],
+    [11, 'The run'],
+    [20, 'The type'],
+    [26.6, 'Many readings'],
+    [33.4, 'The mark']
+  ];
+
+  /* ================= the scroll stage ================= */
+
+  var stage = $('stage');
+  var stageVideo = $('scrubvideo');
+  var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
+  var stageChapter = $('stagechapter');
+  var stageTime = $('stagetime');
+  var stageRule = $('stagerule');
+
+  var lastSeek = 0;
+
+  function paintStage(progress) {
+    if (!stageVideo) return;
+    var time = Math.max(0, Math.min(DURATION, progress * DURATION));
+
+    /* seeking is expensive: only ask the decoder when the target actually moved */
+    if (stageVideo.readyState >= 1 && Math.abs(stageVideo.currentTime - time) > 0.04) {
+      try { stageVideo.currentTime = time; } catch (error) { /* a refused seek is not fatal */ }
+    }
+
+    if (stageRule) stageRule.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+    if (stageTime) stageTime.textContent = '00:' + String(Math.floor(time)).padStart(2, '0');
+
+    if (stageChapter) {
+      var name = CHAPTERS[0][1];
+      for (var i = 0; i < CHAPTERS.length; i++) {
+        if (time >= CHAPTERS[i][0] - 0.12) name = CHAPTERS[i][1];
+      }
+      if (stageChapter.textContent !== name) stageChapter.textContent = name;
+    }
+  }
+
+  /* the first frame is the poster, then the film's own first frame once it is ready */
+  if (stageVideo) {
+    stageVideo.addEventListener('loadedmetadata', function () { paintStage(0); });
+    stageVideo.addEventListener('seeking', function () {
+      lastSeek = performance.now();
+    });
+    stageVideo.pause();
+  }
+
+  /* ================= the watch section ================= */
+
   var video = $('video');
   var frame = $('frame');
   var play = $('play');
@@ -23,21 +81,12 @@
   var hint = $('hint');
   var again = $('again');
 
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var hasGsap = typeof window.gsap !== 'undefined';
-  var hasScroll = hasGsap && typeof window.ScrollTrigger !== 'undefined';
-  if (hasScroll) gsap.registerPlugin(ScrollTrigger);
-
-  var DURATION = 40;
   var demo = null;
   var takeOver = false;
 
-  /* ---------------- the film ---------------- */
-
   function clock(seconds) {
     var s = Math.max(0, Math.min(DURATION, seconds || 0));
-    var whole = Math.floor(s);
-    return '00:' + String(whole).padStart(2, '0');
+    return '00:' + String(Math.floor(s)).padStart(2, '0');
   }
 
   function paintProgress() {
@@ -61,14 +110,9 @@
     if (attempt && attempt.catch) attempt.catch(function () { setPlaying(false); });
   }
 
-  function stop() {
-    video.pause();
-    setPlaying(false);
-  }
+  function stop() { video.pause(); setPlaying(false); }
 
-  function togglePlay() {
-    if (video.paused) start(); else stop();
-  }
+  function togglePlay() { if (video.paused) start(); else stop(); }
 
   function seek(seconds) {
     video.currentTime = Math.max(0, Math.min(DURATION, seconds));
@@ -87,10 +131,8 @@
 
   play.addEventListener('click', start);
   toggle.addEventListener('click', togglePlay);
+  frame.addEventListener('dblclick', start);
 
-  frame.addEventListener('dblclick', function () { start(); });
-
-  /* scrub: pointer, keyboard, and the ghost pointer's drag */
   var dragging = false;
 
   function scrubTo(clientX) {
@@ -130,23 +172,21 @@
     else if (frame.requestFullscreen) frame.requestFullscreen();
   });
 
-  /* chapters: jump the film to a real beat */
   document.querySelectorAll('#chapterlist button').forEach(function (button) {
     button.addEventListener('click', function () {
       seek(parseFloat(button.dataset.at));
       start();
-      document.getElementById('film').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      $('film').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     });
   });
 
-  /* the download button: label follows the visitor's platform */
   var download = $('download');
   var downloadLabel = $('downloadLabel');
   var ua = navigator.userAgent;
   if (/Mac/i.test(ua)) downloadLabel.textContent = 'Download for macOS';
   else if (!/Windows/i.test(ua)) downloadLabel.textContent = 'See the releases';
 
-  /* ---------------- loader ---------------- */
+  /* ================= loader ================= */
 
   var loader = $('loader');
   var loadcount = $('loadcount');
@@ -169,7 +209,7 @@
   }
   setTimeout(hideLoader, 1900);
 
-  /* ---------------- the ghost pointer ---------------- */
+  /* ================= the ghost pointer ================= */
 
   function centre(el) {
     var box = el.getBoundingClientRect();
@@ -192,7 +232,7 @@
     var chapter = document.querySelectorAll('#chapterlist button')[3];
 
     demo = gsap.timeline({
-      onStart: function () { ghost.style.opacity = 1; setPlaying(false); },
+      onStart: function () { ghost.style.opacity = 1; },
       onComplete: function () { endDemo(); }
     });
 
@@ -248,7 +288,7 @@
   again.addEventListener('click', function () {
     takeOver = false;
     again.hidden = true;
-    hint.textContent = 'A ghost arrow is about to show you the controls. Touch anything and it steps aside.';
+    hint.textContent = 'A ghost arrow is about to show you these controls. Touch anything and it steps aside.';
     if (!hasGsap) return;
     gsap.set(ghost, { x: 40, y: window.innerHeight * 0.7, scale: 1 });
     runDemo();
@@ -257,22 +297,63 @@
   ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
     window.addEventListener(type, function (event) {
       if (event.target.closest && event.target.closest('#again')) return;
-      stopDemo('Your turn. The film and the chapters above do exactly what the arrow was doing.');
-    }, { once: false, passive: true });
+      if (event.target.closest && event.target.closest('.masthead')) return;
+      stopDemo('Your turn. The controls above do exactly what the arrow was doing.');
+    }, { passive: true });
   });
 
-  /* ---------------- GSAP layer ---------------- */
+  /* ================= GSAP layer ================= */
 
   if (hasGsap && hasScroll) {
     var mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', function () {
-      gsap.set(ghost, { x: 40, y: window.innerHeight * 0.7 });
+      var lastBeat = beats[beats.length - 1];
 
-      gsap.from('.hero h1, .hero__lede, .hero__spec > div', {
-        y: 26, opacity: 0, duration: 1, stagger: 0.07, ease: 'power3.out', delay: 0.15
+      /* the stage: pinned for three screens, the scroll position is the playhead */
+      var stageTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top top',
+          end: '+=340%',
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) { paintStage(self.progress); }
+        }
       });
-      gsap.from('.screen', { y: 34, opacity: 0, duration: 1.1, ease: 'power3.out', delay: 0.25 });
+
+      /* a ruler of 100 units; the beats sit at their real frame's position */
+      stageTimeline.to({}, { duration: 100 });
+
+      beats.forEach(function (beat, index) {
+        var at = (CHAPTERS[index][0] / DURATION) * 100;
+        var isLast = beat === lastBeat;
+        gsap.set(beat, { autoAlpha: 0, y: 26 });
+        stageTimeline.to(beat, { autoAlpha: 1, y: 0, duration: 3.5, ease: 'power2.out' }, at);
+        if (!isLast) {
+          var out = Math.min(100, (CHAPTERS[index + 1][0] / DURATION) * 100 - 4);
+          stageTimeline.to(beat, { autoAlpha: 0, y: -20, duration: 3.5, ease: 'power2.in' }, Math.max(at + 4, out));
+        }
+      });
+
+      /* the aperture opens as the film runs */
+      gsap.fromTo('.stage__video', { scale: 1.12 }, {
+        scale: 1,
+        ease: 'none',
+        scrollTrigger: { trigger: stage, start: 'top top', end: '+=340%', scrub: 0.5 }
+      });
+
+      /* opening copy lifts away */
+      gsap.to('.opening', {
+        y: -40, opacity: 0.35, ease: 'none',
+        scrollTrigger: { trigger: '.opening', start: 'top top', end: 'bottom top', scrub: 0.5 }
+      });
+
+      gsap.from('.opening h1, .opening__lede, .opening__cue', {
+        y: 26, opacity: 0, duration: 1, stagger: 0.08, ease: 'power3.out', delay: 0.15
+      });
 
       /* scroll rule */
       gsap.to('#scrollbar', {
@@ -281,18 +362,11 @@
         scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.4 }
       });
 
-      /* the frame breathes out as it leaves, the way a plate lifts off the bed */
-      gsap.to('.screen__frame', {
-        scale: 1.025,
-        ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
-      });
-
       /* reveals, one treatment per role */
-      document.querySelectorAll('.chapters__list li, .proof, .stats > div, .take > *, .colophon > *').forEach(function (el) {
+      document.querySelectorAll('.watch__head > *, .screen, .coach, .chapters__list li, .proof, .stats > div, .take > *, .colophon > *').forEach(function (el) {
         gsap.from(el, {
           y: 20, opacity: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true }
         });
       });
 
@@ -308,18 +382,20 @@
         });
       });
 
-      /* the ghost only runs while the film is on screen */
+      /* the ghost only runs while the watch section is on screen */
       ScrollTrigger.create({
-        trigger: '.hero',
-        start: 'top 60%',
-        end: 'bottom 20%',
+        trigger: '.watch',
+        start: 'top 55%',
+        end: 'bottom 40%',
         onEnter: function () { if (!takeOver) runDemo(); },
         onEnterBack: function () { if (!takeOver) runDemo(); },
         onLeave: function () { if (demo) { demo.pause(); } },
         onLeaveBack: function () { if (demo) { demo.pause(); } }
       });
 
-      return function () { if (demo) { demo.kill(); demo = null; } };
+      return function () {
+        if (demo) { demo.kill(); demo = null; }
+      };
     });
 
     mm.add('(prefers-reduced-motion: reduce)', function () {
@@ -327,16 +403,20 @@
         dd.textContent = dd.dataset.count;
       });
       gsap.set(ghost, { opacity: 0 });
+      gsap.set('.beat', { autoAlpha: 1, y: 0 });
+      paintStage(0);
     });
+  } else if (reduce || !hasScroll) {
+    paintStage(0);
   }
 
-  /* paint the first state even if GSAP never loads */
   paintProgress();
   window.addEventListener('resize', paintProgress);
 
-  /* a tiny hook for the smoke checks */
+  /* a hook for the checks */
   window.__publicity = {
     seek: seek,
+    stageTo: paintStage,
     state: function () {
       return {
         time: video.currentTime,
@@ -344,6 +424,10 @@
         duration: DURATION,
         ghostVisible: Number(getComputedStyle(ghost).opacity) > 0.1,
         chapters: document.querySelectorAll('#chapterlist button').length,
+        beats: beats.length,
+        stageTime: stageVideo ? stageVideo.currentTime : null,
+        stagePinned: !!(hasScroll && ScrollTrigger.isScrolling()),
+        pinSpacer: !!document.querySelector('.pin-spacer'),
         takenOver: takeOver
       };
     }

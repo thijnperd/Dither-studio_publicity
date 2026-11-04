@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dither Studio · the launch film</title>
-<meta name="description" content="Forty seconds of the Dither Studio press running. 46 dither algorithms, 24 palettes, type set in characters. Watch the film, then take the app.">
+<meta name="description" content="Scroll and the film runs with you. Forty seconds of the Dither Studio press: 46 dither algorithms, 24 palettes, type set in characters. Free, offline, Windows and macOS.">
 <meta name="theme-color" content="#0B0D12">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Dither Studio · the launch film">
-<meta property="og:description" content="Forty seconds of the Dither Studio press running. Watch it, scrub it, then take the app.">
+<meta property="og:description" content="Scroll and the film runs with you. Then take the app.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +18,7 @@
 </head>
 <body class="no-js">
 
-<a class="skip" href="#film">Skip to the film</a>
+<a class="skip" href="#film">Skip to the controls</a>
 <div class="rule-progress" aria-hidden="true"><i id="scrollbar"></i></div>
 
 <div class="loader" id="loader" aria-hidden="true">
@@ -41,18 +41,58 @@
 
 <main id="top">
 
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__type">
-      <h1 id="hero-title">Let there<br>be pixels.</h1>
-      <p class="hero__lede">Dither Studio is an offline press for images. Forty-six dither algorithms, twenty-four palettes, type set in characters. Forty seconds of it running, below.</p>
-      <dl class="hero__spec">
-        <div><dt>Film</dt><dd>40 s · 1920 × 1080</dd></div>
-        <div><dt>Built</dt><dd>Frame by frame, from the app</dd></div>
-        <div><dt>Cost</dt><dd>Free · offline · no account</dd></div>
-      </dl>
+  <div class="opening">
+    <h1>Let there<br>be pixels.</h1>
+    <p class="opening__lede">An offline press for images: forty-six dither algorithms, twenty-four palettes, type set in characters. Scroll, and the film below runs with you.</p>
+    <p class="opening__cue"><i aria-hidden="true"></i>Scroll to run the film</p>
+  </div>
+
+  <section class="stage" id="stage" aria-label="The film, driven by scroll">
+    <video class="stage__video" id="scrubvideo" src="assets/film-scrub.mp4" poster="assets/poster.png"
+           preload="auto" muted playsinline disablepictureinpicture aria-hidden="true"></video>
+    <div class="stage__spot" aria-hidden="true"></div>
+
+    <div class="beats" id="beats">
+      <div class="beat">
+        <h2>A sheet goes in.</h2>
+        <p>The press reads it, cuts it into chunks, and decides what every chunk is made of.</p>
+      </div>
+      <div class="beat">
+        <h2>Three paintings ship inside.</h2>
+        <p>The Creation of Adam, Tor's Fight with the Giants, Oedipus and the Sphinx. Pick one, or bring your own.</p>
+      </div>
+      <div class="beat">
+        <h2>Forty-six algorithms.</h2>
+        <p>Ordered screens, clustered dots, noise, error diffusion, and mixing plans that hold a tone exactly.</p>
+      </div>
+      <div class="beat">
+        <h2>Or characters.</h2>
+        <p>The same proof, set as type. The paper and the ink follow the palette you chose.</p>
+      </div>
+      <div class="beat">
+        <h2>One image, many readings.</h2>
+        <p>A denser screen is a different account of the same painting. The tone survives; the texture becomes the subject.</p>
+      </div>
+      <div class="beat">
+        <h2>Let there be pixels.</h2>
+        <p>Free, offline, Windows and macOS. No account, no network, no telemetry.</p>
+      </div>
     </div>
 
-    <figure class="screen" id="film">
+    <div class="stage__hud">
+      <span class="stage__chapter" id="stagechapter">The press</span>
+      <span class="stage__rule" aria-hidden="true"><i id="stagerule"></i></span>
+      <span class="stage__count"><span id="stagetime">00:00</span> / 00:40</span>
+    </div>
+  </section>
+
+  <section class="watch" id="film" aria-labelledby="watch-title">
+    <div class="watch__head">
+      <h2 id="watch-title">Watch it straight through</h2>
+      <p>The scroll above is a preview. Here the film answers to you: play it, scrub it, jump to a beat, or run it full screen.</p>
+    </div>
+
+    <figure class="screen">
       <div class="screen__frame" id="frame">
         <span class="tick tick--tl" aria-hidden="true"></span>
         <span class="tick tick--tr" aria-hidden="true"></span>
@@ -90,16 +130,8 @@
     </figure>
 
     <div class="coach" id="coach">
-      <p class="coach__line" id="hint">A ghost arrow is about to show you the controls. Touch anything and it steps aside.</p>
+      <p class="coach__line" id="hint">A ghost arrow is about to show you these controls. Touch anything and it steps aside.</p>
       <button class="coach__again" id="again" type="button" hidden>Show me again</button>
-    </div>
-
-    <div class="ghost" id="ghost" aria-hidden="true">
-      <span class="ghost__note" id="ghostnote">Press play</span>
-      <svg class="ghost__arrow" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true">
-        <path d="M2 2 L2 25 L8.4 19 L12.6 28 L16.4 26.2 L12.2 17.4 L20 17.2 Z"
-              fill="#7E93BE" stroke="#0B0D12" stroke-width="1.4"/>
-      </svg>
     </div>
   </section>
 
@@ -177,6 +209,14 @@
 
 </main>
 
+<div class="ghost" id="ghost" aria-hidden="true">
+  <span class="ghost__note" id="ghostnote">Press play</span>
+  <svg class="ghost__arrow" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true">
+    <path d="M2 2 L2 25 L8.4 19 L12.6 28 L16.4 26.2 L12.2 17.4 L20 17.2 Z"
+          fill="#7E93BE" stroke="#0B0D12" stroke-width="1.4"/>
+  </svg>
+</div>
+
 <footer class="colophon">
   <p class="colophon__spec">Film: 40 s · 1920 × 1080 · h264 · 24 fps · drawn as an HTML page and captured frame by frame</p>
   <p class="colophon__links">
@@ -184,7 +224,7 @@
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
-  <p class="colophon__note">Motion by GSAP. No cookies, no analytics, no fonts fetched from a third party. The film is 27 MB because it is 960 real frames.</p>
+  <p class="colophon__note">Motion by GSAP. The scroll stage plays a second encode of the film, keyed every half second so it seeks cleanly. No cookies, no analytics, no fonts fetched from a third party.</p>
 </footer>
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
