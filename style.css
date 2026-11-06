@@ -562,6 +562,25 @@ body.no-js .beat:last-child { margin-bottom: 0; }
 .colophon__links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
 .colophon__links a { color: var(--ivory); text-decoration: none; border-bottom: 1px solid var(--edge); }
 
+/* ---------- motion: the page sets itself as it is read ----------
+   The head adds .motion only when motion is allowed, so a page with no script,
+   a visitor who asked for less motion, or a page whose GSAP never arrived shows
+   every word already printed. Nothing here is opacity-only decoration: the
+   headings are clipped like a sheet leaving the press, the copy rises a few
+   pixels, and the plates wipe in. */
+
+html.motion [data-reveal] { opacity: 0; }
+
+html.motion [data-clip] { clip-path: inset(0 0 100% 0); }
+
+/* a heading keeps its descenders once it has arrived */
+html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion [data-reveal] { opacity: 1; }
+  html.motion [data-clip] { clip-path: none; }
+}
+
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {

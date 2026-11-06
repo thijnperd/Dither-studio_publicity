@@ -14,6 +14,19 @@
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
 <meta property="og:image:alt" content="Two hands from The Creation of Adam, dissolving into a dither.">
 <meta name="twitter:card" content="summary_large_image">
+<script>
+  /* .motion is what allows the stylesheet to hold the page's type back for its
+     reveal. It is set here, in the head, so nothing is ever painted visible and
+     then hidden; a browser without script, or a visitor who asked for less
+     motion, gets the page already set. The timeout is the safety net: if the
+     reveal engine never arrives, the type prints itself. */
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('motion');
+    window.setTimeout(function () {
+      if (!window.__motionReady) document.documentElement.classList.remove('motion');
+    }, 3000);
+  }
+</script>
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/mark-192.png">
 <link rel="stylesheet" href="style.css">
@@ -80,9 +93,9 @@
   </section>
 
   <section class="claim" id="claim" aria-labelledby="claim-title">
-    <h2 id="claim-title" class="claim__title">A dither filter averages a picture into a few greys. This one decides where every mark goes.</h2>
-    <p class="claim__body">Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture's own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
-    <div class="claim__take">
+    <h2 id="claim-title" class="claim__title" data-clip>A dither filter averages a picture into a few greys. This one decides where every mark goes.</h2>
+    <p class="claim__body" data-reveal>Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture's own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
+    <div class="claim__take" data-reveal>
       <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
         <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
@@ -93,100 +106,100 @@
 
   <section class="panel" id="press" aria-labelledby="press-title">
     <div class="panel__body">
-      <p class="panel__label">The press</p>
-      <h2 id="press-title">Pick a screen, pick an ink, watch the proof change.</h2>
-      <p>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image's own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
-      <ul class="panel__list">
+      <p class="panel__label" data-reveal>The press</p>
+      <h2 id="press-title" data-clip>Pick a screen, pick an ink, watch the proof change.</h2>
+      <p data-reveal>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image's own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
+      <ul class="panel__list" data-reveal>
         <li>46 algorithms, 24 palettes, 13 effects, 11 tone maps</li>
         <li>Pixel size from 1 to 16, with a strength knob that pushes any screen away from mid-grey</li>
         <li>Photos, PNG, JPG, WebP, paste or drop, and your choice of dither seed</li>
       </ul>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy">
+      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy" data-clip>
       <figcaption>The console with a painting in the proof. The rail holds every setting; each station reports what it is set to when closed.</figcaption>
     </figure>
   </section>
 
   <section class="panel panel--flip" aria-labelledby="type-title">
     <div class="panel__body">
-      <p class="panel__label">The type case</p>
-      <h2 id="type-title">The same proof, set as characters.</h2>
-      <p>Text mode prints the image as a grid of glyphs from a ramp you choose, at a cell size you choose. The paper and the type come from the palette, so a Game Boy proof is green type on green paper.</p>
-      <p>Export writes the grid as plain text, one line per row, which is a format that survives being pasted anywhere.</p>
+      <p class="panel__label" data-reveal>The type case</p>
+      <h2 id="type-title" data-clip>The same proof, set as characters.</h2>
+      <p data-reveal>Text mode prints the image as a grid of glyphs from a ramp you choose, at a cell size you choose. The paper and the type come from the palette, so a Game Boy proof is green type on green paper.</p>
+      <p data-reveal>Export writes the grid as plain text, one line per row, which is a format that survives being pasted anywhere.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-text.png" alt="Text mode: the proof printed as characters, with the ramp and cell size controls." width="2010" height="1323" loading="lazy">
+      <img src="assets/shot-text.png" alt="Text mode: the proof printed as characters, with the ramp and cell size controls." width="2010" height="1323" loading="lazy" data-clip>
       <figcaption>Text mode on the same painting. The grid is the proof, and the .txt export is that grid.</figcaption>
     </figure>
   </section>
 
   <section class="panel" aria-labelledby="ink-title">
     <div class="panel__body">
-      <p class="panel__label">The ink</p>
-      <h2 id="ink-title">A palette is a fact, not a filter.</h2>
-      <p>Every colour in a proof is one of the palette's own entries. The Game Boy palette is the four greens the hardware could show; the C64 palette is the sixteen the VIC-II produced. Nothing is invented and nothing is blended.</p>
-      <p>For flat areas that need more tones than the palette has, the mixing plans alternate between entries so the average lands where it should. A flat 128 reads as 128 from a metre away.</p>
+      <p class="panel__label" data-reveal>The ink</p>
+      <h2 id="ink-title" data-clip>A palette is a fact, not a filter.</h2>
+      <p data-reveal>Every colour in a proof is one of the palette's own entries. The Game Boy palette is the four greens the hardware could show; the C64 palette is the sixteen the VIC-II produced. Nothing is invented and nothing is blended.</p>
+      <p data-reveal>For flat areas that need more tones than the palette has, the mixing plans alternate between entries so the average lands where it should. A flat 128 reads as 128 from a metre away.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-mono.png" alt="A proof in a single-ink mode, with the palette swatches and the pixel size control." width="2010" height="1323" loading="lazy">
+      <img src="assets/shot-mono.png" alt="A proof in a single-ink mode, with the palette swatches and the pixel size control." width="2010" height="1323" loading="lazy" data-clip>
       <figcaption>A two-ink proof. The tone survives the reduction, which is the whole job.</figcaption>
     </figure>
   </section>
 
   <section class="panel panel--flip" aria-labelledby="video-title">
     <div class="panel__body">
-      <p class="panel__label">Motion</p>
-      <h2 id="video-title">It will dither a video while it plays.</h2>
-      <p>Drop a clip in, or point it at a webcam. The frame loop renders at the speed the machine can hold and drops frames instead of queueing them, so playback stays honest about what it can do.</p>
-      <p>Recording writes the result to WebM. There are three temporal rules for how the recipe moves between frames, and a frame index always produces the same recipe, so a recording can be repeated.</p>
+      <p class="panel__label" data-reveal>Motion</p>
+      <h2 id="video-title" data-clip>It will dither a video while it plays.</h2>
+      <p data-reveal>Drop a clip in, or point it at a webcam. The frame loop renders at the speed the machine can hold and drops frames instead of queueing them, so playback stays honest about what it can do.</p>
+      <p data-reveal>Recording writes the result to WebM. There are three temporal rules for how the recipe moves between frames, and a frame index always produces the same recipe, so a recording can be repeated.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-video.png" alt="Video mode: a frame being dithered live, with playback controls under the proof." width="1600" height="1000" loading="lazy">
+      <img src="assets/shot-video.png" alt="Video mode: a frame being dithered live, with playback controls under the proof." width="1600" height="1000" loading="lazy" data-clip>
       <figcaption>Video mode. The working frame is capped at 720 px so the loop can keep up with the clock.</figcaption>
     </figure>
   </section>
 
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
     <div class="proofs__head">
-      <h2 id="proofs-title">The press, in numbers</h2>
-      <p>These are the catalogues inside the engine. The tests count them, so what is on this page is what the app ships.</p>
+      <h2 id="proofs-title" data-clip>The press, in numbers</h2>
+      <p data-reveal>These are the catalogues inside the engine. The tests count them, so what is on this page is what the app ships.</p>
     </div>
 
     <dl class="stats" id="stats">
-      <div><dt>Algorithms</dt><dd>46</dd></div>
-      <div><dt>Palettes</dt><dd>24</dd></div>
-      <div><dt>Effects</dt><dd>13</dd></div>
-      <div><dt>Tone maps</dt><dd>11</dd></div>
-      <div><dt>Presets</dt><dd>21</dd></div>
+      <div data-reveal><dt>Algorithms</dt><dd>46</dd></div>
+      <div data-reveal><dt>Palettes</dt><dd>24</dd></div>
+      <div data-reveal><dt>Effects</dt><dd>13</dd></div>
+      <div data-reveal><dt>Tone maps</dt><dd>11</dd></div>
+      <div data-reveal><dt>Presets</dt><dd>21</dd></div>
     </dl>
 
     <div class="proofs__pair">
       <figure class="proof">
-        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="800" height="600" loading="lazy">
-        <figcaption><b>Tor's Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette's colours.</figcaption>
+        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="800" height="600" loading="lazy" data-clip>
+        <figcaption data-reveal><b>Tor's Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette's colours.</figcaption>
       </figure>
       <figure class="proof">
-        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="800" height="600" loading="lazy">
-        <figcaption><b>The same painting, a coarser screen.</b> The average tone stays where it was and the grain does the rest.</figcaption>
+        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="800" height="600" loading="lazy" data-clip>
+        <figcaption data-reveal><b>The same painting, a coarser screen.</b> The average tone stays where it was and the grain does the rest.</figcaption>
       </figure>
     </div>
   </section>
 
   <section class="facts" aria-labelledby="facts-title">
-    <h2 id="facts-title" class="facts__title">Three things it does not need</h2>
+    <h2 id="facts-title" class="facts__title" data-clip>Three things it does not need</h2>
     <div class="facts__row">
-      <div class="fact">
+      <div class="fact" data-reveal>
         <span class="fact__num">0</span>
         <h3>Accounts</h3>
         <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
       </div>
-      <div class="fact">
+      <div class="fact" data-reveal>
         <span class="fact__num">0</span>
         <h3>Uploads</h3>
         <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
       </div>
-      <div class="fact">
+      <div class="fact" data-reveal>
         <span class="fact__num">0</span>
         <h3>Network calls</h3>
         <p>No fonts, no analytics, no licence check. The only request in the whole product is the one you make to download it.</p>
@@ -195,21 +208,21 @@
   </section>
 
   <section class="asks" aria-labelledby="asks-title">
-    <h2 id="asks-title">Before you install</h2>
+    <h2 id="asks-title" data-clip>Before you install</h2>
     <ol class="asks__list">
-      <li>
+      <li data-reveal>
         <h3>The build is unsigned</h3>
         <p>Windows SmartScreen and macOS Gatekeeper will both ask once. The release page says exactly what to click, and it is two clicks.</p>
       </li>
-      <li>
+      <li data-reveal>
         <h3>Pick the build for your machine</h3>
         <p>There is an installer, a portable executable, and a macOS disk image. All three are on the releases page.</p>
       </li>
-      <li>
+      <li data-reveal>
         <h3>It updates by hand</h3>
         <p>There is no auto-updater. A new version is a new download, and your images and settings are untouched.</p>
       </li>
-      <li>
+      <li data-reveal>
         <h3>Video works at 720 px while it plays</h3>
         <p>The frame is capped so the loop can keep up with the clock. A still is printed at full resolution; a moving frame is not.</p>
       </li>
@@ -217,16 +230,16 @@
   </section>
 
   <section class="take" id="take" aria-labelledby="take-title">
-    <h2 id="take-title">Take the press home</h2>
-    <p class="take__lede">The installer is the whole app. It works offline and saves PNG files to your disk.</p>
-    <div class="take__actions">
+    <h2 id="take-title" data-clip>Take the press home</h2>
+    <p class="take__lede" data-reveal>The installer is the whole app. It works offline and saves PNG files to your disk.</p>
+    <div class="take__actions" data-reveal>
       <a class="button" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
         <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
       </a>
       <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
     </div>
-    <p class="take__fine">There is no server in this product. The only network request it ever makes is the one you are about to make.</p>
+    <p class="take__fine" data-reveal>There is no server in this product. The only network request it ever makes is the one you are about to make.</p>
   </section>
 
 </main>

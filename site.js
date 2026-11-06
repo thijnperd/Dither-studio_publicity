@@ -16,6 +16,9 @@
   var hasGsap = typeof window.gsap !== 'undefined';
   var hasScroll = hasGsap && typeof window.ScrollTrigger !== 'undefined';
   if (hasScroll) gsap.registerPlugin(ScrollTrigger);
+  /* the stylesheet holds the type back only while .motion is set, so the class
+     has to come off the moment we know we cannot animate */
+  if (!hasScroll) document.documentElement.classList.remove('motion');
 
   var stage = $('stage');
   var video = $('scrubvideo');
@@ -152,6 +155,60 @@
     });
   }
 
+  /* ================= the page sets itself as it is read ================= */
+
+  if (hasScroll && document.documentElement.classList.contains('motion')) {
+    window.__motionReady = true;
+
+    var RISE = 0.62;      /* seconds, a caption's length of breath */
+    var WIPE = 0.95;
+    var line = window.innerHeight * 0.88;
+
+    function rise(el, delay) {
+      gsap.fromTo(el, { y: 18 }, {
+        opacity: 1, y: 0, duration: RISE, ease: 'power3.out',
+        delay: delay || 0, overwrite: true
+      });
+    }
+
+    /* a heading opens from its baseline, a plate from its top edge */
+    function open(el, delay) {
+      var plate = el.tagName === 'IMG';
+      gsap.to(el, {
+        clipPath: plate ? 'inset(0 0 0% 0)' : 'inset(0 0 -8% 0)',
+        duration: plate ? 0.85 : WIPE,
+        ease: 'power4.out',
+        delay: delay || 0,
+        overwrite: true
+      });
+    }
+
+    function arm(list, play) {
+      list.forEach(function (el, index) {
+        var box = el.getBoundingClientRect();
+        if (box.bottom < 0) {
+          /* already read past (a reload halfway down): never hide it again */
+          gsap.set(el, { opacity: 1, y: 0, clipPath: 'none' });
+          return;
+        }
+        if (box.top < line) {
+          /* on screen at arrival: set it, without waiting for a scroll */
+          play(el, (index % 4) * 0.07);
+          return;
+        }
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+          onEnter: function () { play(el); }
+        });
+      });
+    }
+
+    arm(gsap.utils.toArray('[data-reveal]'), rise);
+    arm(gsap.utils.toArray('[data-clip]'), open);
+  }
+
   /* a hook for the checks */
   window.__publicity = {
     stageTo: paintStage,
@@ -165,6 +222,7 @@
         videosOnPage: document.querySelectorAll('video').length,
         film: video && video.currentSrc ? video.currentSrc.split('/').pop() : null,
         dims: video && video.videoWidth ? video.videoWidth + '×' + video.videoHeight : null,
+        motion: document.documentElement.classList.contains('motion'),
         nav: current ? current.getAttribute('href') : null
       };
     }
