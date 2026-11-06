@@ -179,7 +179,11 @@
           return entry.type === 'file' && (IMAGE.test(entry.name) || VIDEO.test(entry.name));
         })
         .sort(function (a, b) {
-          return a.name.localeCompare(b.name, 'en', { numeric: true });
+          /* stills first, then clips; within each, the file name groups a
+             painting's proofs together and keeps 2 before 10 */
+          var clipA = VIDEO.test(a.name) ? 1 : 0;
+          var clipB = VIDEO.test(b.name) ? 1 : 0;
+          return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
         });
       try {
         sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
