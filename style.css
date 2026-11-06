@@ -765,15 +765,19 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: clamp(1rem, 2.2vw, 1.6rem);
+  columns: 3 300px;
+  column-gap: clamp(1rem, 2.2vw, 1.6rem);
+}
+
+.shelf__item {
+  break-inside: avoid;
+  margin: 0 0 clamp(1rem, 2.2vw, 1.6rem);
 }
 
 .shelf__link {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
   text-decoration: none;
   color: inherit;
   border: 1px solid var(--line);
@@ -786,7 +790,6 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
 .shelf__plate {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
   background: var(--void);
   border-bottom: 1px solid var(--line);
 }
@@ -794,7 +797,7 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
 .shelf__plate img,
 .shelf__plate video {
   width: 100%;
-  height: 100%;
+  height: auto;
   /* a proof is shown whole: cover would crop a landscape or a plinth */
   object-fit: contain;
   display: block;
@@ -831,6 +834,12 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
   color: var(--muted);
 }
 
+.shelf__note {
+  font: 400 12.5px/1.55 var(--sans, system-ui);
+  color: var(--muted);
+  margin: 0;
+}
+
 .library__status {
   font: 400 13px/1.6 var(--mono);
   color: var(--muted);
@@ -851,5 +860,5 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
 @media (max-width: 560px) {
   .library { padding-top: 6.5rem; }
   .library__bar { align-items: flex-start; }
-  .shelf { grid-template-columns: 1fr; }
+  .shelf { columns: 1; }
 }

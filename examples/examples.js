@@ -20,6 +20,7 @@
   if (!grid || !note) return;
 
   var total = 0;
+  var CAPTIONS = {};
 
   function weight(bytes) {
     if (!bytes) return '';
@@ -100,6 +101,14 @@
       meta.appendChild(name);
       meta.appendChild(spec);
 
+      var captionLine = CAPTIONS[file.name] || CAPTIONS[file.name.replace(/\.[^.]+$/, '')];
+      if (captionLine) {
+        var noteLine = document.createElement('span');
+        noteLine.className = 'shelf__note';
+        noteLine.textContent = captionLine;
+        meta.appendChild(noteLine);
+      }
+
       /* once the browser knows the pixels, the caption can say how many */
       media.addEventListener(kind === 'motion' ? 'loadedmetadata' : 'load', function () {
         var w = kind === 'motion' ? media.videoWidth : media.naturalWidth;
@@ -159,36 +168,46 @@
     }
   }
 
-  var held = cached();
-  if (held) {
-    show(held);
-    return;
+  function readCaptions() {
+    return fetch('captions.json', { cache: 'no-store' })
+      .then(function (response) { return response.ok ? response.json() : {}; })
+      .catch(function () { return {}; });
   }
 
-  fetch('https://api.github.com/repos/' + REPO + '/contents/' + DIR + '?ref=main', {
-    headers: { Accept: 'application/vnd.github+json' }
-  })
-    .then(function (response) {
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
+  readCaptions().then(function (map) {
+    CAPTIONS = map && typeof map === 'object' ? map : {};
+
+    var held = cached();
+    if (held) {
+      show(held);
+      return;
+    }
+
+    fetch('https://api.github.com/repos/' + REPO + '/contents/' + DIR + '?ref=main', {
+      headers: { Accept: 'application/vnd.github+json' }
     })
-    .then(function (entries) {
-      if (!Array.isArray(entries)) throw new Error('unexpected listing');
-      var files = entries
-        .filter(function (entry) {
-          return entry.type === 'file' && (IMAGE.test(entry.name) || VIDEO.test(entry.name));
-        })
-        .sort(function (a, b) {
-          /* stills first, then clips; within each, the file name groups a
-             painting's proofs together and keeps 2 before 10 */
-          var clipA = VIDEO.test(a.name) ? 1 : 0;
-          var clipB = VIDEO.test(b.name) ? 1 : 0;
-          return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
-        });
-      try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
-      } catch (error) { /* a browser that refuses storage still gets the shelf */ }
-      show(files);
-    })
-    .catch(failed);
+      .then(function (response) {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+      })
+      .then(function (entries) {
+        if (!Array.isArray(entries)) throw new Error('unexpected listing');
+        var files = entries
+          .filter(function (entry) {
+            return entry.type === 'file' && (IMAGE.test(entry.name) || VIDEO.test(entry.name));
+          })
+          .sort(function (a, b) {
+            /* stills first, then clips; within each, the file name groups a
+               painting's proofs together and keeps 2 before 10 */
+            var clipA = VIDEO.test(a.name) ? 1 : 0;
+            var clipB = VIDEO.test(b.name) ? 1 : 0;
+            return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
+          });
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
+        } catch (error) { /* a browser that refuses storage still gets the shelf */ }
+        show(files);
+      })
+      .catch(failed);
+  });
 })();
