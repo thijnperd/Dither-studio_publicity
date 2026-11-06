@@ -1,7 +1,8 @@
 /* Dither Studio publicity site.
-   The film has one control surface: the scroll. Chapters move the scroll, the
-   ghost pointer demonstrates that, and nothing on the page can restart the film.
-   There is no readout: no timecode, no progress rule, no chapter timer. */
+   The page opens on the film. Scroll is the only control surface: no player, no
+   timeline, no readout, and the film under the type is the app's own dither.
+   Phones, reduced-motion and save-data get the poster and the captions in flow
+   rather than a download they cannot scrub. */
 
 (function () {
   'use strict';
@@ -9,81 +10,124 @@
   document.body.classList.remove('no-js');
 
   var $ = function (id) { return document.getElementById(id); };
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DURATION = 40;          /* seconds of film */
+  var STAGE_SCREENS = 4;      /* viewport-heights of scroll the film runs over */
+
   var hasGsap = typeof window.gsap !== 'undefined';
   var hasScroll = hasGsap && typeof window.ScrollTrigger !== 'undefined';
   if (hasScroll) gsap.registerPlugin(ScrollTrigger);
 
-  var DURATION = 40;
-  /* the second film's stops, so a stop button lands on a real beat of it */
-  var CHAPTERS = [
-    [0, 'Gods'],
-    [5.2, 'The spark'],
-    [9, 'The screen'],
-    [15, 'Gods, rebuilt'],
-    [22.2, 'The press'],
-    [30, 'Many readings']
-  ];
-  var LAST_BEAT_END = 35;
-
   var stage = $('stage');
-  var stageVideo = $('scrubvideo');
+  var video = $('scrubvideo');
+  var hint = $('hint');
   var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
-  var pinTrigger = null;
 
-  /* ================= the scroll stage ================= */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var coarse = window.matchMedia('(pointer: coarse)').matches;
+  var narrow = window.matchMedia('(max-width: 900px)').matches;
+  var thrifty = !!(navigator.connection && navigator.connection.saveData);
+  var canScrub = hasScroll && !reduce && !coarse && !narrow && !thrifty;
+  var mode = canScrub ? 'scrub' : 'still';
+
+  if (stage) stage.setAttribute('data-mode', mode);
+
+  /* ================= the film follows the scroll ================= */
+
+  var want = null;    /* the time the scroll has asked for */
+  var queued = 0;
+
+  function flush() {
+    queued = 0;
+    if (!video || want === null) return;
+    /* a seek asked for before the stream has data is dropped silently, so the
+       request stays queued and loadeddata/seeked come back for it */
+    if (video.readyState < 1) return;
+    if (Math.abs(video.currentTime - want) > 0.04) {
+      try { video.currentTime = want; } catch (error) { /* a refused seek is not fatal */ }
+    }
+  }
 
   function paintStage(progress) {
-    if (!stageVideo) return;
-    var time = Math.max(0, Math.min(DURATION, progress * DURATION));
-
-    /* seeking is expensive: only ask the decoder when the target actually moved */
-    if (stageVideo.readyState >= 1 && Math.abs(stageVideo.currentTime - time) > 0.04) {
-      try { stageVideo.currentTime = time; } catch (error) { /* a refused seek is not fatal */ }
-    }
+    want = Math.max(0, Math.min(DURATION, progress * DURATION));
+    if (!queued) queued = window.requestAnimationFrame(flush);
   }
 
-  if (stageVideo) {
-    stageVideo.addEventListener('loadedmetadata', function () { paintStage(0); });
-    stageVideo.pause();
+  if (canScrub && video) {
+    /* the file is only asked for once we know this visitor can run it */
+    video.preload = 'auto';
+    video.src = video.getAttribute('data-src');
+    video.addEventListener('loadeddata', flush);
+    video.addEventListener('seeked', flush);
+    video.pause();
   }
 
-  /* ================= chapters move the scroll ================= */
+  /* ================= the hint stands down after the first scroll ================= */
 
-  function jumpTo(seconds) {
-    var ratio = Math.max(0, Math.min(1, seconds / DURATION));
-    if (!pinTrigger) {
-      /* no pin (reduced motion, or the script was cut short): just go there */
-      var heading = stage.querySelector('.beat') || stage;
-      heading.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-      return;
-    }
-    var destination = pinTrigger.start + (pinTrigger.end - pinTrigger.start) * ratio;
-    if (!hasGsap || reduce) {
-      window.scrollTo(0, destination);
-      return;
-    }
-    /* tweened, so the film scrubs with the page instead of teleporting;
-       600ms because this is navigation, not a scene */
-    var proxy = { at: window.scrollY };
-    gsap.to(proxy, {
-      at: destination,
-      duration: 0.6,
-      ease: 'power2.inOut',
-      overwrite: true,
-      onUpdate: function () { window.scrollTo(0, proxy.at); }
+  if (hint && canScrub) {
+    var dismissHint = function () {
+      if (window.scrollY > 40) hint.classList.add('is-gone');
+    };
+    window.addEventListener('scroll', dismissHint, { passive: true });
+  }
+
+  /* ================= captions ride the film ================= */
+
+  var pinTrigger = null;
+
+  if (canScrub) {
+    var perSecond = 100 / DURATION;
+    var life = function (seconds) { return seconds * perSecond; };
+    var FADE = 0.9;             /* seconds of film a caption takes to come and go */
+
+    /* [in, out] in seconds of film, each inside the shot it describes:
+       hook 0–5.2, spark 5.2–9, turn 9–15, gods 15–22.2, press 22.2–30,
+       many 30–35, and the mark from 35 with no caption over it */
+    var CAPTIONS = [
+      [2.6, 5.0],
+      [5.6, 8.8],
+      [9.6, 14.6],
+      [15.8, 21.8],
+      [23.0, 29.4],
+      [30.8, 34.4]
+    ];
+
+    var timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: stage,
+        start: 'top top',
+        end: '+=' + (STAGE_SCREENS * 100) + '%',
+        pin: true,
+        scrub: 0.6,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: function (self) { paintStage(self.progress); }
+      }
+    });
+    pinTrigger = timeline.scrollTrigger;
+    timeline.to({}, { duration: 100 });
+
+    /* every beat shares one cell, so only one is ever in the frame */
+    gsap.set(beats, { autoAlpha: 0, y: 18 });
+    var title = beats[0];
+    gsap.set(title, { autoAlpha: 1, y: 0 });
+    timeline.to(title, { autoAlpha: 0, y: -14, duration: life(FADE) }, life(2.2));
+
+    beats.slice(1).forEach(function (beat, index) {
+      var span = CAPTIONS[index];
+      if (!span) return;
+      timeline.to(beat, { autoAlpha: 1, y: 0, duration: life(FADE) }, life(span[0]));
+      timeline.to(beat, { autoAlpha: 0, y: -14, duration: life(FADE) }, life(span[1] - FADE));
     });
   }
 
-  document.querySelectorAll('#chapterlist button').forEach(function (button) {
-    button.addEventListener('click', function () { jumpTo(parseFloat(button.dataset.at)); });
-  });
+  /* ================= the download button knows the platform ================= */
 
-  var download = $('download');
   var downloadLabel = $('downloadLabel');
   var ua = navigator.userAgent;
-  if (/Mac/i.test(ua)) downloadLabel.textContent = 'Download for macOS';
-  else if (!/Windows/i.test(ua)) downloadLabel.textContent = 'See the releases';
+  if (downloadLabel) {
+    if (/Mac/i.test(ua)) downloadLabel.textContent = 'Download for macOS';
+    else if (!/Windows/i.test(ua)) downloadLabel.textContent = 'See the releases';
+  }
 
   /* ================= which section are we in ================= */
 
@@ -101,173 +145,25 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['stage', 'chapters', 'proofs', 'take'].forEach(function (id) {
+    ['stage', 'proofs', 'take'].forEach(function (id) {
       var section = $(id);
       if (section) seen.observe(section);
     });
   }
 
-  /* ================= the ghost pointer ================= */
-
-  var ghost = $('ghost');
-  var ghostNote = $('ghostnote');
-  var hint = $('hint');
-  var again = $('again');
-  var demo = null;
-  var takeOver = false;
-
-  function centre(el) {
-    var box = el.getBoundingClientRect();
-    return { x: box.left + box.width / 2, y: box.top + box.height / 2 };
-  }
-
-  function rippleAt(point) {
-    var dot = document.createElement('span');
-    dot.className = 'ripple';
-    document.body.appendChild(dot);
-    gsap.set(dot, { x: point.x, y: point.y });
-    gsap.fromTo(dot, { scale: 0.35, opacity: 0.9 },
-      { scale: 1.5, opacity: 0, duration: 0.6, ease: 'power2.out', onComplete: function () { dot.remove(); } });
-  }
-
-  function say(text) { ghostNote.textContent = text; }
-
-  function runDemo() {
-    if (!hasGsap || reduce || takeOver || demo) return;
-    var chapter = document.querySelectorAll('#chapterlist button')[1];
-
-    demo = gsap.timeline({
-      onStart: function () { ghost.style.opacity = 1; },
-      onComplete: function () { endDemo(); }
-    });
-
-    demo.call(say, ['Jump to a chapter']);
-    demo.to(ghost, { x: centre(chapter).x, y: centre(chapter).y, duration: 0.9, ease: 'power3.inOut' });
-    demo.to(ghost, { scale: 0.88, duration: 0.1 });
-    demo.call(function () {
-      rippleAt(centre(chapter));
-      chapter.click();
-    });
-    demo.to(ghost, { scale: 1, duration: 0.16 });
-    demo.to({}, { duration: 2.6 });
-
-    demo.call(say, ['Take it home']);
-    demo.to(ghost, { x: centre(download).x, y: centre(download).y, duration: 0.9, ease: 'power3.inOut' });
-    demo.to(download, { scale: 1.03, duration: 0.2, ease: 'power2.out', yoyo: true, repeat: 1 });
-    demo.to({}, { duration: 1.2 });
-  }
-
-  function endDemo() {
-    if (!hasGsap) return;
-    demo = null;
-    gsap.to(ghost, { opacity: 0, duration: 0.3, ease: 'power2.in' });
-  }
-
-  function stopDemo(reason) {
-    if (takeOver) return;
-    takeOver = true;
-    if (demo) { demo.kill(); demo = null; }
-    if (hasGsap) gsap.to(ghost, { opacity: 0, duration: 0.2, ease: 'power2.in' });
-    hint.textContent = reason;
-    again.hidden = false;
-  }
-
-  again.addEventListener('click', function () {
-    takeOver = false;
-    again.hidden = true;
-    hint.textContent = 'The arrow shows what a chapter does. Touch anything and it stands down.';
-    if (!hasGsap) return;
-    gsap.set(ghost, { x: 40, y: window.innerHeight * 0.7, scale: 1 });
-    runDemo();
-  });
-
-  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
-    window.addEventListener(type, function (event) {
-      if (event.target.closest && event.target.closest('#again')) return;
-      if (event.target.closest && event.target.closest('.masthead')) return;
-      stopDemo('Your turn. A chapter button moves the page and the film together.');
-    }, { passive: true });
-  });
-
-  /* ================= GSAP layer ================= */
-
-  if (hasGsap && hasScroll) {
-    var mm = gsap.matchMedia();
-
-    mm.add('(prefers-reduced-motion: no-preference)', function () {
-      /* the stage: pinned for three and a half screens, the scroll is the playhead */
-      var stageTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: 'top top',
-          end: '+=340%',
-          pin: true,
-          scrub: 0.6,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: function (self) { paintStage(self.progress); }
-        }
-      });
-      pinTrigger = stageTimeline.scrollTrigger;
-
-      /* a ruler of 100 units; each caption owns the beats of its own scene */
-      stageTimeline.to({}, { duration: 100 });
-
-      /* One caption per montage beat, cleared before the next. The last one
-         leaves before the close, because the film's end card is the payoff
-         and two headlines in one frame is one too many. */
-      beats.forEach(function (beat, index) {
-        var at = (CHAPTERS[index][0] / DURATION) * 100;
-        var next = CHAPTERS[index + 1] ? CHAPTERS[index + 1][0] : LAST_BEAT_END;
-        var out = Math.min(100, (next / DURATION) * 100 - 4);
-        gsap.set(beat, { autoAlpha: 0, y: 20 });
-        stageTimeline.to(beat, { autoAlpha: 1, y: 0, duration: 3.5, ease: 'power2.out' }, at);
-        stageTimeline.to(beat, { autoAlpha: 0, y: -14, duration: 3.5, ease: 'power2.in' }, Math.max(at + 4, out));
-      });
-
-      /* the aperture opens a little as the film runs */
-      gsap.fromTo('.stage__video', { scale: 1.08 }, {
-        scale: 1,
-        ease: 'none',
-        scrollTrigger: { trigger: stage, start: 'top top', end: '+=340%', scrub: 0.5 }
-      });
-
-      /* the ghost only runs while the chapter strip is on screen */
-      ScrollTrigger.create({
-        trigger: '.chapters',
-        start: 'top 60%',
-        end: 'bottom 60%',
-        onEnter: function () { if (!takeOver) runDemo(); },
-        onEnterBack: function () { if (!takeOver) runDemo(); },
-        onLeave: function () { if (demo) { demo.pause(); } },
-        onLeaveBack: function () { if (demo) { demo.pause(); } }
-      });
-
-      return function () { if (demo) { demo.kill(); demo = null; } };
-    });
-
-    mm.add('(prefers-reduced-motion: reduce)', function () {
-      gsap.set(ghost, { opacity: 0 });
-      gsap.set('.beat', { autoAlpha: 1, y: 0 });
-      paintStage(0);
-    });
-  } else {
-    paintStage(0);
-  }
-
   /* a hook for the checks */
   window.__publicity = {
-    jumpTo: jumpTo,
     stageTo: paintStage,
     state: function () {
       var current = document.querySelector('.masthead__nav a[aria-current]');
       return {
-        stageTime: stageVideo ? +stageVideo.currentTime.toFixed(2) : null,
+        stageTime: video ? +video.currentTime.toFixed(2) : 0,
         beats: beats.length,
+        mode: mode,
         pinned: !!pinTrigger,
         videosOnPage: document.querySelectorAll('video').length,
-        ghostVisible: Number(getComputedStyle(ghost).opacity) > 0.1,
-        takenOver: takeOver,
+        film: video && video.currentSrc ? video.currentSrc.split('/').pop() : null,
+        dims: video && video.videoWidth ? video.videoWidth + '×' + video.videoHeight : null,
         nav: current ? current.getAttribute('href') : null
       };
     }

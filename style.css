@@ -1,7 +1,7 @@
 /* Dither Studio publicity site.
    One stylesheet, the console's own house style: void ground, ivory type,
-   lapis for data, hairlines for structure. The page is a walkthrough: a film
-   you scrub, then panels that show the press one station at a time. */
+   lapis for data, hairlines for structure. The page opens on the film; the
+   panels below show the press one station at a time. */
 
 :root {
   --void: #0B0D12;
@@ -18,7 +18,6 @@
   --mono: Consolas, "Cascadia Mono", ui-monospace, monospace;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --measure: 62ch;
@@ -28,7 +27,7 @@
 
 html {
   background: var(--void);
-  scroll-behavior: auto;          /* the chapter tween owns smooth scrolling */
+  scroll-behavior: auto;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -38,7 +37,8 @@ body {
   color: var(--ivory);
   font: 400 17px/1.62 var(--sans);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* clip, not hidden: a scroll container on the body breaks ScrollTrigger's pin */
+  overflow-x: clip;
 }
 
 [hidden] { display: none !important; }
@@ -76,9 +76,12 @@ p { margin: 0 0 1em; }
 
 /* ---------- masthead ---------- */
 
+/* fixed, not sticky: the film has to start at the top edge of the window */
 .masthead {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   display: flex;
   align-items: center;
@@ -133,52 +136,12 @@ p { margin: 0 0 1em; }
 }
 .masthead__take:active { transform: scale(0.98); }
 
-/* ---------- opening ---------- */
-
-.opening {
-  padding: clamp(4rem, 12vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.opening__label {
-  font: 400 13px/1 var(--mono);
-  letter-spacing: 0.08em;
-  color: var(--lapis);
-  margin-bottom: clamp(1.4rem, 4vh, 2.6rem);
-}
-
-.opening__title {
-  font-size: clamp(2.9rem, 8.2vw, 6.4rem);
-  line-height: 0.98;
-  margin: 0 0 clamp(1.2rem, 3vh, 2rem);
-  max-width: 15ch;
-}
-
-.opening__lede {
-  max-width: var(--measure);
-  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
-  color: var(--ivory);
-  opacity: 0.88;
-}
-
-.opening__cue {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: clamp(2rem, 6vh, 3.4rem);
-  font: 400 13px/1 var(--mono);
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-.opening__cue svg { color: var(--lapis); }
-
-/* ---------- the stage ---------- */
+/* ---------- the stage: the film is the first thing on the page ---------- */
 
 .stage {
   position: relative;
   height: 100svh;
-  min-height: 520px;
+  min-height: 560px;
   overflow: hidden;
   background: #000;
   isolation: isolate;
@@ -198,18 +161,46 @@ p { margin: 0 0 1em; }
   background: radial-gradient(120% 90% at 50% 42%, transparent 34%, rgba(4, 6, 10, 0.72) 100%);
 }
 
+/* type over an ordered dither needs a floor to sit on */
+.stage__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* a floor for the type, not atmosphere: no caption survives a dither
+     without it, and the vignette above is what gives the frame its depth */
+  /* deslop-ignore-next-line 06 */
+  background: linear-gradient(to top,
+    rgba(4, 6, 10, 0.94) 0%,
+    rgba(4, 6, 10, 0.72) 22%,
+    rgba(4, 6, 10, 0.2) 46%,
+    transparent 64%);
+}
+
 .beats {
   position: absolute;
   inset: auto 0 0 0;
-  padding: 0 var(--gutter) clamp(3.2rem, 9vh, 6rem);
+  display: grid;
+  padding: 0 var(--gutter) clamp(3rem, 9vh, 5.4rem);
   pointer-events: none;
 }
 
-.beat { display: none; max-width: 44ch; }
-.beat:first-child { display: block; }
+/* one caption at a time: every beat shares a cell, so the stack never grows
+   and the type never lands on top of another beat */
+.beat {
+  grid-area: 1 / 1;
+  align-self: end;
+  max-width: 46ch;
+}
+
+.beat h1 {
+  font-size: clamp(2.7rem, 7.2vw, 5.6rem);
+  line-height: 0.96;
+  margin: 0 0 0.9rem;
+  max-width: 15ch;
+}
 
 .beat h2 {
-  font-size: clamp(1.9rem, 4.4vw, 3.6rem);
+  font-size: clamp(1.9rem, 4.4vw, 3.4rem);
   line-height: 1.02;
   margin: 0 0 0.7rem;
 }
@@ -217,74 +208,76 @@ p { margin: 0 0 1em; }
 .beat p {
   margin: 0;
   color: var(--ivory);
-  opacity: 0.82;
-  max-width: 40ch;
+  opacity: 0.84;
+  max-width: 42ch;
 }
 
-/* ---------- stops ---------- */
-
-.stops {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: clamp(4rem, 10vh, 7rem) var(--gutter) clamp(3rem, 7vh, 5rem);
-  scroll-margin-top: 4.75rem;
-}
-
-.stops__head h2 { font-size: clamp(1.8rem, 3.4vw, 2.9rem); margin: 0 0 0.6rem; }
-.stops__head p { color: var(--muted); max-width: 52ch; margin-bottom: 2.2rem; }
-
-.chapters__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  border-top: 1px solid var(--line);
-}
-
-.chapters__list li { border-bottom: 1px solid var(--line); }
-
-.chapters__list button {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  padding: 1.15rem 1.2rem 1.3rem;
-  background: transparent;
-  border: 0;
-  border-right: 1px solid var(--line);
-  text-align: left;
-  color: var(--ivory);
-  cursor: pointer;
-  transition: background 140ms var(--ease-out);
-}
-.chapters__list li:last-child button { border-right: 0; }
-
-.chapters__name { font: 400 20px/1.2 var(--serif); }
-.chapters__what { font: 400 13.5px/1.5 var(--sans); color: var(--muted); }
-
-.coach {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1.5rem;
-  font: 400 13px/1.6 var(--mono);
-  color: var(--muted);
-}
-.coach__line { margin: 0; }
-
-.coach__again {
+.beat__label {
   font: 400 13px/1 var(--mono);
-  color: var(--ivory);
-  background: transparent;
-  border: 1px solid var(--edge);
-  border-radius: 3px;
-  padding: 0.5rem 0.8rem;
-  cursor: pointer;
+  letter-spacing: 0.08em;
+  color: var(--lapis);
+  opacity: 1;
+  margin: 0 0 1.2rem;
 }
-.coach__again:active { transform: scale(0.98); }
+
+.beat__lede { font-size: clamp(1rem, 1.4vw, 1.14rem); }
+
+.stage__hint {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(2.2rem, 5.5vh, 3.4rem);
+  margin: 0;
+  font: 400 13px/1 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  transition: opacity 320ms var(--ease-out);
+}
+.stage__hint.is-gone { opacity: 0; }
+
+/* ---------- still mode: no film, the poster and the captions in flow ----------
+   Set by site.js for phones, reduced motion and save-data; the no-JS page gets
+   the same treatment. */
+
+.stage[data-mode="still"],
+body.no-js .stage {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  background: var(--void);
+}
+
+.stage[data-mode="still"] .stage__video,
+.stage[data-mode="still"] .stage__spot,
+.stage[data-mode="still"] .stage__scrim,
+.stage[data-mode="still"] .stage__hint,
+body.no-js .stage__video,
+body.no-js .stage__spot,
+body.no-js .stage__scrim,
+body.no-js .stage__hint { display: none; }
+
+.stage[data-mode="still"]::before,
+body.no-js .stage::before {
+  content: "";
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: #000 url(assets/poster.jpg) center / cover no-repeat;
+  border-bottom: 1px solid var(--line);
+}
+
+.stage[data-mode="still"] .beats,
+body.no-js .beats {
+  position: static;
+  display: block;
+  padding: clamp(2.2rem, 6vh, 3.6rem) var(--gutter) clamp(2rem, 6vh, 3.2rem);
+}
+
+.stage[data-mode="still"] .beat,
+body.no-js .beat {
+  margin: 0 0 2rem;
+  max-width: var(--measure);
+}
+.stage[data-mode="still"] .beat:last-child,
+body.no-js .beat:last-child { margin-bottom: 0; }
 
 /* ---------- facts ---------- */
 
@@ -327,6 +320,7 @@ p { margin: 0 0 1em; }
   margin: 0 auto;
   padding: clamp(3rem, 9vh, 6rem) var(--gutter);
   border-top: 1px solid var(--line);
+  scroll-margin-top: 4.75rem;
 }
 
 .panel--flip .panel__body { order: 2; }
@@ -432,48 +426,6 @@ p { margin: 0 0 1em; }
 .proof figcaption { margin-top: 0.8rem; font-size: 14.5px; color: var(--muted); }
 .proof figcaption b { color: var(--ivory); font-weight: 500; }
 
-/* ---------- the data table ---------- */
-
-.data {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: clamp(3.5rem, 9vh, 6rem) var(--gutter);
-  border-top: 1px solid var(--line);
-}
-
-.data h2 { font-size: clamp(1.8rem, 3.4vw, 2.9rem); margin: 0 0 0.6rem; }
-.data__lede { color: var(--muted); max-width: 54ch; margin-bottom: 2rem; }
-
-.data__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;
-}
-
-.data__table th,
-.data__table td {
-  text-align: left;
-  padding: 0.95rem 1rem 0.95rem 0;
-  border-bottom: 1px solid var(--line);
-  vertical-align: top;
-}
-
-.data__table th {
-  font: 400 12.5px/1 var(--mono);
-  letter-spacing: 0.07em;
-  color: var(--lapis);
-  white-space: nowrap;
-}
-
-.data__table td { color: var(--muted); }
-.data__table td:first-child { color: var(--ivory); width: 26%; }
-.data__table td:last-child {
-  color: var(--ivory);
-  white-space: nowrap;
-  width: 1%;
-  font: 400 12.5px/1.6 var(--mono);
-}
-
 /* ---------- the triad ---------- */
 
 .triad {
@@ -577,47 +529,6 @@ p { margin: 0 0 1em; }
 
 .take__fine { margin-top: 1.6rem; font-size: 14px; color: var(--muted); max-width: 52ch; }
 
-/* ---------- ghost pointer ---------- */
-
-.ghost {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 60;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.ghost__note {
-  transform: translate(4px, 26px);
-  padding: 0.4rem 0.6rem;
-  background: var(--void);
-  border: 1px solid var(--edge);
-  border-radius: 3px;
-  font: 400 12.5px/1 var(--mono);
-  color: var(--ivory);
-  white-space: nowrap;
-}
-
-.ghost__arrow { flex: none; }
-
-.ripple {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1px solid var(--lapis);
-  /* deslop-ignore-next-line 19 */
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 59;
-}
-
 /* ---------- colophon ---------- */
 
 .colophon {
@@ -634,12 +545,7 @@ p { margin: 0 0 1em; }
 .colophon__links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
 .colophon__links a { color: var(--ivory); text-decoration: none; border-bottom: 1px solid var(--edge); }
 
-/* ---------- mobile / no script ---------- */
-
-body.no-js .stage { height: auto; min-height: 0; background: var(--void); }
-body.no-js .stage__video, body.no-js .stage__spot { display: none; }
-body.no-js .beat { display: block; max-width: var(--measure); padding-bottom: 1.6rem; }
-body.no-js .beats { position: static; padding: 0 var(--gutter) 2rem; }
+/* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
   .panel { grid-template-columns: 1fr; }
@@ -654,29 +560,19 @@ body.no-js .beats { position: static; padding: 0 var(--gutter) 2rem; }
   .masthead__nav a { font-size: 12.5px; padding: 0.5rem 0.1rem; }
   .masthead__word { display: none; }
   .masthead__logo { width: 36px; height: 36px; border-radius: 8px; }
-  .opening { padding-top: 3rem; }
-  .stage { height: 78svh; }
-  .data__table td:first-child { width: auto; }
-  .data__table th { display: none; }
-  .data__table tr { display: grid; gap: 0.2rem; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
-  .data__table td { border-bottom: 0; padding: 0; }
+  .stage[data-mode="still"]::before,
+  body.no-js .stage::before { aspect-ratio: 16 / 10; }
+  .beat h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
-  .stage { height: auto; min-height: 0; }
-  .stage__video { display: none; }
-  .beats { position: static; padding: 0 var(--gutter) 2rem; }
-  .beat { display: block; padding-bottom: 1.6rem; }
-  .ghost { display: none; }
 }
 
 /* hover only where a pointer can actually hover */
 @media (hover: hover) and (pointer: fine) {
   .masthead__nav a:hover { color: var(--ivory); }
   .masthead__take:hover { background: #fff; }
-  .chapters__list button:hover { background: var(--panel); }
-  .coach__again:hover { border-color: var(--lapis); }
   .button:hover { background: #fff; }
   .colophon__links a:hover { border-bottom-color: var(--lapis); }
 }
