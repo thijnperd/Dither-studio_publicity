@@ -47,9 +47,15 @@ img, video { max-width: 100%; height: auto; display: block; }
 
 a { color: var(--ivory); text-decoration-color: var(--edge); text-underline-offset: 0.22em; }
 
-h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  /* a headline sets as a block, not as a rag */
+  text-wrap: balance;
+}
 
-p { margin: 0 0 1em; }
+p { margin: 0 0 1em; text-wrap: pretty; }
 
 ::selection { background: var(--lapis); color: var(--void); }
 
@@ -542,7 +548,12 @@ body.no-js .beat:last-child { margin-bottom: 0; }
   color: #4A5366;
 }
 
-.sub { font: 400 14px/1.5 var(--sans); color: var(--muted); }
+.sub {
+  font: 400 14px/1.5 var(--sans);
+  color: var(--muted);
+  border-bottom: 1px solid var(--edge);
+  padding-bottom: 0.12rem;
+}
 
 .take__fine { margin-top: 1.6rem; font-size: 14px; color: var(--muted); max-width: 56ch; }
 
@@ -558,6 +569,14 @@ body.no-js .beat:last-child { margin-bottom: 0; }
 }
 
 .colophon p { margin: 0; font: 400 13px/1.7 var(--mono); color: var(--muted); }
+
+.colophon__label {
+  font: 400 11.5px/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.3rem;
+}
 
 .colophon__links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
 .colophon__links a { color: var(--ivory); text-decoration: none; border-bottom: 1px solid var(--edge); }
@@ -601,6 +620,13 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
   .beat h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); }
 }
 
+/* the narrowest phones: the mark still reaches the film, so the first link
+   can go and leave the other three their room */
+@media (max-width: 430px) {
+  .masthead__nav a[href="#stage"] { display: none; }
+  .masthead__nav a { font-size: 12px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
@@ -611,4 +637,5 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
   .masthead__take:hover { background: #fff; }
   .button:hover { background: #fff; }
   .colophon__links a:hover { border-bottom-color: var(--lapis); }
+  .sub:hover { color: var(--ivory); border-bottom-color: var(--lapis); }
 }

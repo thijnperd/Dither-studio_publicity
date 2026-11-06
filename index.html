@@ -3,17 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
 <title>Dither Studio · the press, the film, the proof</title>
 <meta name="description" content="A dithering press for Windows and macOS. 46 algorithms, 24 palettes, text mode, video. It runs offline and every proof on this page came out of it.">
 <meta name="theme-color" content="#0B0D12">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Dither Studio">
 <meta property="og:title" content="Dither Studio">
 <meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 24 palettes, and a text mode.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
 <meta property="og:image:alt" content="Two hands from The Creation of Adam, dissolving into a dither.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
+<meta name="twitter:image:alt" content="Two hands from The Creation of Adam, dissolving into a dither.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="image" href="assets/poster.jpg" fetchpriority="high">
 <script>
   /* .motion is what allows the stylesheet to hold the page's type back for its
      reveal. It is set here, in the head, so nothing is ever painted visible and
@@ -30,14 +38,17 @@
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/mark-192.png">
 <link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Dither Studio","applicationCategory":"GraphicsApplication","operatingSystem":"Windows, macOS","softwareVersion":"0.2.5","description":"An offline dithering press: 46 algorithms, 24 palettes, text mode and video, drawing every mark from a palette's own entries.","url":"https://thijnperd.github.io/Dither-studio_publicity/","downloadUrl":"https://github.com/thijnperd/dither-studio/releases/latest","image":"https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
+</script>
 </head>
 <body class="no-js">
 
 <a class="skip" href="#claim">Skip the film</a>
 
 <header class="masthead">
-  <a class="masthead__mark" href="#stage">
-    <img class="masthead__logo" src="assets/mark-64.png" alt="" width="40" height="40">
+  <a class="masthead__mark" href="#stage" aria-label="Dither Studio, back to the film">
+    <img class="masthead__logo" src="assets/mark-64.png" alt="" width="40" height="40" decoding="async">
     <span class="masthead__word">Dither Studio</span>
   </a>
   <nav class="masthead__nav" aria-label="Sections">
@@ -77,7 +88,7 @@
       </div>
       <div class="beat">
         <h2>Gods, rebuilt.</h2>
-        <p>Three paintings from the app's own library, each through a different algorithm.</p>
+        <p>Three paintings from the app’s own library, each through a different algorithm.</p>
       </div>
       <div class="beat">
         <h2>The press.</h2>
@@ -92,13 +103,13 @@
     <p class="stage__hint" id="hint">Scroll, and the film runs with you</p>
   </section>
 
-  <section class="claim" id="claim" aria-labelledby="claim-title">
+  <section class="claim" id="claim" aria-labelledby="claim-title" tabindex="-1">
     <h2 id="claim-title" class="claim__title" data-clip>A dither filter averages a picture into a few greys. This one decides where every mark goes.</h2>
-    <p class="claim__body" data-reveal>Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture's own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
+    <p class="claim__body" data-reveal>Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture’s own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
     <div class="claim__take" data-reveal>
       <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
-        <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
+        <span class="button__meta js-meta">Version 0.2.5 · 107 MB · free</span>
       </a>
       <p class="claim__fine">Windows and macOS. The build is unsigned, so the system asks once. It draws the same with the cable out.</p>
     </div>
@@ -108,7 +119,7 @@
     <div class="panel__body">
       <p class="panel__label" data-reveal>The press</p>
       <h2 id="press-title" data-clip>Pick a screen, pick an ink, watch the proof change.</h2>
-      <p data-reveal>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image's own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
+      <p data-reveal>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image’s own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
       <ul class="panel__list" data-reveal>
         <li>46 algorithms, 24 palettes, 13 effects, 11 tone maps</li>
         <li>Pixel size from 1 to 16, with a strength knob that pushes any screen away from mid-grey</li>
@@ -116,7 +127,7 @@
       </ul>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy" data-clip>
+      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy" decoding="async" data-clip>
       <figcaption>The console with a painting in the proof. The rail holds every setting; each station reports what it is set to when closed.</figcaption>
     </figure>
   </section>
@@ -129,7 +140,7 @@
       <p data-reveal>Export writes the grid as plain text, one line per row, which is a format that survives being pasted anywhere.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-text.png" alt="Text mode: the proof printed as characters, with the ramp and cell size controls." width="2010" height="1323" loading="lazy" data-clip>
+      <img src="assets/shot-text.png" alt="Text mode: the proof printed as characters, with the ramp and cell size controls." width="2010" height="1323" loading="lazy" decoding="async" data-clip>
       <figcaption>Text mode on the same painting. The grid is the proof, and the .txt export is that grid.</figcaption>
     </figure>
   </section>
@@ -138,11 +149,11 @@
     <div class="panel__body">
       <p class="panel__label" data-reveal>The ink</p>
       <h2 id="ink-title" data-clip>A palette is a fact, not a filter.</h2>
-      <p data-reveal>Every colour in a proof is one of the palette's own entries. The Game Boy palette is the four greens the hardware could show; the C64 palette is the sixteen the VIC-II produced. Nothing is invented and nothing is blended.</p>
+      <p data-reveal>Every colour in a proof is one of the palette’s own entries. The Game Boy palette is the four greens the hardware could show; the C64 palette is the sixteen the VIC-II produced. Nothing is invented and nothing is blended.</p>
       <p data-reveal>For flat areas that need more tones than the palette has, the mixing plans alternate between entries so the average lands where it should. A flat 128 reads as 128 from a metre away.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-mono.png" alt="A proof in a single-ink mode, with the palette swatches and the pixel size control." width="2010" height="1323" loading="lazy" data-clip>
+      <img src="assets/shot-mono.png" alt="A proof in a single-ink mode, with the palette swatches and the pixel size control." width="2010" height="1323" loading="lazy" decoding="async" data-clip>
       <figcaption>A two-ink proof. The tone survives the reduction, which is the whole job.</figcaption>
     </figure>
   </section>
@@ -155,7 +166,7 @@
       <p data-reveal>Recording writes the result to WebM. There are three temporal rules for how the recipe moves between frames, and a frame index always produces the same recipe, so a recording can be repeated.</p>
     </div>
     <figure class="panel__figure">
-      <img src="assets/shot-video.png" alt="Video mode: a frame being dithered live, with playback controls under the proof." width="1600" height="1000" loading="lazy" data-clip>
+      <img src="assets/shot-video.png" alt="Video mode: a frame being dithered live, with playback controls under the proof." width="1600" height="1000" loading="lazy" decoding="async" data-clip>
       <figcaption>Video mode. The working frame is capped at 720 px so the loop can keep up with the clock.</figcaption>
     </figure>
   </section>
@@ -166,21 +177,21 @@
       <p data-reveal>These are the catalogues inside the engine. The tests count them, so what is on this page is what the app ships.</p>
     </div>
 
-    <dl class="stats" id="stats">
+    <dl class="stats" aria-label="Catalogues in the app">
       <div data-reveal><dt>Algorithms</dt><dd>46</dd></div>
       <div data-reveal><dt>Palettes</dt><dd>24</dd></div>
       <div data-reveal><dt>Effects</dt><dd>13</dd></div>
       <div data-reveal><dt>Tone maps</dt><dd>11</dd></div>
-      <div data-reveal><dt>Presets</dt><dd>21</dd></div>
+      <div data-reveal><dt>Presets</dt><dd>34</dd></div>
     </dl>
 
     <div class="proofs__pair">
       <figure class="proof">
-        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="800" height="600" loading="lazy" data-clip>
-        <figcaption data-reveal><b>Tor's Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette's colours.</figcaption>
+        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="800" height="600" loading="lazy" decoding="async" data-clip>
+        <figcaption data-reveal><b>Tor’s Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette’s colours.</figcaption>
       </figure>
       <figure class="proof">
-        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="800" height="600" loading="lazy" data-clip>
+        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="800" height="600" loading="lazy" decoding="async" data-clip>
         <figcaption data-reveal><b>The same painting, a coarser screen.</b> The average tone stays where it was and the grain does the rest.</figcaption>
       </figure>
     </div>
@@ -212,11 +223,11 @@
     <ol class="asks__list">
       <li data-reveal>
         <h3>The build is unsigned</h3>
-        <p>Windows SmartScreen and macOS Gatekeeper will both ask once. The release page says exactly what to click, and it is two clicks.</p>
+        <p>On Windows, SmartScreen says “Windows protected your PC”: choose More info, then Run anyway. On macOS, right-click the app, choose Open, then Open again. Once each, and then never.</p>
       </li>
       <li data-reveal>
         <h3>Pick the build for your machine</h3>
-        <p>There is an installer, a portable executable, and a macOS disk image. All three are on the releases page.</p>
+        <p>Installers are 107 MB on Windows; the macOS disk images are 124 MB for Apple silicon and 127 MB for Intel. The portable executable needs no install at all.</p>
       </li>
       <li data-reveal>
         <h3>It updates by hand</h3>
@@ -235,7 +246,7 @@
     <div class="take__actions" data-reveal>
       <a class="button" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
-        <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
+        <span class="button__meta js-meta">Version 0.2.5 · 107 MB · free</span>
       </a>
       <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
     </div>
@@ -245,13 +256,14 @@
 </main>
 
 <footer class="colophon">
-  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps, keyed every half second so the scroll can seek it. Drawn as an HTML page and dithered by the app's own engine, frame by frame.</p>
+  <h2 class="colophon__label">Colophon</h2>
+  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps, keyed every half second so the scroll can seek it. Drawn as an HTML page and dithered by the app’s own engine, frame by frame.</p>
   <p class="colophon__links">
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
-  <p class="colophon__note">The film here is the silent cut: no type is burned into it, so the words over it are the page's own. Motion runs on GSAP. No cookies, no analytics, no fonts from a third party.</p>
+  <p class="colophon__note">The film here is the silent cut: no type is burned into it, so the words over it are the page’s own. Motion runs on GSAP, and nothing else is loaded from a third party. No cookies, no analytics, no fonts from elsewhere.</p>
 </footer>
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>

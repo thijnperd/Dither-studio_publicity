@@ -126,12 +126,22 @@
   /* ================= the download button knows the platform ================= */
 
   var ua = navigator.userAgent;
-  var platformLabel = /Mac/i.test(ua) ? 'Download for macOS'
+  var isMac = /Mac/i.test(ua);
+  var platformLabel = isMac ? 'Download for macOS'
     : /Windows/i.test(ua) ? 'Download for Windows'
     : 'See the releases';
   Array.prototype.forEach.call(document.querySelectorAll('.js-platform'), function (el) {
     el.textContent = platformLabel;
   });
+
+  /* the sizes are facts from the 0.2.5 release (bump with desktop/package.json):
+     Windows 107 MB, macOS 124 MB on Apple silicon and 127 MB on Intel. The
+     markup carries the Windows figure; only a Mac needs a different one. */
+  if (isMac) {
+    Array.prototype.forEach.call(document.querySelectorAll('.js-meta'), function (el) {
+      el.textContent = 'Version 0.2.5 · 124–127 MB · free';
+    });
+  }
 
   /* ================= which section are we in ================= */
 
@@ -143,13 +153,14 @@
         if (!entry.isIntersecting) return;
         var hash = '#' + entry.target.id;
         navLinks.forEach(function (link) {
-          if (link.getAttribute('href') === hash) link.setAttribute('aria-current', 'page');
+          /* 'location', not 'page': this marks the section being read, not the page */
+          if (link.getAttribute('href') === hash) link.setAttribute('aria-current', 'location');
           else link.removeAttribute('aria-current');
         });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['stage', 'proofs', 'take'].forEach(function (id) {
+    ['stage', 'press', 'proofs', 'take'].forEach(function (id) {
       var section = $(id);
       if (section) seen.observe(section);
     });
