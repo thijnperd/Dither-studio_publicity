@@ -795,7 +795,8 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
 .shelf__plate video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* a proof is shown whole: cover would crop a landscape or a plinth */
+  object-fit: contain;
   display: block;
 }
 
