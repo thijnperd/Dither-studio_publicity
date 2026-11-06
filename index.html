@@ -20,7 +20,7 @@
 </head>
 <body class="no-js">
 
-<a class="skip" href="#press">Skip the film</a>
+<a class="skip" href="#claim">Skip the film</a>
 
 <header class="masthead">
   <a class="masthead__mark" href="#stage">
@@ -48,11 +48,11 @@
       <div class="beat beat--title">
         <p class="beat__label">Windows and macOS · free · offline</p>
         <h1>Let there be pixels.</h1>
-        <p class="beat__lede">A press that takes a painting, a photograph or a video and rebuilds it out of one palette’s marks. Forty-six algorithms placed every mark in this film.</p>
+        <p class="beat__lede">A press that takes a painting, a photograph or a video and rebuilds it out of one palette’s marks.</p>
       </div>
       <div class="beat">
         <h2>Two hands, one gap.</h2>
-        <p>It opens on the Creation of Adam, close enough that the fingers are the whole frame.</p>
+        <p>The film opens on the Creation of Adam, close enough that the fingers are the whole frame.</p>
       </div>
       <div class="beat">
         <h2>Then a pixel.</h2>
@@ -79,24 +79,15 @@
     <p class="stage__hint" id="hint">Scroll, and the film runs with you</p>
   </section>
 
-  <section class="facts" aria-labelledby="facts-title">
-    <h2 id="facts-title" class="facts__title">Three things it does not need</h2>
-    <div class="facts__row">
-      <div class="fact">
-        <span class="fact__num">0</span>
-        <h3>Accounts</h3>
-        <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
-      </div>
-      <div class="fact">
-        <span class="fact__num">0</span>
-        <h3>Uploads</h3>
-        <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
-      </div>
-      <div class="fact">
-        <span class="fact__num">0</span>
-        <h3>Network calls</h3>
-        <p>No fonts, no analytics, no licence check. It draws the same with the cable out.</p>
-      </div>
+  <section class="claim" id="claim" aria-labelledby="claim-title">
+    <h2 id="claim-title" class="claim__title">A dither filter averages a picture into a few greys. This one decides where every mark goes.</h2>
+    <p class="claim__body">Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture's own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
+    <div class="claim__take">
+      <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
+        <span class="js-platform">Download for Windows</span>
+        <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
+      </a>
+      <p class="claim__fine">Windows and macOS. The build is unsigned, so the system asks once. It draws the same with the cable out.</p>
     </div>
   </section>
 
@@ -182,20 +173,23 @@
     </div>
   </section>
 
-  <section class="triad" aria-labelledby="privacy-title">
-    <h2 id="privacy-title">Your files stay on your machine</h2>
-    <div class="triad__row">
-      <div>
-        <h3>Read from disk</h3>
-        <p>The app opens what you point it at. There is no library to import into and no cache to clear.</p>
+  <section class="facts" aria-labelledby="facts-title">
+    <h2 id="facts-title" class="facts__title">Three things it does not need</h2>
+    <div class="facts__row">
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Accounts</h3>
+        <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
       </div>
-      <div>
-        <h3>Written to disk</h3>
-        <p>Exports go where you save them, as PNG or as text. Video recordings are WebM.</p>
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Uploads</h3>
+        <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
       </div>
-      <div>
-        <h3>Nothing in between</h3>
-        <p>No server, no upload, no telemetry. The only network request in the whole product is the one you make to download it.</p>
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Network calls</h3>
+        <p>No fonts, no analytics, no licence check. The only request in the whole product is the one you make to download it.</p>
       </div>
     </div>
   </section>
@@ -215,6 +209,10 @@
         <h3>It updates by hand</h3>
         <p>There is no auto-updater. A new version is a new download, and your images and settings are untouched.</p>
       </li>
+      <li>
+        <h3>Video works at 720 px while it plays</h3>
+        <p>The frame is capped so the loop can keep up with the clock. A still is printed at full resolution; a moving frame is not.</p>
+      </li>
     </ol>
   </section>
 
@@ -222,25 +220,25 @@
     <h2 id="take-title">Take the press home</h2>
     <p class="take__lede">The installer is the whole app. It works offline and saves PNG files to your disk.</p>
     <div class="take__actions">
-      <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
-        <span id="downloadLabel">Download for Windows</span>
+      <a class="button" href="https://github.com/thijnperd/dither-studio/releases/latest">
+        <span class="js-platform">Download for Windows</span>
         <span class="button__meta">Version 0.2.5 · 107 MB · free</span>
       </a>
       <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
     </div>
-    <p class="take__fine">Windows or macOS. The build is unsigned, so SmartScreen may ask once; the release page says what to click.</p>
+    <p class="take__fine">There is no server in this product. The only network request it ever makes is the one you are about to make.</p>
   </section>
 
 </main>
 
 <footer class="colophon">
-  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps, re-encoded at full size with a keyframe every half second so the scroll can seek it. Drawn as an HTML page and dithered by the app's own engine, frame by frame.</p>
+  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps, keyed every half second so the scroll can seek it. Drawn as an HTML page and dithered by the app's own engine, frame by frame.</p>
   <p class="colophon__links">
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
-  <p class="colophon__note">Motion runs on GSAP. No cookies, no analytics, no fonts from a third party.</p>
+  <p class="colophon__note">The film here is the silent cut: no type is burned into it, so the words over it are the page's own. Motion runs on GSAP. No cookies, no analytics, no fonts from a third party.</p>
 </footer>
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>

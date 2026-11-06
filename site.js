@@ -122,12 +122,13 @@
 
   /* ================= the download button knows the platform ================= */
 
-  var downloadLabel = $('downloadLabel');
   var ua = navigator.userAgent;
-  if (downloadLabel) {
-    if (/Mac/i.test(ua)) downloadLabel.textContent = 'Download for macOS';
-    else if (!/Windows/i.test(ua)) downloadLabel.textContent = 'See the releases';
-  }
+  var platformLabel = /Mac/i.test(ua) ? 'Download for macOS'
+    : /Windows/i.test(ua) ? 'Download for Windows'
+    : 'See the releases';
+  Array.prototype.forEach.call(document.querySelectorAll('.js-platform'), function (el) {
+    el.textContent = platformLabel;
+  });
 
   /* ================= which section are we in ================= */
 

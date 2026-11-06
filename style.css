@@ -1,7 +1,7 @@
 /* Dither Studio publicity site.
    One stylesheet, the console's own house style: void ground, ivory type,
-   lapis for data, hairlines for structure. The page opens on the film; the
-   panels below show the press one station at a time. */
+   lapis for data, hairlines for structure. The page opens on the film, then
+   makes its claim and its ask, then shows the press one station at a time. */
 
 :root {
   --void: #0B0D12;
@@ -279,35 +279,42 @@ body.no-js .beat {
 .stage[data-mode="still"] .beat:last-child,
 body.no-js .beat:last-child { margin-bottom: 0; }
 
-/* ---------- facts ---------- */
+/* ---------- the claim, with the ask ---------- */
 
-.facts {
+.claim {
   max-width: 1180px;
   margin: 0 auto;
-  padding: clamp(3rem, 8vh, 5.5rem) var(--gutter);
+  padding: clamp(3.5rem, 9vh, 6rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   border-top: 1px solid var(--line);
+  scroll-margin-top: 4.75rem;
 }
 
-.facts__title {
-  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+.claim__title {
+  font-size: clamp(1.9rem, 3.8vw, 3.1rem);
+  line-height: 1.12;
+  max-width: 26ch;
+  margin: 0 0 1.4rem;
+}
+
+.claim__body {
+  color: var(--muted);
+  max-width: 56ch;
   margin: 0 0 2.4rem;
 }
 
-.facts__row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(1.5rem, 4vw, 3rem);
+.claim__take {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem 2rem;
 }
 
-.fact__num {
-  display: block;
-  font: 400 clamp(3rem, 6vw, 4.6rem)/0.9 var(--serif);
-  color: var(--lapis);
-  margin-bottom: 0.8rem;
+.claim__fine {
+  margin: 0;
+  font: 400 13px/1.65 var(--mono);
+  color: var(--muted);
+  max-width: 34ch;
 }
-
-.fact h3 { font-size: 1.18rem; margin: 0 0 0.4rem; }
-.fact p { color: var(--muted); font-size: 15.5px; margin: 0; max-width: 34ch; }
 
 /* ---------- panels ---------- */
 
@@ -426,25 +433,35 @@ body.no-js .beat:last-child { margin-bottom: 0; }
 .proof figcaption { margin-top: 0.8rem; font-size: 14.5px; color: var(--muted); }
 .proof figcaption b { color: var(--ivory); font-weight: 500; }
 
-/* ---------- the triad ---------- */
+/* ---------- facts ---------- */
 
-.triad {
+.facts {
   max-width: 1180px;
   margin: 0 auto;
-  padding: clamp(3.5rem, 9vh, 6rem) var(--gutter);
+  padding: clamp(3rem, 8vh, 5.5rem) var(--gutter);
   border-top: 1px solid var(--line);
 }
 
-.triad h2 { font-size: clamp(1.8rem, 3.4vw, 2.9rem); margin: 0 0 2.4rem; }
+.facts__title {
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  margin: 0 0 2.4rem;
+}
 
-.triad__row {
+.facts__row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: clamp(1.5rem, 4vw, 3rem);
 }
 
-.triad h3 { font-size: 1.18rem; margin: 0 0 0.4rem; }
-.triad p { color: var(--muted); font-size: 15.5px; margin: 0; max-width: 34ch; }
+.fact__num {
+  display: block;
+  font: 400 clamp(3rem, 6vw, 4.6rem)/0.9 var(--serif);
+  color: var(--lapis);
+  margin-bottom: 0.8rem;
+}
+
+.fact h3 { font-size: 1.18rem; margin: 0 0 0.4rem; }
+.fact p { color: var(--muted); font-size: 15.5px; margin: 0; max-width: 34ch; }
 
 /* ---------- the closing list ---------- */
 
@@ -527,7 +544,7 @@ body.no-js .beat:last-child { margin-bottom: 0; }
 
 .sub { font: 400 14px/1.5 var(--sans); color: var(--muted); }
 
-.take__fine { margin-top: 1.6rem; font-size: 14px; color: var(--muted); max-width: 52ch; }
+.take__fine { margin-top: 1.6rem; font-size: 14px; color: var(--muted); max-width: 56ch; }
 
 /* ---------- colophon ---------- */
 
