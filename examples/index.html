@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Examples · Dither Studio</title>
+<meta name="description" content="The shelf: every still and every clip in the examples folder, proofed by the app's own engine.">
+<meta name="theme-color" content="#0B0D12">
+<link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/examples/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dither Studio">
+<meta property="og:title" content="Examples · Dither Studio">
+<meta property="og:description" content="A shelf of proofs from the press, and every one of them a file you can download.">
+<meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/examples/">
+<meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" as="font" type="font/woff2" href="../assets/fonts/InstrumentSans-var.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="../assets/fonts/InstrumentSerif-400.woff2" crossorigin>
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/mark-192.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#shelf">Skip to the shelf</a>
+
+<header class="masthead">
+  <a class="masthead__mark" href="../" aria-label="Dither Studio, back to the film">
+    <img class="masthead__logo" src="../assets/mark-64.png" alt="" width="64" height="64" decoding="async">
+    <span class="masthead__word">Dither Studio</span>
+  </a>
+  <nav class="masthead__nav" aria-label="Sections">
+    <a href="../#press">The press</a>
+    <a href="../#proofs">Proofs</a>
+    <a href="./" aria-current="page">Examples</a>
+    <a class="masthead__take" href="../#take">Take it</a>
+  </nav>
+</header>
+
+<main class="library" id="shelf">
+  <p class="library__eyebrow">The shelf</p>
+  <h1 class="library__title">Proofs from the press.</h1>
+  <p class="library__lede">Every still and every clip in the <code>examples/</code> folder appears here, newest additions included, with no list to keep in step. Open one to see it full size.</p>
+
+  <div class="library__bar">
+    <div class="library__filters" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="still" aria-pressed="false">Stills</button>
+      <button type="button" data-filter="motion" aria-pressed="false">Motion</button>
+    </div>
+    <p class="library__count" id="shelf-count" aria-live="polite"></p>
+  </div>
+
+  <ul class="shelf" id="shelf-grid" data-filter="all"></ul>
+
+  <p class="library__status" id="shelf-status">Reading the shelf…</p>
+
+  <noscript>
+    <p class="library__status">The shelf is read by a script, which your browser has turned off. The files themselves are in <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">the examples folder</a>.</p>
+  </noscript>
+</main>
+
+<footer class="colophon">
+  <h2 class="colophon__label">Colophon</h2>
+  <p class="colophon__spec">Still and motion proofs, printed by Dither Studio. The shelf reads its own folder through GitHub’s contents API; adding a file is the whole publishing step.</p>
+  <p class="colophon__links">
+    <a href="../">The film</a>
+    <a href="https://github.com/thijnperd/dither-studio">The app</a>
+    <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">The folder</a>
+  </p>
+</footer>
+
+<script src="examples.js" defer></script>
+</body>
+</html>

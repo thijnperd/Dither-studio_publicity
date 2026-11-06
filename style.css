@@ -3,6 +3,51 @@
    lapis for data, hairlines for structure. The page opens on the film, then
    makes its claim and its ask, then shows the press one station at a time. */
 
+/* ---------- type ----------
+   Instrument Serif for display, Instrument Sans for text, IBM Plex Mono for the
+   labels and data. All three are OFL and stored in assets/fonts/, so the page
+   still asks no third party for anything. */
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("assets/fonts/InstrumentSerif-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("assets/fonts/InstrumentSans-var.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --void: #0B0D12;
   --panel: #121722;
@@ -13,9 +58,9 @@
   --muted: #A1A9B8;
   --lapis: #7E93BE;
 
-  --serif: Georgia, "Times New Roman", serif;
-  --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
-  --mono: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", Consolas, "Cascadia Mono", ui-monospace, monospace;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
@@ -638,4 +683,172 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
   .button:hover { background: #fff; }
   .colophon__links a:hover { border-bottom-color: var(--lapis); }
   .sub:hover { color: var(--ivory); border-bottom-color: var(--lapis); }
+}
+
+/* ---------- the examples shelf ---------- */
+
+.library {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(6rem, 13vh, 8.5rem) var(--gutter) clamp(4rem, 10vh, 7rem);
+}
+
+.library__eyebrow {
+  font: 400 12px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lapis);
+  margin: 0 0 1.5rem;
+}
+
+.library__title {
+  font: 400 clamp(3rem, 8vw, 5.8rem)/0.95 var(--serif);
+  letter-spacing: -0.015em;
+  margin: 0 0 1.2rem;
+  max-width: 14ch;
+}
+
+.library__lede {
+  color: var(--muted);
+  max-width: 58ch;
+  margin: 0 0 0.6rem;
+}
+
+.library__lede code {
+  font: 400 0.9em/1 var(--mono);
+  color: var(--ivory);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.12em 0.4em;
+}
+
+.library__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2.4rem 0 1.6rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.library__filters { display: flex; gap: 0.4rem; }
+
+.library__filters button {
+  font: 400 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+}
+
+.library__filters button[aria-pressed="true"] {
+  color: var(--void);
+  background: var(--ivory);
+  border-color: var(--ivory);
+}
+
+.library__count {
+  font: 400 12px/1 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0;
+}
+
+.shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: clamp(1rem, 2.2vw, 1.6rem);
+}
+
+.shelf__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+
+.shelf__plate {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--void);
+  border-bottom: 1px solid var(--line);
+}
+
+.shelf__plate img,
+.shelf__plate video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shelf__tag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  font: 400 10.5px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--ivory);
+  padding: 0.32rem 0.45rem;
+  border-radius: 2px;
+}
+
+.shelf__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem 0.95rem 1rem;
+}
+
+.shelf__meta b {
+  font: 400 18px/1.2 var(--serif);
+  letter-spacing: -0.01em;
+}
+
+.shelf__spec {
+  font: 400 11.5px/1.5 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.library__status {
+  font: 400 13px/1.6 var(--mono);
+  color: var(--muted);
+  margin: 1.8rem 0 0;
+}
+
+.library__status a { color: var(--ivory); }
+
+.shelf[data-filter="still"] .shelf__item[data-kind="motion"],
+.shelf[data-filter="motion"] .shelf__item[data-kind="still"] { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .shelf__link:hover { border-color: var(--lapis); transform: translateY(-2px); }
+  .library__filters button:hover { color: var(--ivory); border-color: var(--lapis); }
+  .library__filters button[aria-pressed="true"]:hover { color: var(--void); }
+}
+
+@media (max-width: 560px) {
+  .library { padding-top: 6.5rem; }
+  .library__bar { align-items: flex-start; }
+  .shelf { grid-template-columns: 1fr; }
 }

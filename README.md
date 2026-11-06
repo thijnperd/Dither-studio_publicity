@@ -164,3 +164,19 @@ the video cannot seek and the stage will look frozen.
 The film and the proofs are made with Dither Studio and shown here with the
 app's artwork: *The Creation of Adam*, *Tor's Fight with the Giants* and
 *Oedipus and the Sphinx*, all long out of copyright. The code is the author's.
+
+## The examples shelf
+
+`examples/` is the library behind <https://thijnperd.github.io/Dither-studio_publicity/examples/>.
+Drop stills (png, jpg, webp, gif, avif) or clips (mp4, webm, mov) into that folder and push:
+the page reads the folder through GitHub's contents API, so there is no manifest to edit and no
+list that can fall out of step. The file name becomes the caption (`proof-thor-bayer8.png` reads
+"Proof thor bayer 8"), and the card reports the real pixel size once the browser has loaded it.
+GitHub refuses files over 100 MB; keep clips short.
+
+## Type
+
+Instrument Serif for display, Instrument Sans for text, IBM Plex Mono for labels and data. All
+three are OFL and live in `assets/fonts/` with their licence files, so the page fetches no font
+from a third party. The stylesheet points at them with `@font-face`, which is also why the site
+still works from a local folder.
