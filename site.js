@@ -15,14 +15,16 @@
   if (hasScroll) gsap.registerPlugin(ScrollTrigger);
 
   var DURATION = 40;
+  /* the second film's stops, so a stop button lands on a real beat of it */
   var CHAPTERS = [
-    [0, 'The press'],
-    [5, 'The source'],
-    [11, 'The run'],
-    [20, 'The type'],
-    [26.6, 'Many readings'],
-    [33.4, 'The mark']
+    [0, 'Gods'],
+    [5.2, 'The spark'],
+    [9, 'The screen'],
+    [15, 'Gods, rebuilt'],
+    [22.2, 'The press'],
+    [30, 'Many readings']
   ];
+  var LAST_BEAT_END = 35;
 
   var stage = $('stage');
   var stageVideo = $('scrubvideo');
@@ -216,7 +218,7 @@
          and two headlines in one frame is one too many. */
       beats.forEach(function (beat, index) {
         var at = (CHAPTERS[index][0] / DURATION) * 100;
-        var next = CHAPTERS[index + 1] ? CHAPTERS[index + 1][0] : 33.4;
+        var next = CHAPTERS[index + 1] ? CHAPTERS[index + 1][0] : LAST_BEAT_END;
         var out = Math.min(100, (next / DURATION) * 100 - 4);
         gsap.set(beat, { autoAlpha: 0, y: 20 });
         stageTimeline.to(beat, { autoAlpha: 1, y: 0, duration: 3.5, ease: 'power2.out' }, at);

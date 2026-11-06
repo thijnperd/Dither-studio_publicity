@@ -3,18 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dither Studio · the launch film</title>
-<meta name="description" content="A dithering press that runs on your own computer: 46 algorithms, 24 palettes, and a text mode. Scroll the launch film and it runs with you.">
+<title>Dither Studio · the press, the film, the proof</title>
+<meta name="description" content="A dithering press for Windows and macOS. 46 algorithms, 24 palettes, text mode, video. It runs offline and every proof on this page came out of it.">
 <meta name="theme-color" content="#0B0D12">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Dither Studio · the launch film">
-<meta property="og:description" content="Scroll the launch film and it runs with you. Then take the app.">
+<meta property="og:title" content="Dither Studio">
+<meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 24 palettes, and a text mode.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.png">
-<meta property="og:image:alt" content="A frame from the film: a painting dissolving into a dither.">
+<meta property="og:image:alt" content="Two hands from The Creation of Adam, dissolving into a dither.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dither Studio · the launch film">
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/mark-192.png">
 <link rel="stylesheet" href="style.css">
@@ -26,28 +25,29 @@
 <header class="masthead">
   <a class="masthead__mark" href="#top">
     <img class="masthead__logo" src="assets/mark-64.png" alt="" width="40" height="40">
-    Dither Studio
+    <span class="masthead__word">Dither Studio</span>
   </a>
   <nav class="masthead__nav" aria-label="Sections">
     <a href="#stage">Film</a>
-    <a href="#chapters">Chapters</a>
+    <a href="#press">The press</a>
     <a href="#proofs">Proofs</a>
-    <a class="masthead__take" href="#take">Download</a>
+    <a class="masthead__take" href="#take">Take it</a>
   </nav>
 </header>
 
 <main id="top">
 
-  <div class="opening">
-    <h1>Let there<br>be pixels.</h1>
-    <p class="opening__lede">A dithering press that runs on your computer. It ships forty-six algorithms and twenty-four palettes, and it can print the same proof as characters instead of pixels.</p>
+  <section class="opening">
+    <p class="opening__label">Windows and macOS · free · offline</p>
+    <h1 class="opening__title">Let there be pixels.</h1>
+    <p class="opening__lede">A press that takes a painting, a photograph or a video and rebuilds it out of one palette’s marks. Forty-six algorithms place those marks. You can watch them do it in the film, then install the app that made it.</p>
     <p class="opening__cue">
       <svg viewBox="0 0 12 22" width="12" height="22" aria-hidden="true">
         <path d="M6 0 V20 M1 15 L6 20.5 L11 15" fill="none" stroke="currentColor" stroke-width="1.2"/>
       </svg>
-      Scroll to run the film
+      Scroll, and the film runs with you
     </p>
-  </div>
+  </section>
 
   <section class="stage" id="stage" aria-label="The film, driven by scroll">
     <video class="stage__video" id="scrubvideo" src="assets/film-scrub.mp4" poster="assets/poster.png"
@@ -56,58 +56,139 @@
 
     <div class="beats" id="beats">
       <div class="beat">
-        <h2>A sheet goes in.</h2>
-        <p>The press reads it, cuts it into chunks, and decides what each chunk is made of.</p>
+        <h2>Two hands, one gap.</h2>
+        <p>The film opens on the Creation of Adam, close enough that the fingers are the whole frame.</p>
       </div>
       <div class="beat">
-        <h2>Three paintings inside.</h2>
-        <p>The Creation of Adam, Tor's Fight with the Giants, and Oedipus and the Sphinx come with the app. Your own image works too.</p>
+        <h2>Then a pixel.</h2>
+        <p>It lands in the gap and grows by doubling, on the grid it will live on.</p>
       </div>
       <div class="beat">
-        <h2>Forty-six algorithms.</h2>
-        <p>Ordered screens, clustered dots, noise, error diffusion, and mixing plans that hold a flat tone to a measured average.</p>
+        <h2>A screen goes over it.</h2>
+        <p>The dither spreads from that point as sixteen-pixel marks and resolves to four.</p>
       </div>
       <div class="beat">
-        <h2>Or characters.</h2>
-        <p>The same proof set as type. Paper and ink come from the palette you picked.</p>
+        <h2>Gods, rebuilt.</h2>
+        <p>Three paintings from the app's own library, each through a different algorithm.</p>
       </div>
       <div class="beat">
-        <h2>One image, many readings.</h2>
-        <p>A denser screen keeps the average tone and changes the grain.</p>
+        <h2>The press.</h2>
+        <p>The real console, and the same proof printed as characters instead of pixels.</p>
+      </div>
+      <div class="beat">
+        <h2>Many readings.</h2>
+        <p>One painting, two screens. The average tone holds and the grain changes.</p>
       </div>
     </div>
   </section>
 
-  <section class="chapters" id="chapters" aria-labelledby="chapters-title">
-    <div class="chapters__head">
-      <h2 id="chapters-title">The film in six stops</h2>
-      <p>Press a stop and the page scrolls to that moment in the film above.</p>
+  <section class="stops" id="chapters" aria-labelledby="stops-title">
+    <div class="stops__head">
+      <h2 id="stops-title">The film in six stops</h2>
+      <p>A stop moves the page to that moment. The film above follows the page, so it follows the stop.</p>
     </div>
     <ol class="chapters__list" id="chapterlist">
-      <li><button type="button" data-at="0" data-name="The press">
+      <li><button type="button" data-at="0" data-name="Gods">
+        <span class="chapters__name">Gods</span>
+        <span class="chapters__what">The hands, and the gap between them.</span></button></li>
+      <li><button type="button" data-at="5.2" data-name="The spark">
+        <span class="chapters__name">The spark</span>
+        <span class="chapters__what">One pixel, then a block of them.</span></button></li>
+      <li><button type="button" data-at="9" data-name="The screen">
+        <span class="chapters__name">The screen</span>
+        <span class="chapters__what">The dither spreads out from the touch.</span></button></li>
+      <li><button type="button" data-at="15" data-name="Gods, rebuilt">
+        <span class="chapters__name">Gods, rebuilt</span>
+        <span class="chapters__what">Three paintings, three algorithms.</span></button></li>
+      <li><button type="button" data-at="22.2" data-name="The press">
         <span class="chapters__name">The press</span>
-        <span class="chapters__what">One sheet goes through and comes out as ink.</span></button></li>
-      <li><button type="button" data-at="5" data-name="The source">
-        <span class="chapters__name">The source</span>
-        <span class="chapters__what">The paintings that come with the app, and the rail that picks between them.</span></button></li>
-      <li><button type="button" data-at="11" data-name="The run">
-        <span class="chapters__name">The run</span>
-        <span class="chapters__what">The console at speed: algorithms, palettes, the effects stack.</span></button></li>
-      <li><button type="button" data-at="20" data-name="The type">
-        <span class="chapters__name">The type</span>
-        <span class="chapters__what">The same proof printed as characters.</span></button></li>
-      <li><button type="button" data-at="26.6" data-name="Many readings">
+        <span class="chapters__what">The console, then the same proof as type.</span></button></li>
+      <li><button type="button" data-at="30" data-name="Many readings">
         <span class="chapters__name">Many readings</span>
-        <span class="chapters__what">One painting in three screens: ordered, noisy, hand-picked.</span></button></li>
-      <li><button type="button" data-at="33.4" data-name="The mark">
-        <span class="chapters__name">The mark</span>
-        <span class="chapters__what">The press stops on its own mark.</span></button></li>
+        <span class="chapters__what">One painting, two screens.</span></button></li>
     </ol>
 
     <div class="coach" id="coach">
-      <p class="coach__line" id="hint" aria-live="polite">The arrow shows what a chapter does. Touch anything and it stands down.</p>
+      <p class="coach__line" id="hint" aria-live="polite">The arrow shows what a stop does. Touch anything and it stands down.</p>
       <button class="coach__again" id="again" type="button" hidden>Show me again</button>
     </div>
+  </section>
+
+  <section class="facts" aria-labelledby="facts-title">
+    <h2 id="facts-title" class="facts__title">Three things it does not need</h2>
+    <div class="facts__row">
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Accounts</h3>
+        <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
+      </div>
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Uploads</h3>
+        <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
+      </div>
+      <div class="fact">
+        <span class="fact__num">0</span>
+        <h3>Network calls</h3>
+        <p>No fonts, no analytics, no licence check. It draws the same with the cable out.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="press" aria-labelledby="press-title">
+    <div class="panel__body">
+      <p class="panel__label">The press</p>
+      <h2 id="press-title">Pick a screen, pick an ink, watch the proof change.</h2>
+      <p>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image's own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
+      <ul class="panel__list">
+        <li>46 algorithms, 24 palettes, 13 effects, 11 tone maps</li>
+        <li>Pixel size from 1 to 16, with a strength knob that pushes any screen away from mid-grey</li>
+        <li>Photos, PNG, JPG, WebP, paste or drop, and your choice of dither seed</li>
+      </ul>
+    </div>
+    <figure class="panel__figure">
+      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy">
+      <figcaption>The console with a painting in the proof. The rail holds every setting; each station reports what it is set to when closed.</figcaption>
+    </figure>
+  </section>
+
+  <section class="panel panel--flip" aria-labelledby="type-title">
+    <div class="panel__body">
+      <p class="panel__label">The type case</p>
+      <h2 id="type-title">The same proof, set as characters.</h2>
+      <p>Text mode prints the image as a grid of glyphs from a ramp you choose, at a cell size you choose. The paper and the type come from the palette, so a Game Boy proof is green type on green paper.</p>
+      <p>Export writes the grid as plain text, one line per row, which is a format that survives being pasted anywhere.</p>
+    </div>
+    <figure class="panel__figure">
+      <img src="assets/shot-text.png" alt="Text mode: the proof printed as characters, with the ramp and cell size controls." width="2010" height="1323" loading="lazy">
+      <figcaption>Text mode on the same painting. The grid is the proof, and the .txt export is that grid.</figcaption>
+    </figure>
+  </section>
+
+  <section class="panel" aria-labelledby="ink-title">
+    <div class="panel__body">
+      <p class="panel__label">The ink</p>
+      <h2 id="ink-title">A palette is a fact, not a filter.</h2>
+      <p>Every colour in a proof is one of the palette's own entries. The Game Boy palette is the four greens the hardware could show; the C64 palette is the sixteen the VIC-II produced. Nothing is invented and nothing is blended.</p>
+      <p>For flat areas that need more tones than the palette has, the mixing plans alternate between entries so the average lands where it should. A flat 128 reads as 128 from a metre away.</p>
+    </div>
+    <figure class="panel__figure">
+      <img src="assets/shot-mono.png" alt="A proof in a single-ink mode, with the palette swatches and the pixel size control." width="2010" height="1323" loading="lazy">
+      <figcaption>A two-ink proof. The tone survives the reduction, which is the whole job.</figcaption>
+    </figure>
+  </section>
+
+  <section class="panel panel--flip" aria-labelledby="video-title">
+    <div class="panel__body">
+      <p class="panel__label">Motion</p>
+      <h2 id="video-title">It will dither a video while it plays.</h2>
+      <p>Drop a clip in, or point it at a webcam. The frame loop renders at the speed the machine can hold and drops frames instead of queueing them, so playback stays honest about what it can do.</p>
+      <p>Recording writes the result to WebM. There are three temporal rules for how the recipe moves between frames, and a frame index always produces the same recipe, so a recording can be repeated.</p>
+    </div>
+    <figure class="panel__figure">
+      <img src="assets/shot-video.png" alt="Video mode: a frame being dithered live, with playback controls under the proof." width="1600" height="1000" loading="lazy">
+      <figcaption>Video mode. The working frame is capped at 720 px so the loop can keep up with the clock.</figcaption>
+    </figure>
   </section>
 
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
@@ -136,6 +217,59 @@
     </div>
   </section>
 
+  <section class="data" aria-labelledby="data-title">
+    <h2 id="data-title">What is real on this page</h2>
+    <p class="data__lede">Nothing here is a mock-up. Each row says where the thing came from and whether it is the app or a picture of it.</p>
+    <table class="data__table">
+      <thead>
+        <tr><th scope="col">What you see</th><th scope="col">Where it comes from</th><th scope="col">State</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>The film</td><td>Drawn frame by frame from an HTML page, dithered by the app's own engine while it renders</td><td>Real</td></tr>
+        <tr><td>The screenshots</td><td>The desktop app, at its own size</td><td>Real</td></tr>
+        <tr><td>The two proofs</td><td>Exported from the app with the settings named in the caption</td><td>Real</td></tr>
+        <tr><td>46 algorithms, 24 palettes</td><td>The engine's catalogues, counted by its tests</td><td>Real</td></tr>
+        <tr><td>The paintings</td><td>Public domain: Michelangelo, Winge, Moreau, Lanfranco</td><td>Real</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="triad" aria-labelledby="privacy-title">
+    <h2 id="privacy-title">Your files stay on your machine</h2>
+    <div class="triad__row">
+      <div>
+        <h3>Read from disk</h3>
+        <p>The app opens what you point it at. There is no library to import into and no cache to clear.</p>
+      </div>
+      <div>
+        <h3>Written to disk</h3>
+        <p>Exports go where you save them, as PNG or as text. Video recordings are WebM.</p>
+      </div>
+      <div>
+        <h3>Nothing in between</h3>
+        <p>No server, no upload, no telemetry. The only network request in the whole product is the one you make to download it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="asks" aria-labelledby="asks-title">
+    <h2 id="asks-title">Before you install</h2>
+    <ol class="asks__list">
+      <li>
+        <h3>The build is unsigned</h3>
+        <p>Windows SmartScreen and macOS Gatekeeper will both ask once. The release page says exactly what to click, and it is two clicks.</p>
+      </li>
+      <li>
+        <h3>Pick the build for your machine</h3>
+        <p>There is an installer, a portable executable, and a macOS disk image. All three are on the releases page.</p>
+      </li>
+      <li>
+        <h3>It updates by hand</h3>
+        <p>There is no auto-updater. A new version is a new download, and your images and settings are untouched.</p>
+      </li>
+    </ol>
+  </section>
+
   <section class="take" id="take" aria-labelledby="take-title">
     <h2 id="take-title">Take the press home</h2>
     <p class="take__lede">The installer is the whole app. It works offline and saves PNG files to your disk.</p>
@@ -152,7 +286,7 @@
 </main>
 
 <div class="ghost" id="ghost" aria-hidden="true">
-  <span class="ghost__note" id="ghostnote">Jump to a chapter</span>
+  <span class="ghost__note" id="ghostnote">Jump to a stop</span>
   <svg class="ghost__arrow" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true">
     <path d="M2 2 L2 25 L8.4 19 L12.6 28 L16.4 26.2 L12.2 17.4 L20 17.2 Z"
           fill="#7E93BE" stroke="#0B0D12" stroke-width="1.4"/>
@@ -160,7 +294,7 @@
 </div>
 
 <footer class="colophon">
-  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps. Drawn as an HTML page and captured frame by frame.</p>
+  <p class="colophon__spec">Film: 40 seconds, 1920 × 1080, h264, 24 fps. Drawn as an HTML page, dithered by the app's engine, captured frame by frame.</p>
   <p class="colophon__links">
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
