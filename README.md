@@ -10,9 +10,9 @@ manager, no server. GitHub Pages serves this folder as it is.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The page: the pinned film, the on-demand web demo, the feature plates, the proof shelf, the offline ledger, the installation sheet and the download band |
-| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF`; also the paper proof sheet, the catalogue ticker, the cursor loupe and the ivory installation notes |
-| `site.js` | The scroll stage, the section state, the scroll reveals, the GSAP layer, the proof loupe, the rail's arrow controls and live count, and the loader that opens the existing web demo on request |
+| `index.html` | The page: the poster-first film, the on-demand web demo, the feature plates, the proof shelf and one-page examples library, the offline ledger, the installation sheet and the download band |
+| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF`; also the paper proof sheet, the one-page examples shelf, the mobile menu, the catalogue ticker, the cursor loupe and the ivory installation notes |
+| `site.js` | The scroll stage and its deferred film, the section state, the scroll reveals, the GSAP layer, the mobile menu, the stored motion preference, the proof loupe, the rail's arrow controls and live count, and the loader that opens the existing web demo on request |
 | `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
 | `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
@@ -24,15 +24,21 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `assets/proof-*.png` | Proofs from the app's own engine |
 | `404.html` | The missing-plate not-found page: giant misregistered 404, dark proof frame, paper notes |
 | `404.css` | The 404's paper styles and its pointer loupe |
-| `examples/` | The paper proof shelf: a featured proof, a contact sheet, filters and the folder-driven loader |
+| `examples/` | The shelf's files, captions and folder-driven loader; `examples/index.html` redirects to the shelf on the main page |
 | `mascot/` | Mote's unlisted character file and downloadable SVG/PNG plates (`noindex, nofollow, noarchive`, and not linked from the public pages) |
 
 ## How the page works
 
 - **The film is the scroll, and the scroll is the only control.** The stage pins
-  for three and a half screens and the scroll position is the playhead, so the
-  film runs forwards and backwards under the wheel. Six captions cross-fade at
-  the montage's real beats.
+  for four screens and the scroll position is the playhead, so the film runs
+  forwards and backwards under the wheel. Six captions cross-fade at the
+  montage's real beats.
+- **The first paint is a poster, not an 8 MB request.** The stage uses the
+  poster as its background and only asks for the encode when the visitor scrolls
+  or touches the stage. A visible `Skip to the product` link jumps straight to
+  the claim and never requests the film; a navigation jump to Demo, Proofs or
+  Examples counts as a skip too, so a product-only visitor can leave the intro
+  without paying for it.
 - **There is no readout.** No timecode, no progress rule, no chapter timer, no
   numbered markers: the film is watched, not measured.
 - **There is no second player.** The film cannot be restarted, replayed or
@@ -43,7 +49,8 @@ manager, no server. GitHub Pages serves this folder as it is.
   stutters when the playhead jumps. `assets/film-scrub.mp4` is the landscape
   720p file; `assets/film-phone-scrub.mp4` is the portrait 720 × 1280 cut. Both
   key every 12 frames (`-g 12 -sc_threshold 0`), so every half second is
-  independently decodable. A portrait window asks for the portrait file:
+  independently decodable. A portrait window asks for the portrait file. The
+  chosen file is requested only when the intro starts, not on page load:
   ```bash
   # landscape
   ffmpeg -i <app>/publicity/out/dither-studio-mograph-silent.mp4 -an \
@@ -64,7 +71,12 @@ manager, no server. GitHub Pages serves this folder as it is.
   two come from `examples/`. The rail is focusable, draggable and keyboard
   scrollable, with previous/next buttons and a live `01 / 04` counter for a
   pointer that does not want to guess. A cursor loupe follows a fine pointer over
-  it.
+  it. The full folder-driven shelf sits below the rail in `#examples`, so the
+  page is a complete one-pager rather than a set of disconnected pages.
+- **The examples shelf is part of the one-pager.** Its loader waits until the
+  shelf is near the viewport, then reads `examples/captions.json` and the folder
+  listing through GitHub's contents API. The files are served from this site;
+  `examples/index.html` redirects old links to `#examples`.
 - **The last act is a product file, not another essay.** The page returns to the
   dark console for a zero ledger: no accounts, no uploads, no network calls. Then
   the installation notes print on ivory paper, set as a numbered sheet with the
@@ -82,14 +94,17 @@ manager, no server. GitHub Pages serves this folder as it is.
   repository; this site does not rebuild it, and its files are not requested
   until the link is used. Unlike the rest of the page, it cannot draw without a
   connection.
-- **Reduced motion** unpins the stage into a readable list, hides the video,
-  and leaves every caption in the flow.
+- **Reduced motion** follows the system preference by default, and the
+  masthead has a stored `Reduce motion` option. Either one unpins the stage into
+  a readable list, hides the video, and leaves every caption in the flow. The
+  choice survives a reload and is read in the head before the page paints.
 - **Phones get the portrait cut.** A portrait window pins the stage and scrubs
   `assets/film-phone-scrub.mp4`, so the paintings keep their composition instead
   of being cropped from a 16:9 frame. The portrait poster is the first frame
-  while the film loads and the still fallback when it does not. Reduced motion
-  and save-data still get the poster and the captions in flow, with no video
-  requested.
+  while the film loads and the still fallback when it does not. The phone also
+  gets a visible note that the installed app is for Windows and macOS, not a
+  phone or tablet. Reduced motion and save-data still get the poster and the
+  captions in flow, with no video requested.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
 no cookies, no analytics and no third-party fonts. Labels are set in the text
@@ -146,14 +161,16 @@ The rules are Emil Kowalski's ([emilkowal.ski](https://emilkowal.ski), the
 every heading do not, so they were removed, along with the counting numbers.
 - Nothing animates on load. The words are the page; a stalled transition must
   never be what keeps them off screen.
-- Under 300 ms for interface motion: presses 120–160 ms, chapter jumps 600 ms
+- Under 300 ms for interface motion: presses 120–160 ms, section jumps 600 ms
   because they are navigation.
 - Strong curves, not the built-in easings: `cubic-bezier(0.23, 1, 0.32, 1)` for
   entries and colour, `cubic-bezier(0.77, 0, 0.175, 1)` for on-screen movement.
 - `transform`, `opacity` and colour only; hover styles sit behind
   `@media (hover: hover) and (pointer: fine)`; every pressable element answers
   with `scale(0.98)`.
-- `prefers-reduced-motion` still unpins the stage into a readable list.
+- `prefers-reduced-motion` still unpins the stage into a readable list. The
+  stored motion toggle overrides the system preference in either direction; the
+  film's encode is deferred until the intro actually starts.
 
 ## The film's source
 
@@ -170,8 +187,8 @@ node publicity/render-mograph.js --phone --notext  # 1080 × 1920 master
 ```
 
 Re-render it whenever the app's interface changes, or the film will show a
-window that no longer exists. If the scene times move, update `CHAPTERS` in
-`site.js`: the caption timing and the chapter jumps both read it.
+window that no longer exists. If the scene times move, update the caption
+timing in `site.js`; the section jumps follow the page, not the film.
 
 ## Deploying
 
@@ -192,11 +209,14 @@ build delay to every publish.
 npx serve .            # or: python -m http.server 8080
 ```
 
-Open `http://localhost:8080/` and confirm: the stage pins while you scroll and
-the film advances with it, a chapter button moves the page and the film
-together, the ghost runs once and stops when you move, no video can be replayed
-anywhere on the page, no timecode appears anywhere, the film's own mark is in
-the masthead and the browser tab, and the layout holds at 390 px wide.
+Open `http://localhost:8080/` and confirm: the stage shows its poster before
+any MP4 is requested, the stage pins while you scroll and the film advances with
+it, `Skip to the product` reaches the claim without loading the film, a section
+link moves the page and the `Film` link returns to the stage and starts it, the
+ghost runs once and stops when you move, no video can be replayed anywhere on the page, no timecode appears
+anywhere, the film's own mark is in the masthead and the browser tab, the
+`Examples` link reaches the inline shelf, the mobile menu fits at 390 px and its
+download CTA sits at the bottom, and the desktop nav still reads as one row.
 Serve with a Range-capable server: Python's `http.server` ignores `Range`, so
 the video cannot seek and the stage will look frozen.
 
@@ -208,13 +228,16 @@ app's artwork: *The Creation of Adam*, *Tor's Fight with the Giants* and
 
 ## The examples shelf
 
-`examples/` is the library behind <https://thijnperd.github.io/Dither-studio_publicity/examples/>.
-Drop stills (png, jpg, webp, gif, avif) or clips (mp4, webm, mov) into that folder and push:
-the page reads the folder through GitHub's contents API, so there is no manifest to edit and no
-list that can fall out of step. The page is a paper contact sheet: the first still becomes the
-large featured proof, the rest are contact prints, and the Stills/Motion filters appear only for
-kinds that exist. Curated display titles live in `examples.js`; a new file still appears with its
-file name as the title. Each card reports the real pixel size once the browser has loaded it.
+The shelf lives at `#examples` on the main page. `examples/` holds the files,
+`captions.json` and the loader; `examples/index.html` is a noindex redirect for
+old links. Drop stills (png, jpg, webp, gif, avif) or clips (mp4, webm, mov)
+into that folder and push: the loader reads the folder through GitHub's contents
+API, so there is no manifest to edit and no list that can fall out of step. It
+waits until the shelf is near the viewport before it asks for the listing or any
+image. The section is a paper contact sheet with Stills/Motion filters that
+appear only for kinds that exist. Curated display titles live in
+`examples/examples.js`; a new file still appears with its file name as the
+title. Each card reports the real pixel size once the browser has loaded it.
 GitHub refuses files over 100 MB; keep clips short.
 
 ## Type

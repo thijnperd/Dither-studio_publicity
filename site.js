@@ -12,6 +12,14 @@
   var $ = function (id) { return document.getElementById(id); };
   var DURATION = 40;          /* seconds of film */
   var STAGE_SCREENS = 4;      /* viewport-heights of scroll the film runs over */
+  var MOTION_KEY = 'dither:motion';
+
+  var storedMotion = null;
+  try { storedMotion = window.localStorage.getItem(MOTION_KEY); } catch (error) {}
+  if (storedMotion !== 'reduce' && storedMotion !== 'full') storedMotion = null;
+  var systemReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = storedMotion ? storedMotion === 'reduce' : systemReduce;
+  document.documentElement.setAttribute('data-motion', reduce ? 'reduce' : 'full');
 
   var hasGsap = typeof window.gsap !== 'undefined';
   var hasScroll = hasGsap && typeof window.ScrollTrigger !== 'undefined';
@@ -25,7 +33,6 @@
   var hint = $('hint');
   var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
 
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var thrifty = !!(navigator.connection && navigator.connection.saveData);
   /* a phone can hold this: the stage pins and the scroll is the playhead there
      too. Only a visitor who asked for less motion, or who is on a metered
@@ -52,7 +59,7 @@
   function filmPoster() {
     var poster = video.getAttribute('data-poster-phone');
     if (!poster || !window.matchMedia('(orientation: portrait)').matches) {
-      return video.getAttribute('poster');
+      return video.getAttribute('poster') || 'assets/poster.jpg';
     }
     return poster;
   }
@@ -93,6 +100,7 @@
      that follows is the scroll's own. */
   function prime() {
     if (primed || priming || !video || !canScrub) return;
+    startFilm();
     priming = true;
     try {
       video.muted = true;
@@ -126,17 +134,58 @@
     if (hint) hint.classList.add('is-gone');
   }
 
-  if (canScrub && video) {
-    /* the file is only asked for once we know this visitor can run it */
+  /* The poster costs a fraction of the film, so the first paint is a still.
+     The encode is requested only when the visitor actually starts the intro
+     (a scroll or a touch on the stage), and never when they take the skip. */
+  var filmStarted = false;
+  var filmSkipped = false;
+  if (window.location.hash && window.location.hash !== '#stage') filmSkipped = true;
+
+  function startFilm() {
+    if (filmStarted || filmSkipped || !canScrub || !video) return;
+    var source = filmSource();
+    if (!source) return;
+    filmStarted = true;
     video.poster = filmPoster();
     video.preload = 'auto';
-    video.src = filmSource();
+    video.src = source;
+    video.pause();
+  }
+
+  if (canScrub && video) {
+    video.poster = filmPoster();
+    video.preload = 'none';
     video.addEventListener('loadeddata', flush);
     video.addEventListener('seeked', flush);
     video.addEventListener('error', degrade);
-    video.pause();
 
-    window.addEventListener('touchstart', prime, { passive: true });
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 2) startFilm();
+    }, { passive: true });
+
+    window.addEventListener('touchstart', function (event) {
+      if (!event.target || !event.target.closest || !event.target.closest('.stage')) return;
+      if (event.target.closest('[data-skip-film]')) return;
+      startFilm();
+      prime();
+    }, { passive: true });
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-skip-film]'), function (link) {
+      link.addEventListener('click', function () { filmSkipped = true; });
+    });
+
+    /* a direct jump to a later section is not a scroll through the intro */
+    Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (link) {
+      if (link.getAttribute('href') === '#stage' || link.hasAttribute('data-skip-film')) return;
+      link.addEventListener('click', function () { filmSkipped = true; });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.masthead a[href="#stage"]'), function (link) {
+      link.addEventListener('click', function () {
+        filmSkipped = false;
+        startFilm();
+      });
+    });
   }
 
   /* ================= the hint stands down after the first scroll ================= */
@@ -200,8 +249,13 @@
   /* ================= the download button knows the platform ================= */
 
   var ua = navigator.userAgent;
-  var isMac = /Mac/i.test(ua);
-  var platformLabel = isMac ? 'Download for macOS'
+  /* an iPhone's UA contains both iPhone and Mac OS X: check the device first,
+     or the mobile CTA offers a macOS download */
+  var isPhone = /iPhone|iPad|iPod|Android/i.test(ua)
+    || (navigator.maxTouchPoints > 1 && /Mac/i.test(ua));
+  var isMac = !isPhone && /Mac/i.test(ua);
+  var platformLabel = isPhone ? 'Get the desktop app'
+    : isMac ? 'Download for macOS'
     : /Windows/i.test(ua) ? 'Download for Windows'
     : 'See the releases';
   Array.prototype.forEach.call(document.querySelectorAll('.js-platform'), function (el) {
@@ -211,7 +265,11 @@
   /* the sizes are facts from the 0.2.5 release (bump with desktop/package.json):
      Windows 107 MB, macOS 124 MB on Apple silicon and 127 MB on Intel. The
      markup carries the Windows figure; only a Mac needs a different one. */
-  if (isMac) {
+  if (isPhone) {
+    Array.prototype.forEach.call(document.querySelectorAll('.js-meta'), function (el) {
+      el.textContent = 'Windows and macOS · free';
+    });
+  } else if (isMac) {
     Array.prototype.forEach.call(document.querySelectorAll('.js-meta'), function (el) {
       el.textContent = 'Version 0.2.5 · 124–127 MB · free';
     });
@@ -234,7 +292,7 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['stage', 'press', 'proofs', 'take'].forEach(function (id) {
+    ['stage', 'press', 'proofs', 'examples', 'take'].forEach(function (id) {
       var section = $(id);
       if (section) seen.observe(section);
     });
@@ -293,6 +351,72 @@
     arm(gsap.utils.toArray('[data-reveal]'), rise);
     arm(gsap.utils.toArray('[data-clip]'), open);
   }
+
+  /* ================= the masthead menu ================= */
+
+  var masthead = document.querySelector('.masthead');
+  var menuToggle = document.querySelector('.menu-toggle');
+  var menuNav = $('site-menu');
+  var menuMedia = window.matchMedia('(max-width: 860px)');
+
+  if (masthead && menuToggle && menuNav) {
+    var menuLabel = menuToggle.querySelector('.menu-toggle__label');
+
+    var setMenu = function (open) {
+      var next = !!(open && menuMedia.matches);
+      masthead.setAttribute('data-menu-open', String(next));
+      menuToggle.setAttribute('aria-expanded', String(next));
+      menuToggle.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
+      if (menuLabel) menuLabel.textContent = next ? 'Close' : 'Menu';
+      document.body.classList.toggle('menu-open', next);
+      var pageMain = document.querySelector('main');
+      var pageFooter = document.querySelector('.colophon');
+      if (pageMain) pageMain.toggleAttribute('inert', next);
+      if (pageFooter) pageFooter.toggleAttribute('inert', next);
+    };
+
+    menuToggle.addEventListener('click', function () {
+      setMenu(masthead.getAttribute('data-menu-open') !== 'true');
+    });
+
+    menuNav.addEventListener('click', function (event) {
+      if (event.target.closest && event.target.closest('a')) setMenu(false);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && masthead.getAttribute('data-menu-open') === 'true') {
+        setMenu(false);
+        menuToggle.focus();
+      }
+    });
+
+    var closeMenu = function () { setMenu(false); };
+    if (menuMedia.addEventListener) menuMedia.addEventListener('change', closeMenu);
+    else menuMedia.addListener(closeMenu);
+    setMenu(false);
+  }
+
+  /* ================= the motion preference ================= */
+
+  var motionButtons = Array.prototype.slice.call(document.querySelectorAll('[data-motion-toggle]'));
+
+  function syncMotionButtons() {
+    motionButtons.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(reduce));
+      button.setAttribute('aria-label', reduce
+        ? 'Turn motion back on; reloads the page'
+        : 'Reduce motion; reloads the page');
+      button.textContent = reduce ? 'Use motion' : 'Reduce motion';
+    });
+  }
+
+  motionButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      try { window.localStorage.setItem(MOTION_KEY, reduce ? 'full' : 'reduce'); } catch (error) {}
+      window.location.reload();
+    });
+  });
+  syncMotionButtons();
 
   /* ================= the web demo loads only when asked ================= */
 
@@ -466,6 +590,9 @@
         beats: beats.length,
         mode: mode,
         pinned: !!pinTrigger,
+        motionPreference: reduce ? 'reduced' : 'full',
+        filmStarted: filmStarted,
+        filmSkipped: filmSkipped,
         videosOnPage: document.querySelectorAll('video').length,
         film: video && video.currentSrc ? video.currentSrc.split('/').pop() : null,
         dims: video && video.videoWidth ? video.videoWidth + '×' + video.videoHeight : null,

@@ -1,7 +1,7 @@
-/* The examples shelf.
-   It reads the folder it lives in through GitHub's contents API, so adding a
-   file to examples/ and pushing is the whole workflow: no manifest to edit and
-   no list that can fall out of step with the folder. */
+/* The proof shelf, now part of the one-pager.
+   It reads the examples folder through GitHub's contents API, so adding a file
+   and pushing is still the whole workflow. The request waits until the shelf is
+   near the viewport, and the files themselves are served from this site. */
 
 (function () {
   'use strict';
@@ -10,7 +10,7 @@
   var DIR = 'examples';
   var IMAGE = /\.(avif|gif|jpe?g|png|webp)$/i;
   var VIDEO = /\.(mp4|mov|webm)$/i;
-  var CACHE_KEY = 'dither:shelf:v1';
+  var CACHE_KEY = 'dither:shelf:v2';
   var CACHE_MS = 60000;
 
   /* Curated display names for the files already in the folder. A new file
@@ -30,24 +30,18 @@
     'thor-thermal-cam': 'Thor, thermal'
   };
 
+  var section = document.getElementById('examples');
   var grid = document.getElementById('shelf-grid');
   var note = document.getElementById('shelf-status');
   var count = document.getElementById('shelf-count');
-  var filters = Array.prototype.slice.call(document.querySelectorAll('.library__filters [data-filter]'));
-  var feature = document.querySelector('[data-feature]');
-  var featureImage = document.querySelector('[data-feature-image]');
-  var featureVideo = document.querySelector('[data-feature-video]');
-  var featureTitle = document.querySelector('[data-feature-title]');
-  var featureNote = document.querySelector('[data-feature-note]');
-  var featureSpec = document.querySelector('[data-feature-spec]');
-  var featureKind = document.querySelector('[data-feature-kind]');
-  var featureLinks = Array.prototype.slice.call(document.querySelectorAll('[data-feature-link]'));
-  if (!grid || !note) return;
+  var filters = Array.prototype.slice.call(document.querySelectorAll('.examples__filters [data-filter]'));
+  if (!section || !grid || !note) return;
 
-  var total = 0;
   var CAPTIONS = {};
   var currentFilter = 'all';
-  var hasFeature = false;
+  var total = 0;
+  var loaded = false;
+  var loading = false;
 
   function weight(bytes) {
     if (!bytes) return '';
@@ -71,80 +65,34 @@
     return TITLES[name.replace(/\.[^.]+$/, '')] || caption(name);
   }
 
-  function featureCaption(file) {
-    return CAPTIONS[file.name] || CAPTIONS[file.name.replace(/\.[^.]+$/, '')] || '';
+  function fileCaption(name) {
+    return CAPTIONS[name] || CAPTIONS[name.replace(/\.[^.]+$/, '')] || '';
   }
 
-  function showFeature() {
-    if (!feature) return;
-    feature.hidden = !hasFeature || currentFilter === 'motion';
+  function localURL(name) {
+    return 'examples/' + encodeURIComponent(name);
   }
 
-  function setFeature(list) {
-    if (!feature || !featureImage || !featureVideo) return;
-    var file = list.filter(function (entry) { return !VIDEO.test(entry.name); })[0] || list[0];
+  function downloadURL(file) {
+    return file.download_url || 'https://github.com/' + REPO + '/raw/main/' + DIR + '/' + encodeURIComponent(file.name);
+  }
 
-    if (!file) {
-      hasFeature = false;
-      feature.hidden = true;
-      return;
-    }
-
-    var kind = VIDEO.test(file.name) ? 'motion' : 'still';
-    var name = displayTitle(file.name);
-    var copy = featureCaption(file);
-
-    hasFeature = true;
-    showFeature();
-
-    featureLinks.forEach(function (link) {
-      link.href = file.download_url;
-      link.setAttribute('aria-label', name + ', open the full file');
-    });
-
-    if (featureTitle) featureTitle.textContent = name;
-    if (featureNote) {
-      featureNote.textContent = copy || 'The first file in the folder, printed by the app’s own engine.';
-    }
-    if (featureKind) featureKind.textContent = kind === 'motion' ? 'Motion' : 'Still';
-    if (featureSpec) {
-      featureSpec.textContent = extension(file.name) + ' · ' + weight(file.size);
-    }
-
-    featureImage.hidden = kind === 'motion';
-    featureVideo.hidden = kind !== 'motion';
-
-    if (kind === 'motion') {
-      featureVideo.src = file.download_url;
-      featureVideo.setAttribute('aria-label', name + ', motion proof');
-      var metadata = function () {
-        if (featureSpec && featureVideo.videoWidth) {
-          featureSpec.textContent = extension(file.name) + ' · ' + featureVideo.videoWidth + ' × ' + featureVideo.videoHeight + ' · ' + weight(file.size);
-        }
-      };
-      featureVideo.addEventListener('loadedmetadata', metadata, { once: true });
-      featureVideo.play().catch(function () { /* a browser that refuses autoplay still shows the first frame */ });
-    } else {
-      featureImage.hidden = false;
-      featureImage.alt = name + ', a proof from the examples folder';
-      featureImage.src = file.download_url;
-      featureImage.addEventListener('load', function () {
-        if (featureSpec && featureImage.naturalWidth) {
-          featureSpec.textContent = extension(file.name) + ' · ' + featureImage.naturalWidth + ' × ' + featureImage.naturalHeight + ' · ' + weight(file.size);
-        }
-      }, { once: true });
-    }
+  function setBusy(isBusy) {
+    if (isBusy) grid.setAttribute('aria-busy', 'true');
+    else grid.removeAttribute('aria-busy');
   }
 
   function render(list) {
     total = list.length;
+    loaded = true;
+    loading = false;
+    setBusy(false);
 
     if (!total) {
-      hasFeature = false;
-      if (feature) feature.hidden = true;
+      grid.textContent = '';
       note.hidden = false;
       note.textContent = 'The shelf is empty. Drop a still or a clip into examples/ and push it.';
-      count.textContent = '';
+      if (count) count.textContent = '';
       return;
     }
 
@@ -160,24 +108,24 @@
       });
     }
 
-    setFeature(list);
     grid.textContent = '';
-
     var shelf = document.createDocumentFragment();
 
     list.forEach(function (file) {
       var kind = VIDEO.test(file.name) ? 'motion' : 'still';
+      var title = displayTitle(file.name);
+      var src = localURL(file.name);
+      var link = document.createElement('a');
 
       var item = document.createElement('li');
       item.className = 'shelf__item';
       item.setAttribute('data-kind', kind);
 
-      var link = document.createElement('a');
       link.className = 'shelf__link';
-      link.href = file.download_url;
+      link.href = downloadURL(file);
       link.target = '_blank';
       link.rel = 'noopener';
-      link.setAttribute('aria-label', displayTitle(file.name) + ', open the full file');
+      link.setAttribute('aria-label', title + ', open the full file');
 
       var plate = document.createElement('span');
       plate.className = 'shelf__plate';
@@ -189,14 +137,13 @@
         media.playsInline = true;
         media.preload = 'metadata';
         media.setAttribute('aria-hidden', 'true');
-        media.src = file.download_url;
       } else {
         media = document.createElement('img');
         media.alt = '';
         media.loading = 'lazy';
         media.decoding = 'async';
-        media.src = file.download_url;
       }
+      media.src = src;
       plate.appendChild(media);
 
       var tag = document.createElement('span');
@@ -207,18 +154,18 @@
       var meta = document.createElement('span');
       meta.className = 'shelf__meta';
       var name = document.createElement('b');
-      name.textContent = displayTitle(file.name);
+      name.textContent = title;
       var spec = document.createElement('span');
       spec.className = 'shelf__spec';
       spec.textContent = extension(file.name) + ' · ' + weight(file.size);
       meta.appendChild(name);
       meta.appendChild(spec);
 
-      var captionLine = featureCaption(file);
-      if (captionLine) {
+      var line = fileCaption(file.name);
+      if (line) {
         var noteLine = document.createElement('span');
         noteLine.className = 'shelf__note';
-        noteLine.textContent = captionLine;
+        noteLine.textContent = line;
         meta.appendChild(noteLine);
       }
 
@@ -240,37 +187,32 @@
     });
 
     grid.appendChild(shelf);
+    note.textContent = '';
     note.hidden = true;
-    count.textContent = total + (total === 1 ? ' proof' : ' proofs') + ' on the shelf';
+    updateCount();
   }
 
-  function show(list) {
-    render(list);
+  function updateCount() {
+    if (!count) return;
+    var shown = currentFilter === 'all'
+      ? total
+      : grid.querySelectorAll('[data-kind="' + currentFilter + '"]').length;
+    count.textContent = currentFilter === 'all'
+      ? total + (total === 1 ? ' proof' : ' proofs') + ' on the shelf'
+      : shown + ' of ' + total + ' shown';
+  }
+
+  function filter() {
     filters.forEach(function (button) {
       button.addEventListener('click', function () {
-        var want = button.getAttribute('data-filter');
-        currentFilter = want;
-        grid.setAttribute('data-filter', want);
+        currentFilter = button.getAttribute('data-filter');
+        grid.setAttribute('data-filter', currentFilter);
         filters.forEach(function (other) {
           other.setAttribute('aria-pressed', String(other === button));
         });
-        showFeature();
-        var shown = want === 'all' ? total : grid.querySelectorAll('[data-kind="' + want + '"]').length;
-        count.textContent = shown + ' of ' + total + ' shown';
-        note.hidden = total > 0;
+        updateCount();
       });
     });
-  }
-
-  function failed(error) {
-    note.hidden = false;
-    note.textContent = '';
-    note.appendChild(document.createTextNode('The shelf could not be read (' + error.message + '). '));
-    var link = document.createElement('a');
-    link.href = 'https://github.com/' + REPO + '/tree/main/' + DIR;
-    link.textContent = 'Open the folder on GitHub';
-    note.appendChild(link);
-    if (feature) feature.hidden = true;
   }
 
   function cached() {
@@ -285,45 +227,78 @@
   }
 
   function readCaptions() {
-    return fetch('captions.json', { cache: 'no-store' })
+    return fetch(DIR + '/captions.json', { cache: 'no-store' })
       .then(function (response) { return response.ok ? response.json() : {}; })
       .catch(function () { return {}; });
   }
 
-  readCaptions().then(function (map) {
-    CAPTIONS = map && typeof map === 'object' ? map : {};
+  function failed(error) {
+    loading = false;
+    setBusy(false);
+    note.hidden = false;
+    note.textContent = '';
+    note.appendChild(document.createTextNode('The shelf could not be read (' + error.message + '). '));
+    var link = document.createElement('a');
+    link.href = 'https://github.com/' + REPO + '/tree/main/' + DIR;
+    link.textContent = 'Open the folder on GitHub';
+    note.appendChild(link);
+  }
 
-    var held = cached();
-    if (held) {
-      show(held);
-      return;
-    }
+  function load() {
+    if (loaded || loading) return;
+    loading = true;
+    setBusy(true);
+    note.hidden = false;
+    note.textContent = 'Reading the shelf…';
 
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + DIR + '?ref=main', {
-      headers: { Accept: 'application/vnd.github+json' }
-    })
-      .then(function (response) {
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        return response.json();
+    readCaptions().then(function (map) {
+      CAPTIONS = map && typeof map === 'object' ? map : {};
+      var held = cached();
+      if (held) {
+        render(held);
+        return;
+      }
+
+      return fetch('https://api.github.com/repos/' + REPO + '/contents/' + DIR + '?ref=main', {
+        headers: { Accept: 'application/vnd.github+json' }
       })
-      .then(function (entries) {
-        if (!Array.isArray(entries)) throw new Error('unexpected listing');
-        var files = entries
-          .filter(function (entry) {
-            return entry.type === 'file' && (IMAGE.test(entry.name) || VIDEO.test(entry.name));
-          })
-          .sort(function (a, b) {
-            /* stills first, then clips; within each, the file name groups a
-               painting's proofs together and keeps 2 before 10 */
-            var clipA = VIDEO.test(a.name) ? 1 : 0;
-            var clipB = VIDEO.test(b.name) ? 1 : 0;
-            return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
-          });
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
-        } catch (error) { /* a browser that refuses storage still gets the shelf */ }
-        show(files);
-      })
-      .catch(failed);
-  });
+        .then(function (response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(function (entries) {
+          if (!Array.isArray(entries)) throw new Error('unexpected listing');
+          var files = entries
+            .filter(function (entry) {
+              return entry.type === 'file' && entry.name !== 'captions.json' && (IMAGE.test(entry.name) || VIDEO.test(entry.name));
+            })
+            .sort(function (a, b) {
+              /* stills first, then clips; within each, the file name groups a
+                 painting's proofs together and keeps 2 before 10 */
+              var clipA = VIDEO.test(a.name) ? 1 : 0;
+              var clipB = VIDEO.test(b.name) ? 1 : 0;
+              return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
+            });
+          try {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
+          } catch (error) { /* a browser that refuses storage still gets the shelf */ }
+          render(files);
+        })
+        .catch(failed);
+    });
+  }
+
+  filter();
+
+  if (!('IntersectionObserver' in window)) {
+    load();
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+    observer.disconnect();
+    load();
+  }, { rootMargin: '600px 0px' });
+  observer.observe(section);
 })();

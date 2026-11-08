@@ -21,21 +21,33 @@
 <meta name="twitter:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
 <meta name="twitter:image:alt" content="Two hands from The Creation of Adam, dissolving into a dither.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="assets/poster.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="assets/poster.jpg" fetchpriority="high" media="(orientation: landscape)">
+<link rel="preload" as="image" href="assets/film-phone-poster.jpg" fetchpriority="high" media="(orientation: portrait)">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/InstrumentSans-var.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/InstrumentSerif-400.woff2" crossorigin>
 <script>
   /* .motion is what allows the stylesheet to hold the page's type back for its
      reveal. It is set here, in the head, so nothing is ever painted visible and
      then hidden; a browser without script, or a visitor who asked for less
-     motion, gets the page already set. The timeout is the safety net: if the
-     reveal engine never arrives, the type prints itself. */
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.classList.add('motion');
-    window.setTimeout(function () {
-      if (!window.__motionReady) document.documentElement.classList.remove('motion');
-    }, 3000);
-  }
+     motion, gets the page already set. A stored choice wins over the system
+     preference; removing the choice falls back to the system again. */
+  (function () {
+    var root = document.documentElement;
+    var key = 'dither:motion';
+    var stored = null;
+    try { stored = window.localStorage.getItem(key); } catch (error) {}
+    if (stored !== 'reduce' && stored !== 'full') stored = null;
+    root.classList.add('js');
+    var reduce = stored ? stored === 'reduce'
+      : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    root.setAttribute('data-motion', reduce ? 'reduce' : 'full');
+    if (!reduce) {
+      root.classList.add('motion');
+      window.setTimeout(function () {
+        if (!window.__motionReady) root.classList.remove('motion');
+      }, 3000);
+    }
+  })();
 </script>
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/mark-192.png">
@@ -46,37 +58,47 @@
 </head>
 <body class="no-js">
 
-<a class="skip" href="#claim">Skip the film</a>
+<a class="skip" data-skip-film href="#claim">Skip to the product</a>
 
-<header class="masthead">
+<header class="masthead" data-menu-open="false">
   <a class="masthead__mark" href="#stage" aria-label="Dither Studio, back to the film">
     <img class="masthead__logo" src="assets/mark-64.png" alt="" width="64" height="64" decoding="async">
     <span class="masthead__word">Dither Studio</span>
   </a>
-  <nav class="masthead__nav" aria-label="Sections">
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+    <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="menu-toggle__label">Menu</span>
+  </button>
+  <nav class="masthead__nav" id="site-menu" aria-label="Sections">
     <a href="#stage">Film</a>
     <a href="#press">Demo</a>
     <a href="#proofs">Proofs</a>
-    <a href="examples/">Examples</a>
-    <a class="masthead__take" href="#take">Take it</a>
+    <a href="#examples">Examples</a>
+    <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Reduce motion</button>
+    <div class="masthead__foot">
+      <p class="masthead__note">Desktop app for Windows and macOS. It does not run on phones or tablets.</p>
+      <a class="masthead__take js-platform" href="https://github.com/thijnperd/dither-studio/releases/latest">Download for Windows</a>
+    </div>
   </nav>
 </header>
 
 <main id="top">
 
   <section class="stage" id="stage" aria-label="The film, driven by scroll">
-    <video class="stage__video" id="scrubvideo" poster="assets/poster.jpg"
+    <video class="stage__video" id="scrubvideo"
            data-poster-phone="assets/film-phone-poster.jpg"
            data-src="assets/film-scrub.mp4" preload="none" muted playsinline
            disablepictureinpicture aria-hidden="true"></video>
     <div class="stage__scrim" aria-hidden="true"></div>
     <div class="stage__spot" aria-hidden="true"></div>
+    <a class="stage__skip" id="skip-intro" data-skip-film href="#claim">Skip to the product <span aria-hidden="true">↓</span></a>
 
     <div class="beats" id="beats">
       <div class="beat beat--title">
         <p class="beat__label">Windows and macOS · free · offline</p>
         <h1>Let there be pixels.</h1>
         <p class="beat__lede">A press that takes a painting, a photograph or a video and rebuilds it out of one palette’s marks.</p>
+        <p class="stage__device">Desktop app for Windows and macOS. It does not run on phones or tablets.</p>
       </div>
       <div class="beat">
         <h2>Two hands, one gap.</h2>
@@ -129,6 +151,7 @@
       <a class="claim__demo" href="#press">Try the web demo <span aria-hidden="true">→</span></a>
       <p class="claim__fine">Windows and macOS. The build is unsigned, so the system asks once. It draws the same with the cable out.</p>
     </div>
+    <p class="device-note">Dither Studio is a desktop app for Windows and macOS. It does not run on phones or tablets; the web demo is a browser preview.</p>
   </section>
 
   <section class="demo" id="press" aria-labelledby="demo-title" data-demo data-state="idle">
@@ -219,7 +242,7 @@
     <div class="proofs__shelf-head">
       <div class="proofs__shelf-copy">
         <h3>One press, many readings.</h3>
-        <p>Four proofs from the shelf, every mark one of the palette’s own entries. <a href="examples/">The rest of the files are here</a>.</p>
+        <p>Four selected proofs, every mark one of the palette’s own entries. <a href="#examples">The full shelf is below</a>.</p>
       </div>
       <div class="proofs__controls" data-rail-controls hidden>
         <button type="button" data-rail-prev aria-controls="proofs-rail" aria-label="Previous proof">←</button>
@@ -263,6 +286,29 @@
       </figure>
     </div>
     <p class="proofs__hint" id="proofs-hint">Drag or swipe the shelf, use the arrows, or scroll sideways. On a fine pointer, the loupe follows.</p>
+
+    <section class="examples" id="examples" aria-labelledby="examples-title">
+      <div class="examples__head">
+        <div>
+          <p class="examples__label" data-reveal>The shelf</p>
+          <h3 id="examples-title" data-clip>Every proof in the folder.</h3>
+        </div>
+        <p data-reveal>Every still and clip in the <code>examples/</code> folder appears here, newest additions included, with no list to keep in step. <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">Open the folder</a>.</p>
+      </div>
+      <div class="examples__bar">
+        <div class="examples__filters" role="group" aria-label="Show">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="still" aria-pressed="false">Stills</button>
+          <button type="button" data-filter="motion" aria-pressed="false">Motion</button>
+        </div>
+        <p class="examples__count" id="shelf-count" aria-live="polite"></p>
+      </div>
+      <ul class="examples__grid" id="shelf-grid" data-filter="all" aria-labelledby="examples-title"></ul>
+      <p class="examples__status" id="shelf-status">Reading the shelf…</p>
+      <noscript>
+        <p class="examples__status">The shelf is read by a script, which your browser has turned off. The files are in <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">the examples folder</a>.</p>
+      </noscript>
+    </section>
     </div>
   </section>
 
@@ -338,6 +384,7 @@
       <a class="sub" href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Try the web demo first</a>
     </div>
     <p class="take__fine" data-reveal>There is no server in this product. The installed app needs one network request, the download; the web demo above is the only other one, and only when you start it.</p>
+    <p class="device-note">Desktop app only: Windows and macOS. It does not run on phones or tablets.</p>
   </section>
 
 </main>
@@ -348,7 +395,7 @@
   <p class="colophon__links">
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
-    <a href="examples/">Examples</a>
+    <a href="#examples">Examples</a>
     <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Web demo</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
@@ -360,5 +407,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="site.js"></script>
+<script defer src="examples/examples.js"></script>
 </body>
 </html>
