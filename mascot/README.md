@@ -2,7 +2,7 @@
 
 Mote is the supporting character for **Dither Studio**: one halftone dot that
 missed the paper and stayed. It checks edges, keeps the registration honest, and
-carries the loupe nobody else needs.
+holds the proof strip up to the light.
 
 It is not the brand's god. The God from *The Creation of Adam* remains the mark,
 the masthead, the icon and the hero. Mote is the hand that pulls the proof.
@@ -15,15 +15,15 @@ The promise is one line: **every mark is a decision.**
 |---|---|
 | **Name** | Mote |
 | **Role** | Press apprentice |
-| **Shape** | A tall ivory ink drop with one missing-pixel bite at the upper right |
-| **Face** | Two square ink eyes, a small smile, a lapis freckle and one lapis cheek mark |
-| **Trade** | A black printer's apron with a lapis registration cross and a tape label; a lapis loupe |
-| **Loose part** | One out-of-register pixel, forever floating near the bite |
+| **Shape** | A tall ivory ink drop with a stepped bite at the upper left |
+| **Face** | One square ink eye, a brow, a dry mouth, and a lapis loupe mounted over the other eye |
+| **Trade** | A black printer's apron with a pocket and lapis registration marks; a proof strip in its left hand |
+| **Loose part** | One out-of-register pixel, forever floating above the bite |
 | **Stage** | The unlisted character sheet at `/mascot/`, on paper with one black plate |
 
 The body is deliberately larger and simpler than the old character. The
-silhouette has to survive at 32 px: the bite is the identity, the black apron is
-the trade, and the loupe ring is the only tool.
+silhouette has to survive at 32 px: the bite is the identity, the black apron
+is the trade, and the mounted loupe is the tool.
 
 ### Three traits
 
@@ -50,34 +50,34 @@ Mote notices the edge, names the fix, and credits the person who made the mark.
 
 - **Palette:** ivory `#EFEADF`, ink `#0B0D12`, lapis `#7E93BE`, press `#121722`.
   The apron is ink; the paper body and the lapis loupe keep it readable at
-  thumbnail sizes. At 32 px it is a body, a dark block, a blue ring and a face.
+  thumbnail sizes. At 32 px it is a body, a dark block, a blue ring and one eye.
 - **Material:** flat fills only. No gradients, glow, bevels or second light.
 - **Silhouette:** the bite is the identity. Without it the drop is a generic
   blob; with it the body reads as a printed dot that lost a piece.
 - **The loose pixel:** it is out of register, not a magic sparkle. The paper
   square is the misregistration; the lapis square is the ink.
-- **The loupe:** held in the right hand, never floating. The hand is drawn over
-  the handle so the grip reads at full size.
-- **Small sizes:** 32 px is the floor. The loose pixel, freckles and halftone
-  patch simplify; the face, apron and loupe ring still read. Below 32 px, use a
+- **The loupe:** mounted over the right eye, never held. The ring, the dotted
+  lens and the strap into the brow are one unit; the free hand holds the proof.
+- **Small sizes:** 32 px is the floor. The loose pixel, pocket and halftone
+  patch simplify; the eye, apron and loupe ring still read. Below 32 px, use a
   plain dot, not a shrunken Mote.
 - **Clear space:** one dot, 18 px at 512, scaled with the mark.
 
 The master is **640 × 640**; the earlier 512 master and its old slate apron are
-gone. The new art is one body, one apron, one loupe, one loose pixel.
+gone. The new art is one body, one apron, one loupe, one proof strip and one loose pixel.
 
 ## The motion
 
 The selected direction is **the proof check**: Mote arrives, breathes, blinks,
-scans the sheet with the loupe, and never catches the loose pixel. One thought at
+tilts the mounted loupe, and never catches the loose pixel. One thought at
 a time. It is an apprentice at work, not a character performing.
 
 | Beat | What moves | Timing |
 |---|---|---|
 | Arrive | Whole mark rises 14 px and fades in | 900 ms, once |
 | Breathe | Body scales 0.4–1%, shadow counters | 5.2 s loop |
-| Blink | Both eyes close and open | 120 ms, every 4.8 s, after a 2.4 s hold |
-| Loupe | Right rig scans around the shoulder | 6.4 s loop |
+| Blink | The open eye closes and opens | 120 ms, every 4.8 s, after a 2.4 s hold |
+| Loupe | The mounted lens shifts and tilts against the brow | 6.4 s loop |
 | Loose pixel | Floats 6 px, opacity dips | 3.6 s loop |
 | Reduced motion | Everything stops; the master is the fallback | `prefers-reduced-motion` |
 
@@ -153,7 +153,7 @@ the two SVGs; the previews are for inspecting the motion.
 ## Don't
 
 - Don't add a gradient, glow, bevel or second light source.
-- Don't add a hat, a second prop, a new expression or a different loupe.
+- Don't add a hat, a second prop, a new expression, or take the loupe off the face.
 - Don't animate the mouth, add a speech bubble or make Mote wink.
 - Don't put Mote in the masthead, hero or app icon.
 - Don't use Mote to explain the interface. It notices; it does not instruct.
