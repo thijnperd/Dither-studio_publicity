@@ -17,20 +17,19 @@ const motion = String.raw`
     #mote {
       animation: mote-arrive 900ms cubic-bezier(.23, 1, .32, 1) both;
       transform-box: view-box;
-      transform-origin: 256px 450px;
+      transform-origin: 320px 560px;
     }
-    #mote-core {
+    #mote-body-group {
       animation: mote-breathe 5.2s cubic-bezier(.4, 0, .2, 1) infinite;
       transform-box: view-box;
-      transform-origin: 256px 440px;
+      transform-origin: 320px 560px;
     }
     #mote-shadow {
       animation: mote-shadow 5.2s cubic-bezier(.4, 0, .2, 1) infinite;
       transform-box: fill-box;
       transform-origin: center;
     }
-    #mote-eye-left,
-    #mote-eye-right {
+    #mote-eyes rect {
       animation: mote-blink 4.8s cubic-bezier(.4, 0, .2, 1) 2.4s infinite;
       transform-box: fill-box;
       transform-origin: center;
@@ -38,12 +37,12 @@ const motion = String.raw`
     #mote-right-rig {
       animation: mote-loupe 6.4s cubic-bezier(.4, 0, .2, 1) infinite;
       transform-box: view-box;
-      transform-origin: 354px 324px;
+      transform-origin: 448px 356px;
     }
     #mote-spark {
       animation: mote-pixel 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
       transform-box: view-box;
-      transform-origin: 365px 148px;
+      transform-origin: 454px 118px;
     }
     @keyframes mote-arrive {
       from { opacity: 0; transform: translateY(14px) scale(.985); }
@@ -51,30 +50,30 @@ const motion = String.raw`
     }
     @keyframes mote-breathe {
       0%, 100% { transform: scale(1); }
-      48%      { transform: scale(1.006, 1.012); }
-      70%      { transform: scale(.998, .996); }
+      48%      { transform: scale(1.004, 1.01); }
+      70%      { transform: scale(.999, .997); }
     }
     @keyframes mote-shadow {
-      0%, 100% { transform: scaleX(1); opacity: .42; }
-      48%      { transform: scaleX(1.035); opacity: .36; }
-      70%      { transform: scaleX(.99); opacity: .44; }
+      0%, 100% { transform: scaleX(1); opacity: .45; }
+      48%      { transform: scaleX(1.025); opacity: .4; }
+      70%      { transform: scaleX(.995); opacity: .46; }
     }
     @keyframes mote-blink {
       0%, 91%, 100% { transform: scaleY(1); }
       93.5%, 96%    { transform: scaleY(.08); }
     }
     @keyframes mote-loupe {
-      0%, 40%, 100% { transform: rotate(0) translateY(0); }
+      0%, 38%, 100% { transform: rotate(0) translateY(0); }
       50%           { transform: rotate(1.2deg) translateY(-2px); }
       62%           { transform: rotate(-.8deg) translateY(1px); }
       74%           { transform: rotate(.4deg) translateY(0); }
     }
     @keyframes mote-pixel {
-      0%, 100% { transform: translateY(0); opacity: 1; }
-      50%      { transform: translateY(-6px); opacity: .85; }
+      0%, 100% { transform: translateY(0) rotate(9deg); opacity: 1; }
+      50%      { transform: translateY(-6px) rotate(9deg); opacity: .82; }
     }
     @media (prefers-reduced-motion: reduce) {
-      #mote, #mote-core, #mote-shadow, #mote-eye-left, #mote-eye-right,
+      #mote, #mote-body-group, #mote-shadow, #mote-eyes rect,
       #mote-right-rig, #mote-spark { animation: none !important; }
     }
 `;

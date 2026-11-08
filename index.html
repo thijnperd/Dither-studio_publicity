@@ -106,6 +106,17 @@
     <p class="stage__hint" id="hint">Scroll, and the film runs with you</p>
   </section>
 
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <div class="ticker__group">
+        <span>46 algorithms</span><span>24 palettes</span><span>13 effects</span><span>11 tone maps</span><span>34 presets</span><span>no accounts</span><span>no uploads</span><span>offline</span>
+      </div>
+      <div class="ticker__group">
+        <span>46 algorithms</span><span>24 palettes</span><span>13 effects</span><span>11 tone maps</span><span>34 presets</span><span>no accounts</span><span>no uploads</span><span>offline</span>
+      </div>
+    </div>
+  </div>
+
   <section class="claim" id="claim" aria-labelledby="claim-title" tabindex="-1">
     <h2 id="claim-title" class="claim__title" data-clip>A dither filter averages a picture into a few greys. This one decides where every mark goes.</h2>
     <p class="claim__body" data-reveal>Forty-six algorithms, from a Bayer screen to error diffusion to three that read the picture’s own structure. Every one is a published method with a name in the menu, and the catalogue on this page is the one the app ships.</p>
@@ -190,6 +201,7 @@
   </section>
 
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
+    <div class="proofs__inner">
     <div class="proofs__head">
       <h2 id="proofs-title" data-clip>The press, in numbers</h2>
       <p data-reveal>These are the catalogues inside the engine. The tests count them, so what is on this page is what the app ships.</p>
@@ -204,11 +216,18 @@
     </dl>
 
     <div class="proofs__shelf-head">
-      <h3>One press, many readings.</h3>
-      <p>Four proofs from the shelf, every mark one of the palette’s own entries. <a href="examples/">The rest of the files are here</a>.</p>
+      <div class="proofs__shelf-copy">
+        <h3>One press, many readings.</h3>
+        <p>Four proofs from the shelf, every mark one of the palette’s own entries. <a href="examples/">The rest of the files are here</a>.</p>
+      </div>
+      <div class="proofs__controls" data-rail-controls hidden>
+        <button type="button" data-rail-prev aria-controls="proofs-rail" aria-label="Previous proof">←</button>
+        <span class="proofs__count" data-rail-count aria-live="polite" aria-atomic="true">01 / 04</span>
+        <button type="button" data-rail-next aria-controls="proofs-rail" aria-label="Next proof">→</button>
+      </div>
     </div>
 
-    <div class="proofs__rail" tabindex="0" role="region" aria-label="Proofs from the app, scrolling sideways">
+    <div class="proofs__rail" id="proofs-rail" tabindex="0" role="region" aria-describedby="proofs-hint" aria-label="Proofs from the app, scrolling sideways">
       <figure class="proof">
         <img src="assets/proof-thor.png" alt="Thor’s Fight with the Giants, dithered in an orange and gold ordered screen." width="1011" height="1462" loading="lazy" decoding="async">
         <figcaption>
@@ -242,50 +261,68 @@
         </figcaption>
       </figure>
     </div>
-    <p class="proofs__hint">Scroll sideways for the rest.</p>
+    <p class="proofs__hint" id="proofs-hint">Drag or swipe the shelf, use the arrows, or scroll sideways. On a fine pointer, the loupe follows.</p>
+    </div>
   </section>
 
   <section class="facts" aria-labelledby="facts-title">
-    <h2 id="facts-title" class="facts__title" data-clip>Three things it does not need</h2>
-    <div class="facts__row">
-      <div class="fact" data-reveal>
-        <span class="fact__num">0</span>
-        <h3>Accounts</h3>
-        <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
+    <div class="facts__inner">
+      <div class="facts__head">
+        <p class="facts__label" data-reveal>Offline by construction</p>
+        <h2 id="facts-title" class="facts__title" data-clip>No accounts.<br>No uploads.<br>No network calls.</h2>
+        <p class="facts__lede" data-reveal>The installer is the whole press. It opens on your machine and saves to your disk.</p>
       </div>
-      <div class="fact" data-reveal>
-        <span class="fact__num">0</span>
-        <h3>Uploads</h3>
-        <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
-      </div>
-      <div class="fact" data-reveal>
-        <span class="fact__num">0</span>
-        <h3>Network calls</h3>
-        <p>No fonts, no analytics, no licence check. The installed app makes no request at all; the web demo above loads only when you start it.</p>
+      <div class="facts__row">
+        <div class="fact" data-reveal>
+          <span class="fact__num">0</span>
+          <div>
+            <h3>Accounts</h3>
+            <p>There is no login. The installer is the whole app, and it opens on your own machine.</p>
+          </div>
+        </div>
+        <div class="fact" data-reveal>
+          <span class="fact__num">0</span>
+          <div>
+            <h3>Uploads</h3>
+            <p>Your images are read from disk and written back to disk. Nothing is sent anywhere.</p>
+          </div>
+        </div>
+        <div class="fact" data-reveal>
+          <span class="fact__num">0</span>
+          <div>
+            <h3>Network calls</h3>
+            <p>No fonts, no analytics, no licence check. The installed app makes no request at all; the web demo above loads only when you start it.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="asks" aria-labelledby="asks-title">
-    <h2 id="asks-title" data-clip>Before you install</h2>
-    <ol class="asks__list">
-      <li data-reveal>
-        <h3>The build is unsigned</h3>
-        <p>On Windows, SmartScreen says “Windows protected your PC”: choose More info, then Run anyway. On macOS, right-click the app, choose Open, then Open again. Once each, and then never.</p>
-      </li>
-      <li data-reveal>
-        <h3>Pick the build for your machine</h3>
-        <p>Installers are 107 MB on Windows; the macOS disk images are 124 MB for Apple silicon and 127 MB for Intel. The portable executable needs no install at all.</p>
-      </li>
-      <li data-reveal>
-        <h3>It updates by hand</h3>
-        <p>There is no auto-updater. A new version is a new download, and your images and settings are untouched.</p>
-      </li>
-      <li data-reveal>
-        <h3>Video works at 720 px while it plays</h3>
-        <p>The frame is capped so the loop can keep up with the clock. A still is printed at full resolution; a moving frame is not.</p>
-      </li>
-    </ol>
+    <div class="asks__inner">
+      <div class="asks__head">
+        <p class="asks__label" data-reveal>Installation notes / 0.2.5</p>
+        <h2 id="asks-title" data-clip>Before you install</h2>
+      </div>
+      <ol class="asks__list">
+        <li data-reveal>
+          <h3>The build is unsigned</h3>
+          <p>On Windows, SmartScreen says “Windows protected your PC”: choose More info, then Run anyway. On macOS, right-click the app, choose Open, then Open again. Once each, and then never.</p>
+        </li>
+        <li data-reveal>
+          <h3>Pick the build for your machine</h3>
+          <p>Installers are 107 MB on Windows; the macOS disk images are 124 MB for Apple silicon and 127 MB for Intel. The portable executable needs no install at all.</p>
+        </li>
+        <li data-reveal>
+          <h3>It updates by hand</h3>
+          <p>There is no auto-updater. A new version is a new download, and your images and settings are untouched.</p>
+        </li>
+        <li data-reveal>
+          <h3>Video works at 720 px while it plays</h3>
+          <p>The frame is capped so the loop can keep up with the clock. A still is printed at full resolution; a moving frame is not.</p>
+        </li>
+      </ol>
+    </div>
   </section>
 
   <section class="take" id="take" aria-labelledby="take-title">
@@ -316,6 +353,8 @@
   </p>
   <p class="colophon__note">The film here is the silent cut: no type is burned into it, so the words over it are the page’s own. Motion runs on GSAP, and nothing else is loaded from a third party. The type is Instrument Serif, Instrument Sans and IBM Plex Mono, all open-licence and served from this site. No cookies, no analytics, no fonts from elsewhere.</p>
 </footer>
+
+<div class="proof-loupe" data-proof-loupe aria-hidden="true"><span class="proof-loupe__label">2× / the proof</span></div>
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>

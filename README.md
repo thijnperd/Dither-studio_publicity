@@ -10,17 +10,20 @@ manager, no server. GitHub Pages serves this folder as it is.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The page: the pinned film, the on-demand web demo, the feature plates, the proof shelf, the download band |
-| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF` |
-| `site.js` | The scroll stage, the section state, the scroll reveals, the GSAP layer, and the loader that opens the existing web demo on request |
+| `index.html` | The page: the pinned film, the on-demand web demo, the feature plates, the proof shelf, the offline ledger, the installation sheet and the download band |
+| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF`; also the paper proof sheet, the catalogue ticker, the cursor loupe and the ivory installation notes |
+| `site.js` | The scroll stage, the section state, the scroll reveals, the GSAP layer, the proof loupe, the rail's arrow controls and live count, and the loader that opens the existing web demo on request |
 | `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
 | `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
 | `assets/film-scrub.mp4` | The film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
 | `assets/poster.jpg` | Its poster frame, used as the `og:image` and as the stage's first frame |
 | `assets/shot-webdemo.png` | The browser build's console, at 2×, used as the web demo's poster |
-| `assets/proof-*.png` | Two proofs from the app's own engine |
-| `404.html` | The designed not-found page |
+| `assets/proof-*.png` | Proofs from the app's own engine |
+| `404.html` | The missing-plate not-found page: giant misregistered 404, dark proof frame, paper notes |
+| `404.css` | The 404's paper styles and its pointer loupe |
+| `examples/` | The paper proof shelf: a featured proof, a contact sheet, filters and the folder-driven loader |
+| `mascot/` | Mote's unlisted character file and downloadable SVG/PNG plates (`noindex, nofollow, noarchive`, and not linked from the public pages) |
 
 ## How the page works
 
@@ -44,10 +47,22 @@ manager, no server. GitHub Pages serves this folder as it is.
     -c:v libx264 -preset slow -crf 32 -g 12 -keyint_min 12 \
     -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-scrub.mp4
   ```
-- **The proof shelf runs sideways.** Four proofs keep their own aspect ratios
-  on one scroll-snapping rail; the first two are console proofs, the last two
-  come from `examples/`. The rail is focusable and its arrows scroll it.
+- **The proof sheet is the second room.** After the dark film, the page turns to
+  ivory paper: a giant ghost `PROOF`, oversized catalogue numbers and a sideways
+  rail of proofs with hard lapis offsets. Four proofs keep their own aspect
+  ratios on one scroll-snapping rail; the first two are console proofs, the last
+  two come from `examples/`. The rail is focusable, draggable and keyboard
+  scrollable, with previous/next buttons and a live `01 / 04` counter for a
+  pointer that does not want to guess. A cursor loupe follows a fine pointer over
+  it.
+- **The last act is a product file, not another essay.** The page returns to the
+  dark console for a zero ledger: no accounts, no uploads, no network calls. Then
+  the installation notes print on ivory paper, set as a numbered sheet with the
+  build caveats and file sizes. The closing `TAKE` carries the download.
 - **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 24 palettes, 13 effects, 11 tone maps, 34 presets.
+- **The 404 carries the same print-room idea.** A missing plate is a blank
+  sheet: a misregistered 404, a dark proof frame, a paper note and one way back.
+  It is public and `noindex`, and it does not link to the unlisted character file.
 - **The web demo is the real app.** The demo section opens the frozen web build
   from <https://thijnperd.github.io/dither-studio/> in an iframe when *Start the
   press* is used on a wide screen. The control is a normal link, so a phone, a
@@ -66,7 +81,9 @@ face, not in monospace.
 
 ## The deslop passes
 
-Two checkers run over this page, and both must be clean before a publish.
+Two checkers run over these pages before a publish. They are advisory scanners,
+not test suites: review every hit, fix the real ones, and leave a reason for the
+ones that are the design.
 
 ```bash
 # the AI-tells scanner from https://github.com/yetone/kill-ai-slop
@@ -77,25 +94,23 @@ node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
 npx impeccable detect --json index.html
 ```
 
-`kill-ai-slop` reports 35 tells; three hits here are deliberate and carry scoped
-`deslop-ignore-next-line` comments in `style.css` with the reason on the line:
-the spotlight vignette over the film (the page's whole visual idea is a
-spotlight, and the gradient is what keeps a caption legible on a bright frame),
-the scrim beneath the type (the same reason, at the foot of the frame), and the
-demo veil (a floor for the start card over a busier app shot).
-Everything it did catch was fixed: eleven monospace labels moved to the text
-face, the player and its CSS were deleted, the `01/02/03` markers came off the
-chapter cards (tell 30, decorative numbering), and the load curtain went
-altogether.
+`kill-ai-slop` reports 32 hits across five families, all of them the shared
+print-room vocabulary rather than copy or structure defects: the paper dot
+texture on 404/examples/Mascot, press-label eyebrows, display tracking read as
+“full-sentence headline”, the circular loupe read as glassmorphism, and the
+mono face used for labels and data. The three gradient exceptions already carry
+scoped `deslop-ignore-next-line 06` comments in `style.css`: the spotlight over
+the film, the scrim beneath the type and the demo veil. The catchable copy
+defects remain fixed: no decorative chapter numbers, no player chrome, no load
+curtain, and the functional labels are set in the text face.
 
-`impeccable` now reports no findings on the PC page. Two rule classes still
-match the source but are false positives on this construction: the brand faces
-(Instrument Sans and Instrument Serif are not the generic defaults the rule
-targets) and the section top borders (the scan reads the `clamp()` padding
-shorthand as no inset, though every section carries 3.5 to 6rem above its first
-child). Both are waived with reasons in `.impeccable/config.json`. The scan also
-caught two genuinely wide tracking values and one orphaned caption; those are
-fixed in `style.css`.
+`impeccable` reports four hard-offset-shadow advisories and one marquee warning
+on `index.html`. The offsets are the proof sheet's lapis registration motif; the
+catalogue strip is decorative, pauses on hover and is removed under reduced
+motion. The two real findings from this pass were fixed: the rail counter is
+11 px rather than 10 px, and the rail instruction is sentence case rather than
+a 98-character all-caps line. The brand faces and clamp-padding false positives
+remain waived with reasons in `.impeccable/config.json`.
 
 ## The copy, and why it reads like this
 
@@ -181,8 +196,10 @@ app's artwork: *The Creation of Adam*, *Tor's Fight with the Giants* and
 `examples/` is the library behind <https://thijnperd.github.io/Dither-studio_publicity/examples/>.
 Drop stills (png, jpg, webp, gif, avif) or clips (mp4, webm, mov) into that folder and push:
 the page reads the folder through GitHub's contents API, so there is no manifest to edit and no
-list that can fall out of step. The file name becomes the caption (`proof-thor-bayer8.png` reads
-"Proof thor bayer 8"), and the card reports the real pixel size once the browser has loaded it.
+list that can fall out of step. The page is a paper contact sheet: the first still becomes the
+large featured proof, the rest are contact prints, and the Stills/Motion filters appear only for
+kinds that exist. Curated display titles live in `examples.js`; a new file still appears with its
+file name as the title. Each card reports the real pixel size once the browser has loaded it.
 GitHub refuses files over 100 MB; keep clips short.
 
 ## Type

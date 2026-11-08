@@ -296,6 +296,97 @@
     demoSet('idle');
   }
 
+  /* ================= the proof loupe ================= */
+
+  var proofRail = document.querySelector('.proofs__rail');
+  var proofLoupe = document.querySelector('[data-proof-loupe]');
+  if (proofRail && proofLoupe && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var hideLoupe = function () {
+      proofLoupe.classList.remove('is-visible');
+    };
+    var trackLoupe = function (event) {
+      var image = event.target.closest ? event.target.closest('.proof img') : null;
+      if (!image) {
+        hideLoupe();
+        return;
+      }
+      var rect = image.getBoundingClientRect();
+      var x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      var y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+      proofLoupe.style.setProperty('--x', event.clientX + 'px');
+      proofLoupe.style.setProperty('--y', event.clientY + 'px');
+      proofLoupe.style.backgroundImage = 'url("' + (image.currentSrc || image.src) + '")';
+      proofLoupe.style.backgroundPosition = (x * 100).toFixed(2) + '% ' + (y * 100).toFixed(2) + '%';
+      proofLoupe.classList.add('is-visible');
+    };
+    proofRail.addEventListener('pointermove', trackLoupe, { passive: true });
+    proofRail.addEventListener('pointerleave', hideLoupe);
+    proofRail.addEventListener('scroll', hideLoupe, { passive: true });
+  }
+
+  /* ================= the proof rail: arrows and a count ================= */
+
+  var railControls = document.querySelector('[data-rail-controls]');
+  var railPrev = document.querySelector('[data-rail-prev]');
+  var railNext = document.querySelector('[data-rail-next]');
+  var railCount = document.querySelector('[data-rail-count]');
+  var railProofs = proofRail ? Array.prototype.slice.call(proofRail.querySelectorAll('.proof')) : [];
+
+  if (proofRail && railControls && railPrev && railNext && railCount && railProofs.length > 1) {
+    var railIndex = 0;
+    var railQueued = 0;
+    var railPad = 0;
+    var twoDigits = function (number) { return (number < 10 ? '0' : '') + number; };
+
+    var measureRail = function () {
+      railPad = parseFloat(window.getComputedStyle(proofRail).paddingLeft) || 0;
+      var start = proofRail.getBoundingClientRect().left + railPad;
+      var nearest = 0;
+      var distance = Infinity;
+
+      railProofs.forEach(function (proof, index) {
+        var gap = Math.abs(proof.getBoundingClientRect().left - start);
+        if (gap < distance) {
+          distance = gap;
+          nearest = index;
+        }
+      });
+
+      railIndex = nearest;
+      railPrev.disabled = nearest === 0;
+      railNext.disabled = nearest === railProofs.length - 1;
+      railCount.textContent = twoDigits(nearest + 1) + ' / ' + twoDigits(railProofs.length);
+      railCount.setAttribute('aria-label', 'Proof ' + (nearest + 1) + ' of ' + railProofs.length);
+    };
+
+    var queueRailMeasure = function () {
+      if (railQueued) return;
+      railQueued = window.requestAnimationFrame(function () {
+        railQueued = 0;
+        measureRail();
+      });
+    };
+
+    var moveRail = function (delta) {
+      measureRail();
+      var next = Math.max(0, Math.min(railProofs.length - 1, railIndex + delta));
+      var left = proofRail.scrollLeft
+        + railProofs[next].getBoundingClientRect().left
+        - proofRail.getBoundingClientRect().left
+        - railPad;
+
+      proofRail.scrollTo({ left: left, behavior: reduce ? 'auto' : 'smooth' });
+    };
+
+    railControls.hidden = false;
+    railPrev.addEventListener('click', function () { moveRail(-1); });
+    railNext.addEventListener('click', function () { moveRail(1); });
+    proofRail.addEventListener('scroll', queueRailMeasure, { passive: true });
+    window.addEventListener('resize', queueRailMeasure);
+    window.addEventListener('load', measureRail);
+    measureRail();
+  }
+
   /* a hook for the checks */
   window.__publicity = {
     stageTo: paintStage,

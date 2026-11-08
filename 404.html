@@ -3,304 +3,108 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
-<title>Frame 404 · Dither Studio</title>
-<meta name="description" content="The frame you asked for was never pulled. Return to the film.">
+<meta name="color-scheme" content="light">
+<title>Missing plate · Dither Studio</title>
+<meta name="description" content="This frame was never pulled. Return to the press.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0B0D12">
+<meta name="theme-color" content="#EFEADF">
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/mark-192.png">
 <link rel="stylesheet" href="404.css">
 </head>
 <body>
 
-<a class="skip" href="#main">Skip to the missing frame</a>
+<a class="skip" href="#main">Skip to the missing plate</a>
 
-<header class="top shell">
-  <a class="brand" href="./" aria-label="Dither Studio, back to the film">
+<header class="masthead shell">
+  <a class="brand" href="./" aria-label="Dither Studio, back to the press">
     <img class="brand__mark" src="assets/mark-64.png" alt="" width="64" height="64" decoding="async">
     <span class="brand__word">Dither Studio</span>
   </a>
-  <p class="top__meta"><span class="status-dot" aria-hidden="true"></span>404 / missing frame</p>
+  <p class="masthead__meta"><span class="status-dot" aria-hidden="true"></span>404 / no proof</p>
 </header>
 
-<main id="main" class="page shell">
+<main id="main" class="missing shell">
 
-  <section class="bed" aria-labelledby="notfound-title">
-    <span class="reg reg--tl" aria-hidden="true">+</span>
-    <span class="reg reg--tr" aria-hidden="true">+</span>
-    <span class="reg reg--bl" aria-hidden="true">+</span>
-    <span class="reg reg--br" aria-hidden="true">+</span>
+  <div class="missing__rail">
+    <span>Proof book / 2026</span>
+    <span>Plate 404 / no exposure</span>
+  </div>
 
-    <div class="bed__bar">
-      <span>Frame 404 / not pulled</span>
-      <span>00:00:04:04</span>
-    </div>
+  <section class="missing__stage" aria-labelledby="notfound-title">
 
-    <div class="word" id="word">
-      <h1 id="notfound-title">404</h1>
-      <canvas id="dither" aria-hidden="true"></canvas>
-      <span class="scan" aria-hidden="true"></span>
-    </div>
+    <div class="missing__plate">
+      <p class="missing__aside" aria-hidden="true">NO PROOF</p>
 
-    <div class="bed__bar bed__bar--bottom">
-      <span>Proof bed / 1-bit</span>
-      <span>Hover to pull</span>
-    </div>
-  </section>
-
-  <section class="note" aria-labelledby="note-title">
-    <div class="note__head">
-      <p class="eyebrow">The missing frame</p>
-      <h2 id="note-title">This page was never pulled.</h2>
-    </div>
-
-    <div class="note__copy">
-      <p class="lede">The address is not part of this page. Nothing is broken; the frame simply isn’t in the strip.</p>
-      <p class="aside">Every mark is a decision. This one was not made.</p>
-
-      <div class="actions">
-        <a class="back" href="./"><span aria-hidden="true">←</span> Back to the film</a>
-        <button class="dither" type="button" aria-pressed="false" aria-describedby="hint">
-          <span class="swatch" aria-hidden="true"></span>
-          <span>Dither</span>
-        </button>
+      <div class="missing__word">
+        <span class="missing__ghost" aria-hidden="true">404</span>
+        <h1 id="notfound-title" class="missing__number">404</h1>
       </div>
-      <p class="hint" id="hint">Hover the 404 — or pull the proof.</p>
+
+      <figure class="missing__frame" aria-hidden="true">
+        <img src="assets/poster.jpg" alt="" width="1920" height="1080" decoding="async">
+        <span class="missing__reg missing__reg--tl">+</span>
+        <span class="missing__reg missing__reg--tr">+</span>
+        <span class="missing__reg missing__reg--bl">+</span>
+        <span class="missing__reg missing__reg--br">+</span>
+        <span class="missing__frame-tag">Plate 404</span>
+        <span class="missing__frame-tag missing__frame-tag--right">No proof</span>
+      </figure>
+
+      <div class="missing__loupe" data-loupe aria-hidden="true">
+        <span>Looking for the proof</span>
+      </div>
     </div>
+
+    <div class="missing__notes">
+      <div class="missing__copy">
+        <p class="eyebrow">The missing frame</p>
+        <h2>This page was never pulled.</h2>
+        <p>The address is not in the proof book. Nothing is broken; the sheet is simply blank.</p>
+        <a class="back" href="./"><span aria-hidden="true">←</span> Back to the press</a>
+      </div>
+      <p class="missing__quote">“Every mark is a decision. This one was not made.”</p>
+    </div>
+
   </section>
+
+  <div class="missing__ticker" aria-hidden="true">
+    <div class="missing__ticker-track">
+      <div class="missing__ticker-group">
+        <span>Missing plate</span><span>404</span><span>Return to the press</span><span>No exposure</span><span>One frame short</span>
+      </div>
+      <div class="missing__ticker-group">
+        <span>Missing plate</span><span>404</span><span>Return to the press</span><span>No exposure</span><span>One frame short</span>
+      </div>
+    </div>
+  </div>
 
 </main>
 
-<footer class="foot shell">
+<footer class="colophon shell">
   <p>Dither Studio · a press for Windows and macOS</p>
   <p>One frame missing · 2026</p>
 </footer>
 
-<noscript><style>.dither { display: none; }</style></noscript>
-
 <script>
 (() => {
-  const word = document.getElementById('word');
-  const heading = document.getElementById('notfound-title');
-  const canvas = document.getElementById('dither');
-  const button = document.querySelector('.dither');
-  const context = canvas.getContext('2d');
-  if (!context) {
-    button.hidden = true;
-    return;
-  }
+  const plate = document.querySelector('.missing__plate');
+  const loupe = document.querySelector('[data-loupe]');
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (!plate || !loupe || !fine.matches) return;
 
-  const BAYER = [
-    [ 0, 32,  8, 40,  2, 34, 10, 42],
-    [48, 16, 56, 24, 50, 18, 58, 26],
-    [12, 44,  4, 36, 14, 46,  6, 38],
-    [60, 28, 52, 20, 62, 30, 54, 22],
-    [ 3, 35, 11, 43,  1, 33,  9, 41],
-    [51, 19, 59, 27, 49, 17, 57, 25],
-    [15, 47,  7, 39, 13, 45,  5, 37],
-    [63, 31, 55, 23, 61, 29, 53, 21]
-  ];
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let width = 0;
-  let height = 0;
-  let cell = 5;
-  let cols = 0;
-  let rows = 0;
-  let alpha = null;
-  let amount = 0;
-  let target = 0;
-  let hovered = false;
-  let locked = false;
-  let pointer = { x: 0.5, y: 0.5 };
-  let frame = 0;
-
-  function metrics() {
-    const style = getComputedStyle(heading);
-    return {
-      size: parseFloat(style.fontSize),
-      family: style.fontFamily,
-      weight: style.fontWeight,
-      style: style.fontStyle,
-      stroke: parseFloat(style.webkitTextStrokeWidth) || 0
-    };
-  }
-
-  function drawSolid(size, family, weight, style, stroke) {
-    context.clearRect(0, 0, width, height);
-    context.save();
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.font = `${style} ${weight} ${size}px ${family}`;
-    context.lineJoin = 'round';
-    context.lineWidth = Math.max(1, stroke);
-    const x = width / 2;
-    const y = height / 2;
-
-    // The lapis plate sits a hair out of register, like a two-pass print.
-    context.fillStyle = '#7E93BE';
-    context.strokeStyle = '#7E93BE';
-    context.strokeText('404', x + size * 0.01, y + size * 0.01);
-    context.fillText('404', x + size * 0.01, y + size * 0.01);
-
-    context.fillStyle = '#EFEADF';
-    context.strokeStyle = '#EFEADF';
-    context.strokeText('404', x, y);
-    context.fillText('404', x, y);
-    context.restore();
-  }
-
-  function buildAlpha(size, family, weight, style, stroke) {
-    cell = Math.max(3, Math.min(6, Math.round(width / 210)));
-    cols = Math.max(1, Math.ceil(width / cell));
-    rows = Math.max(1, Math.ceil(height / cell));
-    alpha = new Uint8ClampedArray(cols * rows);
-
-    const plate = document.createElement('canvas');
-    plate.width = cols;
-    plate.height = rows;
-    const plateContext = plate.getContext('2d');
-    plateContext.clearRect(0, 0, cols, rows);
-    plateContext.textAlign = 'center';
-    plateContext.textBaseline = 'middle';
-    plateContext.font = `${style} ${weight} ${size / cell}px ${family}`;
-    plateContext.lineJoin = 'round';
-    plateContext.lineWidth = Math.max(0.5, stroke / cell);
-    plateContext.fillStyle = '#fff';
-    plateContext.strokeStyle = '#fff';
-    plateContext.strokeText('404', cols / 2, rows / 2);
-    plateContext.fillText('404', cols / 2, rows / 2);
-
-    const pixels = plateContext.getImageData(0, 0, cols, rows).data;
-    for (let i = 0; i < alpha.length; i += 1) {
-      alpha[i] = pixels[i * 4 + 3];
-    }
-  }
-
-  function drawHoles(size) {
-    if (!alpha || amount < 0.001) return;
-
-    context.save();
-    context.globalCompositeOperation = 'destination-out';
-    context.globalAlpha = amount;
-    context.fillStyle = '#000';
-
-    for (let y = 0; y < rows; y += 1) {
-      const depth = 0.24 + 0.22 * (y / Math.max(1, rows - 1));
-      for (let x = 0; x < cols; x += 1) {
-        if (alpha[y * cols + x] < 110) continue;
-        const dx = (x + 0.5) / cols - pointer.x;
-        const dy = (y + 0.5) / rows - pointer.y;
-        const lens = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) / 0.56);
-        const density = Math.min(0.68, depth + lens * 0.22);
-        if (BAYER[y % 8][x % 8] / 64 < density) {
-          context.fillRect(x * cell, y * cell, cell, cell);
-        }
-      }
-    }
-
-    context.restore();
-  }
-
-  function draw() {
-    if (!width || !height || !document.fonts.status) return;
-    const type = metrics();
-    drawSolid(type.size, type.family, type.weight, type.style, type.stroke);
-    drawHoles(type.size);
-  }
-
-  function size() {
-    const rect = word.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
-    if (!width || !height) return;
-    const ratio = Math.min(2, window.devicePixelRatio || 1);
-    canvas.width = Math.max(1, Math.round(width * ratio));
-    canvas.height = Math.max(1, Math.round(height * ratio));
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    const type = metrics();
-    buildAlpha(type.size, type.family, type.weight, type.style, type.stroke);
-    word.classList.add('is-live');
-    draw();
-  }
-
-  function settle() {
-    if (!still.matches) {
-      amount += (target - amount) * 0.16;
-      if (Math.abs(target - amount) < 0.002) amount = target;
-    } else {
-      amount = target;
-    }
-    draw();
-    if (amount !== target) {
-      frame = requestAnimationFrame(settle);
-    } else {
-      frame = 0;
-    }
-  }
-
-  function wake() {
-    if (!frame) frame = requestAnimationFrame(settle);
-  }
-
-  function sync() {
-    target = locked || hovered ? 1 : 0;
-    word.classList.toggle('is-dithering', target === 1);
-    wake();
-  }
-
-  function move(event) {
-    const rect = word.getBoundingClientRect();
-    pointer.x = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-    pointer.y = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-    if (hovered || locked) wake();
-  }
-
-  word.addEventListener('pointerenter', (event) => {
-    hovered = true;
-    move(event);
-    sync();
-  });
-  word.addEventListener('pointermove', (event) => {
-    if (!hovered) {
-      hovered = true;
-      sync();
-    }
-    move(event);
-  });
-  word.addEventListener('pointerleave', () => {
-    hovered = false;
-    sync();
-  });
-  word.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse') return;
-    locked = !locked;
-    button.setAttribute('aria-pressed', String(locked));
-    sync();
-  });
-
-  button.addEventListener('click', () => {
-    locked = !locked;
-    button.setAttribute('aria-pressed', String(locked));
-    sync();
-  });
-
-  still.addEventListener('change', () => {
-    if (still.matches) {
-      amount = target;
-      draw();
-    }
-  });
-
-  document.fonts.ready.then(() => {
-    size();
-    if ('ResizeObserver' in window) {
-      new ResizeObserver(size).observe(word);
-    } else {
-      window.addEventListener('resize', size);
-    }
-  });
+  const hide = () => loupe.classList.remove('is-visible');
+  plate.addEventListener('pointermove', (event) => {
+    const rect = plate.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    loupe.style.setProperty('--x', event.clientX + 'px');
+    loupe.style.setProperty('--y', event.clientY + 'px');
+    loupe.style.backgroundPosition = (x * 100).toFixed(2) + '% ' + (y * 100).toFixed(2) + '%';
+    loupe.classList.add('is-visible');
+  }, { passive: true });
+  plate.addEventListener('pointerleave', hide);
+  window.addEventListener('scroll', hide, { passive: true });
 })();
 </script>
 

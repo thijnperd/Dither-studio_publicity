@@ -13,14 +13,41 @@
   var CACHE_KEY = 'dither:shelf:v1';
   var CACHE_MS = 60000;
 
+  /* Curated display names for the files already in the folder. A new file
+     still appears without editing this map; its file name becomes the title. */
+  var TITLES = {
+    'adam-line-dmg': 'The Creation, line-damaged',
+    'adam-the-gap': 'The gap, in ice',
+    'hoplite-cyan-study': 'Hoplite, cyan study',
+    'hoplite-full-figure': 'Hoplite, full figure',
+    'hoplite-ink-study': 'Hoplite, ink study',
+    'oedipus-glitch-sort': 'Oedipus, signal decay',
+    'oedipus-gold-leaf': 'Oedipus, gold leaf',
+    'oedipus-line-gameboy': 'Oedipus, four greens',
+    'oedipus-the-answer': 'The answer',
+    'orator-cyanotype': 'The orator, cyanotype',
+    'thor-the-strike': 'Thor, the strike',
+    'thor-thermal-cam': 'Thor, thermal'
+  };
+
   var grid = document.getElementById('shelf-grid');
   var note = document.getElementById('shelf-status');
   var count = document.getElementById('shelf-count');
-  var filters = Array.prototype.slice.call(document.querySelectorAll('[data-filter]'));
+  var filters = Array.prototype.slice.call(document.querySelectorAll('.library__filters [data-filter]'));
+  var feature = document.querySelector('[data-feature]');
+  var featureImage = document.querySelector('[data-feature-image]');
+  var featureVideo = document.querySelector('[data-feature-video]');
+  var featureTitle = document.querySelector('[data-feature-title]');
+  var featureNote = document.querySelector('[data-feature-note]');
+  var featureSpec = document.querySelector('[data-feature-spec]');
+  var featureKind = document.querySelector('[data-feature-kind]');
+  var featureLinks = Array.prototype.slice.call(document.querySelectorAll('[data-feature-link]'));
   if (!grid || !note) return;
 
   var total = 0;
   var CAPTIONS = {};
+  var currentFilter = 'all';
+  var hasFeature = false;
 
   function weight(bytes) {
     if (!bytes) return '';
@@ -40,15 +67,101 @@
     return base ? base.charAt(0).toUpperCase() + base.slice(1) : name;
   }
 
+  function displayTitle(name) {
+    return TITLES[name.replace(/\.[^.]+$/, '')] || caption(name);
+  }
+
+  function featureCaption(file) {
+    return CAPTIONS[file.name] || CAPTIONS[file.name.replace(/\.[^.]+$/, '')] || '';
+  }
+
+  function showFeature() {
+    if (!feature) return;
+    feature.hidden = !hasFeature || currentFilter === 'motion';
+  }
+
+  function setFeature(list) {
+    if (!feature || !featureImage || !featureVideo) return;
+    var file = list.filter(function (entry) { return !VIDEO.test(entry.name); })[0] || list[0];
+
+    if (!file) {
+      hasFeature = false;
+      feature.hidden = true;
+      return;
+    }
+
+    var kind = VIDEO.test(file.name) ? 'motion' : 'still';
+    var name = displayTitle(file.name);
+    var copy = featureCaption(file);
+
+    hasFeature = true;
+    showFeature();
+
+    featureLinks.forEach(function (link) {
+      link.href = file.download_url;
+      link.setAttribute('aria-label', name + ', open the full file');
+    });
+
+    if (featureTitle) featureTitle.textContent = name;
+    if (featureNote) {
+      featureNote.textContent = copy || 'The first file in the folder, printed by the app’s own engine.';
+    }
+    if (featureKind) featureKind.textContent = kind === 'motion' ? 'Motion' : 'Still';
+    if (featureSpec) {
+      featureSpec.textContent = extension(file.name) + ' · ' + weight(file.size);
+    }
+
+    featureImage.hidden = kind === 'motion';
+    featureVideo.hidden = kind !== 'motion';
+
+    if (kind === 'motion') {
+      featureVideo.src = file.download_url;
+      featureVideo.setAttribute('aria-label', name + ', motion proof');
+      var metadata = function () {
+        if (featureSpec && featureVideo.videoWidth) {
+          featureSpec.textContent = extension(file.name) + ' · ' + featureVideo.videoWidth + ' × ' + featureVideo.videoHeight + ' · ' + weight(file.size);
+        }
+      };
+      featureVideo.addEventListener('loadedmetadata', metadata, { once: true });
+      featureVideo.play().catch(function () { /* a browser that refuses autoplay still shows the first frame */ });
+    } else {
+      featureImage.hidden = false;
+      featureImage.alt = name + ', a proof from the examples folder';
+      featureImage.src = file.download_url;
+      featureImage.addEventListener('load', function () {
+        if (featureSpec && featureImage.naturalWidth) {
+          featureSpec.textContent = extension(file.name) + ' · ' + featureImage.naturalWidth + ' × ' + featureImage.naturalHeight + ' · ' + weight(file.size);
+        }
+      }, { once: true });
+    }
+  }
+
   function render(list) {
     total = list.length;
 
     if (!total) {
+      hasFeature = false;
+      if (feature) feature.hidden = true;
       note.hidden = false;
       note.textContent = 'The shelf is empty. Drop a still or a clip into examples/ and push it.';
       count.textContent = '';
       return;
     }
+
+    var hasMotion = list.some(function (file) { return VIDEO.test(file.name); });
+    filters.forEach(function (button) {
+      if (button.getAttribute('data-filter') === 'motion') button.hidden = !hasMotion;
+    });
+    if (!hasMotion && currentFilter === 'motion') {
+      currentFilter = 'all';
+      grid.setAttribute('data-filter', 'all');
+      filters.forEach(function (button) {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-filter') === 'all'));
+      });
+    }
+
+    setFeature(list);
+    grid.textContent = '';
 
     var shelf = document.createDocumentFragment();
 
@@ -64,7 +177,7 @@
       link.href = file.download_url;
       link.target = '_blank';
       link.rel = 'noopener';
-      link.setAttribute('aria-label', caption(file.name) + ', open the full file');
+      link.setAttribute('aria-label', displayTitle(file.name) + ', open the full file');
 
       var plate = document.createElement('span');
       plate.className = 'shelf__plate';
@@ -94,14 +207,14 @@
       var meta = document.createElement('span');
       meta.className = 'shelf__meta';
       var name = document.createElement('b');
-      name.textContent = caption(file.name);
+      name.textContent = displayTitle(file.name);
       var spec = document.createElement('span');
       spec.className = 'shelf__spec';
       spec.textContent = extension(file.name) + ' · ' + weight(file.size);
       meta.appendChild(name);
       meta.appendChild(spec);
 
-      var captionLine = CAPTIONS[file.name] || CAPTIONS[file.name.replace(/\.[^.]+$/, '')];
+      var captionLine = featureCaption(file);
       if (captionLine) {
         var noteLine = document.createElement('span');
         noteLine.className = 'shelf__note';
@@ -136,10 +249,12 @@
     filters.forEach(function (button) {
       button.addEventListener('click', function () {
         var want = button.getAttribute('data-filter');
+        currentFilter = want;
         grid.setAttribute('data-filter', want);
         filters.forEach(function (other) {
           other.setAttribute('aria-pressed', String(other === button));
         });
+        showFeature();
         var shown = want === 'all' ? total : grid.querySelectorAll('[data-kind="' + want + '"]').length;
         count.textContent = shown + ' of ' + total + ' shown';
         note.hidden = total > 0;
@@ -155,6 +270,7 @@
     link.href = 'https://github.com/' + REPO + '/tree/main/' + DIR;
     link.textContent = 'Open the folder on GitHub';
     note.appendChild(link);
+    if (feature) feature.hidden = true;
   }
 
   function cached() {
