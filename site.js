@@ -227,6 +227,75 @@
     arm(gsap.utils.toArray('[data-clip]'), open);
   }
 
+  /* ================= the web demo loads only when asked ================= */
+
+  var demo = $('press');
+  if (demo && demo.hasAttribute('data-demo')) {
+    var demoStage = demo.querySelector('[data-demo-stage]');
+    var demoStart = demo.querySelector('[data-demo-start]');
+    var demoClose = demo.querySelector('[data-demo-close]');
+    var demoStatus = demo.querySelector('[data-demo-status]');
+    var demoLoading = demo.querySelector('[data-demo-loading]');
+    var demoFrame = null;
+    var demoWatchdog = 0;
+    var demoUrl = demoStart.getAttribute('href');
+
+    function demoSet(state) {
+      demo.setAttribute('data-state', state);
+      if (demoClose) demoClose.hidden = state === 'idle';
+      if (demoLoading) demoLoading.hidden = state !== 'loading';
+      if (demoStatus) {
+        demoStatus.textContent = state === 'live' ? 'Web demo / live'
+          : state === 'loading' ? 'Web demo / opening'
+          : 'Web demo / ready';
+      }
+      if (state === 'loading') demoStage.setAttribute('aria-busy', 'true');
+      else demoStage.removeAttribute('aria-busy');
+    }
+
+    function demoOpen() {
+      if (demoFrame) return;
+      demoSet('loading');
+      demoFrame = document.createElement('iframe');
+      demoFrame.title = 'Dither Studio web demo';
+      demoFrame.src = demoUrl;
+      demoFrame.loading = 'eager';
+      demoFrame.setAttribute('allow', 'clipboard-read; clipboard-write');
+      demoFrame.addEventListener('load', function () {
+        if (!demoFrame || demoFrame.parentNode !== demoStage) return;
+        window.clearTimeout(demoWatchdog);
+        demoSet('live');
+        demoFrame.focus();
+      });
+      demoStage.insertBefore(demoFrame, demo.querySelector('.demo__veil'));
+      demoWatchdog = window.setTimeout(function () {
+        if (!demoFrame || demoFrame.parentNode !== demoStage) return;
+        demoStage.removeChild(demoFrame);
+        demoFrame = null;
+        demoSet('idle');
+        demoStart.focus();
+      }, 30000);
+    }
+
+    function demoShut() {
+      if (!demoFrame) return;
+      window.clearTimeout(demoWatchdog);
+      demoStage.removeChild(demoFrame);
+      demoFrame = null;
+      demoSet('idle');
+      demoStart.focus();
+    }
+
+    demoStart.addEventListener('click', function (event) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (!window.matchMedia('(min-width: 900px)').matches) return;
+      event.preventDefault();
+      demoOpen();
+    });
+    if (demoClose) demoClose.addEventListener('click', demoShut);
+    demoSet('idle');
+  }
+
   /* a hook for the checks */
   window.__publicity = {
     stageTo: paintStage,
@@ -241,6 +310,8 @@
         film: video && video.currentSrc ? video.currentSrc.split('/').pop() : null,
         dims: video && video.videoWidth ? video.videoWidth + '×' + video.videoHeight : null,
         motion: document.documentElement.classList.contains('motion'),
+        demo: demo ? demo.getAttribute('data-state') : null,
+        demoFrame: !!(demo && demo.querySelector('iframe')),
         nav: current ? current.getAttribute('href') : null
       };
     }

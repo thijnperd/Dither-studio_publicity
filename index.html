@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Dither Studio · the press, the film, the proof</title>
-<meta name="description" content="A dithering press for Windows and macOS. 46 algorithms, 24 palettes, text mode, video. It runs offline and every proof on this page came out of it.">
+<meta name="description" content="A dithering press for Windows and macOS, with the web build running in the browser. 46 algorithms, 24 palettes, text mode and video. It runs offline.">
 <meta name="theme-color" content="#0B0D12">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Dither Studio">
 <meta property="og:title" content="Dither Studio">
-<meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 24 palettes, and a text mode.">
+<meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 24 palettes, and a text mode. Try the web demo in the page.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
 <meta property="og:image:width" content="1920">
@@ -55,7 +55,7 @@
   </a>
   <nav class="masthead__nav" aria-label="Sections">
     <a href="#stage">Film</a>
-    <a href="#press">The press</a>
+    <a href="#press">Demo</a>
     <a href="#proofs">Proofs</a>
     <a href="examples/">Examples</a>
     <a class="masthead__take" href="#take">Take it</a>
@@ -114,25 +114,40 @@
         <span class="js-platform">Download for Windows</span>
         <span class="button__meta js-meta">Version 0.2.5 · 107 MB · free</span>
       </a>
+      <a class="claim__demo" href="#press">Try the web demo <span aria-hidden="true">→</span></a>
       <p class="claim__fine">Windows and macOS. The build is unsigned, so the system asks once. It draws the same with the cable out.</p>
     </div>
   </section>
 
-  <section class="panel" id="press" aria-labelledby="press-title">
-    <div class="panel__body">
-      <p class="panel__label" data-reveal>The press</p>
-      <h2 id="press-title" data-clip>Pick a screen, pick an ink, watch the proof change.</h2>
-      <p data-reveal>Ordered screens, clustered dots, noise, error diffusion, mixing plans, and three screens that read the image’s own structure. Each one is a real algorithm with a name in the menu, not a slider with a mood.</p>
-      <ul class="panel__list" data-reveal>
-        <li>46 algorithms, 24 palettes, 13 effects, 11 tone maps</li>
-        <li>Pixel size from 1 to 16, with a strength knob that pushes any screen away from mid-grey</li>
-        <li>Photos, PNG, JPG, WebP, paste or drop, and your choice of dither seed</li>
-      </ul>
+  <section class="demo" id="press" aria-labelledby="demo-title" data-demo data-state="idle">
+    <div class="demo__head">
+      <p class="demo__label" data-reveal>The web demo</p>
+      <h2 id="demo-title" data-clip>Try the press before you take it.</h2>
+      <p class="demo__lede" data-reveal>The frozen web build, one click away. Same 46 algorithms and 24 palettes as the desktop app, with no install and nothing uploaded. <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Open it in its own tab</a> if you would rather keep it.</p>
     </div>
-    <figure class="panel__figure">
-      <img src="assets/shot-console.png" alt="The Dither Studio console: the proof on the left, the rail of stations on the right." width="2010" height="1323" loading="lazy" decoding="async" data-clip>
-      <figcaption>The console with a painting in the proof. The rail holds every setting; each station reports what it is set to when closed.</figcaption>
-    </figure>
+
+    <div class="demo__window">
+      <div class="demo__bar">
+        <span class="demo__status"><span class="demo__dot" aria-hidden="true"></span><span data-demo-status aria-live="polite">Web demo / ready</span></span>
+        <span class="demo__bar-meta">Dither Studio / browser build</span>
+        <button class="demo__close" type="button" data-demo-close hidden>Close</button>
+      </div>
+      <div class="demo__stage" data-demo-stage>
+        <img src="assets/shot-webdemo.png" alt="The Dither Studio web demo: a black-and-white Oedipus proof on the stage, with the settings rail on the left." width="1203" height="752" loading="lazy" decoding="async">
+        <div class="demo__veil">
+          <a class="demo__start" data-demo-start data-impeccable-ignore="hard-offset-shadow" href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">
+            <span class="demo__start-label">Start the press</span>
+            <span class="demo__start-meta">The browser build · no install</span>
+          </a>
+          <span class="demo__loading" data-demo-loading hidden>Pulling the press…</span>
+          <p class="demo__hint">The first launch takes a few seconds.</p>
+        </div>
+      </div>
+      <div class="demo__bar demo__bar--foot">
+        <span>46 algorithms / 24 palettes / 13 effects</span>
+        <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Open in a new tab</a>
+      </div>
+    </div>
   </section>
 
   <section class="panel panel--flip" aria-labelledby="type-title">
@@ -188,16 +203,46 @@
       <div data-reveal><dt>Presets</dt><dd>34</dd></div>
     </dl>
 
-    <div class="proofs__pair">
+    <div class="proofs__shelf-head">
+      <h3>One press, many readings.</h3>
+      <p>Four proofs from the shelf, every mark one of the palette’s own entries. <a href="examples/">The rest of the files are here</a>.</p>
+    </div>
+
+    <div class="proofs__rail" tabindex="0" role="region" aria-label="Proofs from the app, scrolling sideways">
       <figure class="proof">
-        <img src="assets/proof-thor.png" alt="A dither of Tor's fight with the giants in a dense ordered palette." width="1011" height="1462" loading="lazy" decoding="async" data-clip>
-        <figcaption data-reveal><b>Tor’s Fight with the Giants.</b> Ordered screen, dense palette. Every pixel in it is one of the palette’s colours.</figcaption>
+        <img src="assets/proof-thor.png" alt="Thor’s Fight with the Giants, dithered in an orange and gold ordered screen." width="1011" height="1462" loading="lazy" decoding="async">
+        <figcaption>
+          <b>Thor’s Fight with the Giants.</b>
+          <span class="proof__spec">Ordered screen · dense palette</span>
+          <span class="proof__note">Every pixel is one of the palette’s colours.</span>
+        </figcaption>
       </figure>
       <figure class="proof">
-        <img src="assets/proof-bloom.png" alt="The same painting through a coarser ordered screen." width="1200" height="800" loading="lazy" decoding="async" data-clip>
-        <figcaption data-reveal><b>The same painting, a coarser screen.</b> The average tone stays where it was and the grain does the rest.</figcaption>
+        <img src="assets/proof-bloom.png" alt="Oedipus and the Sphinx, dithered in blue with a coarse ordered screen." width="1200" height="800" loading="lazy" decoding="async">
+        <figcaption>
+          <b>Oedipus and the Sphinx.</b>
+          <span class="proof__spec">Coarse ordered screen · blue</span>
+          <span class="proof__note">The average tone holds while the grain changes.</span>
+        </figcaption>
+      </figure>
+      <figure class="proof">
+        <img src="examples/oedipus-gold-leaf.png" alt="Oedipus in profile, dithered in gold on black with a line screen." width="900" height="600" loading="lazy" decoding="async">
+        <figcaption>
+          <b>Oedipus in gold leaf.</b>
+          <span class="proof__spec">Line screen · gold on black</span>
+          <span class="proof__note">The profile pressed like leaf.</span>
+        </figcaption>
+      </figure>
+      <figure class="proof">
+        <img src="examples/adam-the-gap.png" alt="The Creation of Adam, dithered in ice blue with a smooth diffusion screen." width="1000" height="666" loading="lazy" decoding="async">
+        <figcaption>
+          <b>The Creation, in ice.</b>
+          <span class="proof__spec">Diffusion · eight greys</span>
+          <span class="proof__note">The touch left open.</span>
+        </figcaption>
       </figure>
     </div>
+    <p class="proofs__hint">Scroll sideways for the rest.</p>
   </section>
 
   <section class="facts" aria-labelledby="facts-title">
@@ -216,7 +261,7 @@
       <div class="fact" data-reveal>
         <span class="fact__num">0</span>
         <h3>Network calls</h3>
-        <p>No fonts, no analytics, no licence check. The only request in the whole product is the one you make to download it.</p>
+        <p>No fonts, no analytics, no licence check. The installed app makes no request at all; the web demo above loads only when you start it.</p>
       </div>
     </div>
   </section>
@@ -252,8 +297,9 @@
         <span class="button__meta js-meta">Version 0.2.5 · 107 MB · free</span>
       </a>
       <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
+      <a class="sub" href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Try the web demo first</a>
     </div>
-    <p class="take__fine" data-reveal>There is no server in this product. The only network request it ever makes is the one you are about to make.</p>
+    <p class="take__fine" data-reveal>There is no server in this product. The installed app needs one network request, the download; the web demo above is the only other one, and only when you start it.</p>
   </section>
 
 </main>
@@ -265,6 +311,7 @@
     <a href="https://github.com/thijnperd/dither-studio">The app</a>
     <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
     <a href="examples/">Examples</a>
+    <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Web demo</a>
     <a href="https://github.com/thijnperd/dither-studio/releases">Releases</a>
   </p>
   <p class="colophon__note">The film here is the silent cut: no type is burned into it, so the words over it are the page’s own. Motion runs on GSAP, and nothing else is loaded from a third party. The type is Instrument Serif, Instrument Sans and IBM Plex Mono, all open-licence and served from this site. No cookies, no analytics, no fonts from elsewhere.</p>
