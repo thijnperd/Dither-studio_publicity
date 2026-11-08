@@ -1,0 +1,29 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-11-08T10:16:07.425Z",
+        "reason": "Instrument Sans is the site's own OFL brand face, not one of the listed default UI fonts."
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-11-08T10:16:18.175Z",
+        "reason": "Instrument Serif is the site's own OFL display face, not one of the listed default UI fonts."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-08T10:16:29.873Z",
+        "reason": "The section rule reads clamp() top padding as no inset; every flagged section carries 3.5-6rem above its first child."
+      }
+    ]
+  }
+}

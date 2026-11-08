@@ -265,10 +265,13 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 
 .beat__label {
   font: 400 13px/1 var(--mono);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: var(--lapis);
   opacity: 1;
   margin: 0 0 1.2rem;
+  /* the label can land on a bright patch of the dither; the title has the
+     scrim, this small line needs its own floor */
+  text-shadow: 0 1px 3px rgba(4, 6, 10, 0.9), 0 0 14px rgba(4, 6, 10, 0.6);
 }
 
 .beat__lede { font-size: clamp(1rem, 1.4vw, 1.14rem); }
@@ -279,7 +282,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   bottom: clamp(2.2rem, 5.5vh, 3.4rem);
   margin: 0;
   font: 400 13px/1 var(--mono);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--muted);
   transition: opacity 320ms var(--ease-out);
 }
@@ -429,6 +432,7 @@ body.no-js .beat:last-child { margin-bottom: 0; }
   font: 400 13px/1.6 var(--mono);
   color: var(--muted);
   max-width: 52ch;
+  text-wrap: pretty;
 }
 
 /* ---------- proofs ---------- */

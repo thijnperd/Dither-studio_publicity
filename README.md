@@ -55,6 +55,9 @@ manager, no server. GitHub Pages serves this folder as it is.
   algorithms, 24 palettes, 13 effects, 11 tone maps, 21 recipes.
 - **Reduced motion** unpins the stage into a readable list, turns off the ghost,
   and leaves the chapter jumps as plain jumps.
+- **Phones get the poster, not the film.** Under 900 px, or on a coarse pointer,
+  the stage unpins into the same readable list, the video element is removed,
+  and the film is never requested, so a phone does not download the 27 MB encode.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
 no cookies, no analytics and no third-party fonts. Labels are set in the text
@@ -69,8 +72,8 @@ Two checkers run over this page, and both must be clean before a publish.
 # installed at ~/.claude/skills/kill-ai-slop
 node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
 
-# the design detector from the impeccable skill
-~/.claude/skills/impeccable/scripts/impeccable detect --json index.html
+# the design detector from Impeccable
+npx impeccable detect --json index.html
 ```
 
 `kill-ai-slop` reports 35 tells; two hits here are deliberate and carry scoped
@@ -82,9 +85,14 @@ face, the player and its CSS were deleted, the `01/02/03` markers came off the
 chapter cards (tell 30, decorative numbering), and the load curtain went
 altogether.
 
-`impeccable` reports only `cramped-padding` on the hairline grids whose cells
-already carry 16 to 24 px of padding, which is a false positive on that
-construction.
+`impeccable` now reports no findings on the PC page. Two rule classes still
+match the source but are false positives on this construction: the brand faces
+(Instrument Sans and Instrument Serif are not the generic defaults the rule
+targets) and the section top borders (the scan reads the `clamp()` padding
+shorthand as no inset, though every section carries 3.5 to 6rem above its first
+child). Both are waived with reasons in `.impeccable/config.json`. The scan also
+caught two genuinely wide tracking values and one orphaned caption; those are
+fixed in `style.css`.
 
 ## The copy, and why it reads like this
 

@@ -34,6 +34,13 @@
 
   if (stage) stage.setAttribute('data-mode', mode);
 
+  /* a phone gets the poster and the captions in flow, not a dormant video
+     element carrying a source it will never play */
+  if (!canScrub && video) {
+    video.removeAttribute('src');
+    video.remove();
+  }
+
   /* ================= the film follows the scroll ================= */
 
   var want = null;    /* the time the scroll has asked for */
