@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="mote-title mote-desc">
+  <title id="mote-title">Mote, the Dither Studio press apprentice</title>
+  <desc id="mote-desc">A small ivory ink drop with a missing-pixel notch, a printer's apron, a loupe, and a loose out-of-register pixel.</desc>
+  <defs>
+    <mask id="mote-body-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <path d="M256 146 C270 176 302 190 326 216 C358 252 370 306 358 354 C348 396 310 420 256 420 C202 420 164 396 154 354 C142 306 154 252 186 216 C210 190 242 176 256 146 Z" fill="#fff"/>
+      <rect x="312" y="172" width="46" height="46" fill="#000"/>
+    </mask>
+    <clipPath id="mote-body-clip">
+      <path d="M256 146 C270 176 302 190 326 216 C358 252 370 306 358 354 C348 396 310 420 256 420 C202 420 164 396 154 354 C142 306 154 252 186 216 C210 190 242 176 256 146 Z"/>
+    </clipPath>
+  </defs>
+
+  <g id="mote">
+    <ellipse id="mote-shadow" cx="256" cy="450" rx="108" ry="13" fill="#0B0D12" opacity="0.42"/>
+
+    <g id="mote-core">
+    <g id="mote-feet" fill="#EFEADF">
+      <rect x="214" y="408" width="32" height="30" rx="10"/>
+      <rect x="282" y="408" width="32" height="30" rx="10"/>
+      <rect x="216" y="430" width="28" height="5" rx="2.5" fill="#293244"/>
+      <rect x="284" y="430" width="28" height="5" rx="2.5" fill="#293244"/>
+    </g>
+
+    <g id="mote-body" mask="url(#mote-body-mask)">
+      <path d="M256 146 C270 176 302 190 326 216 C358 252 370 306 358 354 C348 396 310 420 256 420 C202 420 164 396 154 354 C142 306 154 252 186 216 C210 190 242 176 256 146 Z" fill="#EFEADF"/>
+      <ellipse cx="296" cy="390" rx="66" ry="44" fill="#D9D2C5" opacity="0.45"/>
+      <path d="M312 218 V194 M312 218 H350" fill="none" stroke="#7E93BE" stroke-width="4" opacity="0.8" stroke-linecap="square"/>
+      <g fill="#0B0D12" opacity="0.16" clip-path="url(#mote-body-clip)">
+        <circle cx="174" cy="316" r="2.2"/>
+        <circle cx="190" cy="316" r="2.8"/>
+        <circle cx="206" cy="316" r="3.4"/>
+        <circle cx="222" cy="316" r="4"/>
+        <circle cx="174" cy="332" r="2.8"/>
+        <circle cx="190" cy="332" r="3.5"/>
+        <circle cx="206" cy="332" r="4.2"/>
+        <circle cx="222" cy="332" r="4.9"/>
+        <circle cx="174" cy="348" r="3.4"/>
+        <circle cx="190" cy="348" r="4.2"/>
+        <circle cx="206" cy="348" r="5"/>
+        <circle cx="222" cy="348" r="5.7"/>
+        <circle cx="174" cy="364" r="4"/>
+        <circle cx="190" cy="364" r="4.8"/>
+        <circle cx="206" cy="364" r="5.6"/>
+        <circle cx="174" cy="380" r="4.5"/>
+        <circle cx="190" cy="380" r="5.3"/>
+      </g>
+    </g>
+
+    <g id="mote-apron">
+      <path d="M214 316 H298 L308 396 Q308 406 298 408 H214 Q204 406 204 396 Z" fill="#293244" stroke="#121722" stroke-width="3"/>
+      <path d="M216 316 C210 302 208 292 208 284 M296 316 C302 302 304 292 304 284" fill="none" stroke="#7E93BE" stroke-width="6" stroke-linecap="round"/>
+      <path d="M207 400 H305" fill="none" stroke="#7E93BE" stroke-width="4"/>
+      <g id="mote-registration" fill="none" stroke="#7E93BE" stroke-width="4" stroke-linecap="round">
+        <path d="M256 336 V368 M240 352 H272"/>
+        <circle cx="256" cy="352" r="11" opacity="0.55"/>
+      </g>
+    </g>
+
+    <g id="mote-face">
+      <rect id="mote-eye-left" x="208" y="236" width="22" height="34" rx="4" fill="#0B0D12"/>
+      <rect id="mote-eye-right" x="282" y="236" width="22" height="34" rx="4" fill="#0B0D12"/>
+      <path id="mote-mouth" d="M242 288 Q256 299 270 288" fill="none" stroke="#0B0D12" stroke-width="6" stroke-linecap="round"/>
+      <g id="mote-freckles" fill="#7E93BE" opacity="0.7">
+        <circle cx="196" cy="290" r="3"/>
+        <circle cx="316" cy="282" r="3"/>
+      </g>
+    </g>
+
+    <g id="mote-arm-left">
+      <path d="M164 334 C144 342 132 350 126 362" fill="none" stroke="#EFEADF" stroke-width="18" stroke-linecap="round"/>
+      <circle cx="120" cy="366" r="13" fill="#EFEADF"/>
+    </g>
+
+    <g id="mote-right-rig">
+      <g id="mote-arm-right">
+        <path d="M354 324 C374 328 388 334 396 340" fill="none" stroke="#EFEADF" stroke-width="18" stroke-linecap="round"/>
+      </g>
+
+      <g id="mote-loupe">
+        <path d="M404 334 L424 378" fill="none" stroke="#7E93BE" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="404" cy="300" r="34" fill="#0B0D12" fill-opacity="0.14" stroke="#7E93BE" stroke-width="9"/>
+        <circle cx="404" cy="300" r="25" fill="#0B0D12" fill-opacity="0.10"/>
+        <path d="M389 289 Q399 279 411 281" fill="none" stroke="#EFEADF" stroke-width="4.5" stroke-linecap="round" opacity="0.55"/>
+      </g>
+
+      <circle id="mote-hand-right" cx="398" cy="342" r="14" fill="#EFEADF"/>
+    </g>
+
+    <g id="mote-spark">
+      <g transform="rotate(8 365 148)">
+        <rect x="357" y="140" width="24" height="24" fill="#EFEADF" opacity="0.9"/>
+        <rect x="352" y="135" width="24" height="24" fill="#7E93BE"/>
+      </g>
+    </g>
+    </g>
+  </g>
+  <style>
+
+    #mote {
+      animation: mote-arrive 900ms cubic-bezier(.23, 1, .32, 1) both;
+      transform-box: view-box;
+      transform-origin: 256px 450px;
+    }
+    #mote-core {
+      animation: mote-breathe 5.2s cubic-bezier(.4, 0, .2, 1) infinite;
+      transform-box: view-box;
+      transform-origin: 256px 440px;
+    }
+    #mote-shadow {
+      animation: mote-shadow 5.2s cubic-bezier(.4, 0, .2, 1) infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    #mote-eye-left,
+    #mote-eye-right {
+      animation: mote-blink 4.8s cubic-bezier(.4, 0, .2, 1) 2.4s infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    #mote-right-rig {
+      animation: mote-loupe 6.4s cubic-bezier(.4, 0, .2, 1) infinite;
+      transform-box: view-box;
+      transform-origin: 354px 324px;
+    }
+    #mote-spark {
+      animation: mote-pixel 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
+      transform-box: view-box;
+      transform-origin: 365px 148px;
+    }
+    @keyframes mote-arrive {
+      from { opacity: 0; transform: translateY(14px) scale(.985); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes mote-breathe {
+      0%, 100% { transform: scale(1); }
+      48%      { transform: scale(1.006, 1.012); }
+      70%      { transform: scale(.998, .996); }
+    }
+    @keyframes mote-shadow {
+      0%, 100% { transform: scaleX(1); opacity: .42; }
+      48%      { transform: scaleX(1.035); opacity: .36; }
+      70%      { transform: scaleX(.99); opacity: .44; }
+    }
+    @keyframes mote-blink {
+      0%, 91%, 100% { transform: scaleY(1); }
+      93.5%, 96%    { transform: scaleY(.08); }
+    }
+    @keyframes mote-loupe {
+      0%, 40%, 100% { transform: rotate(0) translateY(0); }
+      50%           { transform: rotate(1.2deg) translateY(-2px); }
+      62%           { transform: rotate(-.8deg) translateY(1px); }
+      74%           { transform: rotate(.4deg) translateY(0); }
+    }
+    @keyframes mote-pixel {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50%      { transform: translateY(-6px); opacity: .85; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #mote, #mote-core, #mote-shadow, #mote-eye-left, #mote-eye-right,
+      #mote-right-rig, #mote-spark { animation: none !important; }
+    }
+  </style>
+</svg>

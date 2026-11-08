@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Mote · the press apprentice · Dither Studio</title>
+<meta name="description" content="Mote is the smallest mark in the Dither Studio shop: one ink dot, a printer's apron, a loupe, and one loose pixel.">
+<meta name="theme-color" content="#0B0D12">
+<link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/mascot/">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<meta property="og:title" content="Mote · the press apprentice">
+<meta property="og:description" content="One ink dot, a printer's apron, a loupe, and a loose pixel. Meet the smallest mark in the Dither Studio shop.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="mascot.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to the character</a>
+
+<header class="wrap masthead">
+  <a class="masthead__mark" href="../" aria-label="Dither Studio, back to the film">
+    <img class="masthead__logo" src="../assets/mark-64.png" alt="" width="64" height="64" decoding="async">
+    <span class="masthead__word">Dither Studio</span>
+  </a>
+  <nav class="masthead__nav" aria-label="Sections">
+    <a href="../">The film</a>
+    <a href="./" aria-current="page">The apprentice</a>
+    <a href="https://github.com/thijnperd/dither-studio">The app</a>
+  </nav>
+</header>
+
+<main id="main" class="wrap">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__copy">
+      <p class="eyebrow">Character file / 01</p>
+      <h1 id="hero-title">Mote</h1>
+      <p class="hero__role">The press apprentice</p>
+      <p class="hero__lede">A halftone dot that missed the paper and stayed. It checks edges, keeps the registration honest, and carries the loupe nobody else needs.</p>
+      <p class="hero__promise">“Every mark is a decision.”</p>
+      <p class="hero__note">The God is the myth. Mote is the hand that pulls the proof.</p>
+    </div>
+
+    <figure class="proof">
+      <div class="proof__board">
+        <div class="proof__bar">
+          <span>Plate 01</span>
+          <span>Mote / idle</span>
+        </div>
+        <div class="proof__stage">
+          <span class="reg reg--tl" aria-hidden="true">+</span>
+          <span class="reg reg--tr" aria-hidden="true">+</span>
+          <span class="reg reg--bl" aria-hidden="true">+</span>
+          <span class="reg reg--br" aria-hidden="true">+</span>
+          <img id="mote-live" class="js-mote-live" src="mote.svg" width="512" height="512" alt="Mote, an ivory ink drop with a slate printer's apron and a lapis loupe, floating beside one loose out-of-register pixel.">
+        </div>
+        <div class="proof__foot">
+          <span>Ivory / ink / lapis</span>
+          <span>512 × 512</span>
+        </div>
+      </div>
+      <figcaption class="proof__cap">
+        <span>13 paths preserved / CSS motion</span>
+        <button class="motion-toggle js-motion" type="button" aria-pressed="false">Hold still</button>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="section traits" aria-labelledby="traits-title">
+    <div class="section__head">
+      <p class="eyebrow">The character</p>
+      <div>
+        <h2 id="traits-title">Small enough to notice the edge.</h2>
+        <p class="lede">Mote is the mark that stayed. It is not a guide, a chatbot or a mascot with a slogan. It is an apprentice with a job: look closer, keep the proof true, and leave one thing slightly out of place.</p>
+      </div>
+    </div>
+
+    <div class="traits__grid">
+      <article class="trait">
+        <span class="trait__index">01</span>
+        <h3>Curious</h3>
+        <p>Leans in first. Asks the proof what it is hiding, then checks the edge it would rather not show.</p>
+      </article>
+      <article class="trait">
+        <span class="trait__index">02</span>
+        <h3>Exact</h3>
+        <p>Checks registration twice. It will not call a loose mark a mistake until it has looked at the whole sheet.</p>
+      </article>
+      <article class="trait">
+        <span class="trait__index">03</span>
+        <h3>Mischievous</h3>
+        <p>Keeps one pixel out of register, just to see if you notice. It always has a reason; it rarely says it.</p>
+      </article>
+    </div>
+
+    <div class="voice">
+      <p class="voice__line">“Mind the registration.”</p>
+      <div class="voice__body">
+        <p><strong>Short, dry, never scolding.</strong> Mote speaks in press-room imperatives, not slogans. It notices the edge, names the fix, and leaves the joke where it belongs: in the one pixel that will not sit still.</p>
+        <p style="margin-top: 1rem;">No exclamation marks. No dance. No explaining the joke. The voice stays constant; the tone can be patient, curious or quietly pleased with a clean pull.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section motion" aria-labelledby="motion-title">
+    <div class="section__head">
+      <p class="eyebrow">Motion / the proof check</p>
+      <div>
+        <h2 id="motion-title">One thought at a time.</h2>
+        <p class="lede">The body breathes. The eyes blink. The loupe scans the sheet. The loose pixel never lands. All of it is CSS transform and opacity on the exact master; no path is redrawn.</p>
+      </div>
+    </div>
+
+    <div class="motion__pair">
+      <figure class="motion__plate">
+        <img src="mote-master.svg" width="512" height="512" alt="The static Mote master: an ivory ink drop with a slate apron and a loupe.">
+        <figcaption><span>Master / still</span><span>Static SVG</span></figcaption>
+      </figure>
+      <figure class="motion__plate">
+        <img class="js-mote-live" src="mote.svg" width="512" height="512" alt="Mote in motion: the same ink drop, with the loupe scanning and the loose pixel bobbing.">
+        <figcaption><span>Motion / live</span><span>Same paths</span></figcaption>
+      </figure>
+    </div>
+
+    <dl class="score">
+      <div class="score__row">
+        <dt>Arrive</dt>
+        <dd>14 px rise, fade, 900 ms, once</dd>
+        <dd>01</dd>
+      </div>
+      <div class="score__row">
+        <dt>Breathe</dt>
+        <dd>0.6% body scale, 5.2 s, shadow counter</dd>
+        <dd>02</dd>
+      </div>
+      <div class="score__row">
+        <dt>Blink</dt>
+        <dd>Both eyes, 120 ms, every 4.8 s</dd>
+        <dd>03</dd>
+      </div>
+      <div class="score__row">
+        <dt>Loupe</dt>
+        <dd>1.2° scan at the wrist, 6.4 s</dd>
+        <dd>04</dd>
+      </div>
+      <div class="score__row">
+        <dt>Loose pixel</dt>
+        <dd>6 px float, 3.6 s, never settles</dd>
+        <dd>05</dd>
+      </div>
+      <div class="score__row">
+        <dt>Reduced motion</dt>
+        <dd>All stops. The master is the fallback.</dd>
+        <dd>06</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section specimen" aria-labelledby="specimen-title">
+    <div class="section__head">
+      <p class="eyebrow">Proof / sizes</p>
+      <div>
+        <h2 id="specimen-title">Read it at a glance.</h2>
+        <p class="lede">The silhouette has one job: be a dot with a bite, not a generic character. At 32 px the loupe is a blue ring and the apron is a slate block. That is enough: face, tool, trade.</p>
+      </div>
+    </div>
+
+    <div class="specimen__row">
+      <figure class="specimen__item">
+        <img src="mote-128.png" width="128" height="128" alt="Mote at 128 pixels.">
+        <figcaption>128 px / detail</figcaption>
+      </figure>
+      <figure class="specimen__item">
+        <img src="mote-64.png" width="64" height="64" alt="Mote at 64 pixels.">
+        <figcaption>64 px / mark</figcaption>
+      </figure>
+      <figure class="specimen__item">
+        <img src="mote-32.png" width="32" height="32" alt="Mote at 32 pixels.">
+        <figcaption>32 px / floor</figcaption>
+      </figure>
+    </div>
+    <p class="specimen__note">The PNGs are transparent, cut from the master at these sizes. The animated SVG carries its own styles, so it needs no script and no runtime.</p>
+  </section>
+
+  <section class="section files" aria-labelledby="files-title">
+    <div class="section__head">
+      <p class="eyebrow">Files</p>
+      <div>
+        <h2 id="files-title">Take the apprentice.</h2>
+        <p class="lede">Use Mote in the quiet places: a 404, a colophon, an empty state, a sticker. The God keeps the masthead, the hero and the app icon.</p>
+      </div>
+    </div>
+
+    <ul class="files__list">
+      <li><a href="mote-master.svg" download>mote-master.svg</a><span>Untouched source · 512 × 512</span></li>
+      <li><a href="mote.svg" download>mote.svg</a><span>CSS motion · same paths</span></li>
+      <li><a href="mote-512.png" download>mote-512.png</a><span>Transparent raster · 512 px</span></li>
+      <li><a href="mote-128.png" download>mote-128.png</a><span>Transparent raster · 128 px</span></li>
+      <li><a href="mote-64.png" download>mote-64.png</a><span>Transparent raster · 64 px</span></li>
+      <li><a href="mote-32.png" download>mote-32.png</a><span>Transparent raster · 32 px</span></li>
+    </ul>
+
+    <div class="rules">
+      <div>
+        <h3>Use</h3>
+        <ul>
+          <li>One dot of clear space: 18 px at 512, scaled with the mark.</li>
+          <li>32 px minimum; below that, use the plain dot, not the detail.</li>
+          <li>Void, ivory, or one flat ink. Let the bite and the loose pixel do the work.</li>
+          <li>Let Mote notice things. It is a pair of eyes, not a mouthpiece.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Do not</h3>
+        <ul>
+          <li>No gradients, glow, bevels, or a second light source.</li>
+          <li>No new props, hats, expressions, or a different loupe.</li>
+          <li>Never in the masthead, hero, or app icon. The God stays the mark.</li>
+          <li>No speech bubbles. Mote’s lines belong in the page, not in its mouth.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap colophon">
+  <p>Mote is the apprentice. The God stays the mark. Drawn for Dither Studio, 2026.</p>
+  <p>
+    <a href="../">The film</a> ·
+    <a href="https://github.com/thijnperd/dither-studio">The app</a> ·
+    <a href="https://github.com/thijnperd/Dither-studio_publicity">This site</a>
+  </p>
+</footer>
+
+<script>
+  (() => {
+    const toggle = document.querySelector('.js-motion');
+    const live = [...document.querySelectorAll('.js-mote-live')];
+    const preferStill = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let moving = !preferStill.matches;
+
+    const sync = () => {
+      live.forEach((image) => { image.src = moving ? 'mote.svg' : 'mote-master.svg'; });
+      toggle.textContent = moving ? 'Hold still' : 'Play motion';
+      toggle.setAttribute('aria-pressed', String(!moving));
+    };
+
+    toggle.addEventListener('click', () => {
+      moving = !moving;
+      sync();
+    });
+
+    preferStill.addEventListener('change', (event) => {
+      if (event.matches) {
+        moving = false;
+        sync();
+      }
+    });
+
+    sync();
+  })();
+</script>
+
+</body>
+</html>

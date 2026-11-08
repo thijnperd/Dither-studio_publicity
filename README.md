@@ -16,11 +16,11 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
 | `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
-| `assets/film.mp4` | The film. 40 s, 1920 × 1080, h264, 24 fps, 27 MB. The archival copy, linked from the colophon |
-| `assets/film-scrub.mp4` | The same film at 1280 × 720, 8 MB, keyed every 12 frames. This is the one the page plays |
-| `assets/poster.png` | Its poster frame, used as the `og:image` and as the stage's first frame |
+| `assets/film-scrub.mp4` | The film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
+| `assets/poster.jpg` | Its poster frame, used as the `og:image` and as the stage's first frame |
 | `assets/proof-*.png` | Two proofs from the app's own engine |
-| `404.html` | The designed not-found page |
+| `404.html` | The designed not-found page, with Mote doing the looking |
+| `mascot/` | Mote, the press apprentice: master SVG, CSS-animated copy, transparent PNGs, character notes and the character-file page |
 
 ## How the page works
 
@@ -42,8 +42,9 @@ manager, no server. GitHub Pages serves this folder as it is.
   frames (`-g 12 -sc_threshold 0`), so every half second is independently
   decodable:
   ```bash
-  ffmpeg -i assets/film.mp4 -an -vf "scale=1280:-2:flags=lanczos" \
-    -c:v libx264 -preset veryfast -crf 25 -g 12 -keyint_min 12 \
+  ffmpeg -i <app>/publicity/out/dither-studio-mograph-silent.mp4 -an \
+    -vf "scale=1280:720:flags=lanczos" \
+    -c:v libx264 -preset slow -crf 32 -g 12 -keyint_min 12 \
     -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-scrub.mp4
   ```
 - **The ghost pointer** moves to the second chapter, presses it, and then points
@@ -57,7 +58,7 @@ manager, no server. GitHub Pages serves this folder as it is.
   and leaves the chapter jumps as plain jumps.
 - **Phones get the poster, not the film.** Under 900 px, or on a coarse pointer,
   the stage unpins into the same readable list, the video element is removed,
-  and the film is never requested, so a phone does not download the 27 MB encode.
+  and the film is never requested, so a phone does not download the 8.4 MB encode.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
 no cookies, no analytics and no third-party fonts. Labels are set in the text
@@ -125,15 +126,15 @@ every heading do not, so they were removed, along with the counting numbers.
 ## The film's source
 
 The film is not recorded. It is one HTML page in the app's repository,
-`publicity/launch.html`, where every frame is a function of time; `render.js`
-seeks it frame by frame in Playwright and encodes the result with ffmpeg.
+`publicity/mograph.html`, where every frame is a function of time;
+`render-mograph.js` seeks it frame by frame in Playwright and encodes the result
+with ffmpeg.
 
 ```bash
 # in the app's repository
-node publicity/render.js                     # writes publicity/out/dither-studio-launch.mp4
-cp publicity/out/dither-studio-launch.mp4  <this repo>/assets/film.mp4
-cp publicity/out/poster.png                <this repo>/assets/poster.png
-# then rebuild the scrub encode with the ffmpeg line above
+node publicity/render-mograph.js             # writes publicity/out/dither-studio-mograph-silent.mp4
+# export the silent poster to <this repo>/assets/poster.jpg, then rebuild the
+# scrub encode with the ffmpeg line above
 ```
 
 Re-render it whenever the app's interface changes, or the film will show a
