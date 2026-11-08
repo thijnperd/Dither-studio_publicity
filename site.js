@@ -63,6 +63,8 @@
   var queued = 0;
   var pinTrigger = null;
   var degraded = false;
+  var primed = false;
+  var priming = false;
 
   function flush() {
     queued = 0;
@@ -70,6 +72,11 @@
     /* a seek asked for before the stream has data is dropped silently, so the
        request stays queued and loadeddata/seeked come back for it */
     if (video.readyState < 1) return;
+    /* one seek at a time: setting currentTime on every frame while the last
+       seek is still open buries a phone decoder in requests, and the frame
+       that finally settles can be an older one. seeked calls this again with
+       the latest target, so a fast scroll still lands where it finished. */
+    if (video.seeking) return;
     if (Math.abs(video.currentTime - want) > 0.04) {
       try { video.currentTime = want; } catch (error) { /* a refused seek is not fatal */ }
     }
@@ -78,6 +85,33 @@
   function paintStage(progress) {
     want = Math.max(0, Math.min(DURATION, progress * DURATION));
     if (!queued) queued = window.requestAnimationFrame(flush);
+  }
+
+  /* iOS will not paint a frame from a paused, muted inline video until it has
+     played once. Asking on the first touch gives the decoder a live first frame
+     before the scroll sends it anywhere; it pauses immediately, and the seek
+     that follows is the scroll's own. */
+  function prime() {
+    if (primed || priming || !video || !canScrub) return;
+    priming = true;
+    try {
+      video.muted = true;
+      var started = video.play();
+      var settle = function () {
+        video.pause();
+        priming = false;
+        primed = true;
+        flush();
+      };
+      if (started && typeof started.then === 'function') {
+        started.then(settle, function () {
+          /* leave it armed: the next touch can try again if this one was refused */
+          priming = false;
+        });
+      } else {
+        settle();
+      }
+    } catch (error) { priming = false; /* priming is best effort */ }
   }
 
   /* an encode that is absent or refuses to load must not leave a black stage:
@@ -101,6 +135,8 @@
     video.addEventListener('seeked', flush);
     video.addEventListener('error', degrade);
     video.pause();
+
+    window.addEventListener('touchstart', prime, { passive: true });
   }
 
   /* ================= the hint stands down after the first scroll ================= */
@@ -140,7 +176,8 @@
         scrub: 0.6,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: function (self) { paintStage(self.progress); }
+        onUpdate: function (self) { paintStage(self.progress); },
+        onLeaveBack: function () { paintStage(0); }
       }
     });
     pinTrigger = timeline.scrollTrigger;
