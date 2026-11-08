@@ -18,7 +18,7 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
 | `assets/film-scrub.mp4` | The film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
 | `assets/poster.jpg` | Its poster frame, used as the `og:image` and as the stage's first frame |
-| `assets/shot-webdemo.png` | The browser build's console, at 2×, used as the web demo's poster |
+| `assets/shot-webdemo.png` | The web demo's console at 1440 × 900, used as its poster and framed shot |
 | `assets/proof-*.png` | Proofs from the app's own engine |
 | `404.html` | The missing-plate not-found page: giant misregistered 404, dark proof frame, paper notes |
 | `404.css` | The 404's paper styles and its pointer loupe |
@@ -59,16 +59,19 @@ manager, no server. GitHub Pages serves this folder as it is.
   dark console for a zero ledger: no accounts, no uploads, no network calls. Then
   the installation notes print on ivory paper, set as a numbered sheet with the
   build caveats and file sizes. The closing `TAKE` carries the download.
-- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 24 palettes, 13 effects, 11 tone maps, 34 presets.
+- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 24 palettes, 13 effects, 11 tone maps, 21 presets.
 - **The 404 carries the same print-room idea.** A missing plate is a blank
   sheet: a misregistered 404, a dark proof frame, a paper note and one way back.
   It is public and `noindex`, and it does not link to the unlisted character file.
-- **The web demo is the real app.** The demo section opens the frozen web build
-  from <https://thijnperd.github.io/dither-studio/> in an iframe when *Start the
-  press* is used on a wide screen. The control is a normal link, so a phone, a
-  middle-click or a browser without JavaScript opens it in its own tab. The demo
-  is not rebuilt here and its files are not requested until the link is used;
-  unlike the rest of the page, it cannot draw without a connection.
+- **The web demo is the real app.** The demo section opens the web build from
+  <https://thijnperd.github.io/dither-studio/> in an iframe when *Start the
+  press* is used on a wide screen. The frame adds `?embed=1`, so the console
+  drops its splash and masthead and starts on a finished proof. The control is
+  still a normal link, so a phone, a middle-click or a browser without
+  JavaScript opens it in its own tab. The demo is maintained in the app's
+  repository; this site does not rebuild it, and its files are not requested
+  until the link is used. Unlike the rest of the page, it cannot draw without a
+  connection.
 - **Reduced motion** unpins the stage into a readable list, removes the video,
   and leaves every caption in the flow.
 - **Phones get the poster, not the film.** Under 900 px, or on a coarse pointer,
@@ -79,30 +82,29 @@ GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
 no cookies, no analytics and no third-party fonts. Labels are set in the text
 face, not in monospace.
 
-## The deslop passes
+## Copy and design checks
 
 Two checkers run over these pages before a publish. They are advisory scanners,
 not test suites: review every hit, fix the real ones, and leave a reason for the
 ones that are the design.
 
 ```bash
-# the AI-tells scanner from https://github.com/yetone/kill-ai-slop
-# installed at ~/.claude/skills/kill-ai-slop
+# a copy-pattern scanner (installed at ~/.claude/skills/kill-ai-slop)
 node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
 
 # the design detector from Impeccable
 npx impeccable detect --json index.html
 ```
 
-`kill-ai-slop` reports 32 hits across five families, all of them the shared
+The copy scanner reports 32 hits across five families, all of them the shared
 print-room vocabulary rather than copy or structure defects: the paper dot
 texture on 404/examples/Mascot, press-label eyebrows, display tracking read as
 “full-sentence headline”, the circular loupe read as glassmorphism, and the
 mono face used for labels and data. The three gradient exceptions already carry
-scoped `deslop-ignore-next-line 06` comments in `style.css`: the spotlight over
-the film, the scrim beneath the type and the demo veil. The catchable copy
-defects remain fixed: no decorative chapter numbers, no player chrome, no load
-curtain, and the functional labels are set in the text face.
+scoped ignore comments in `style.css`: the spotlight over the film, the scrim
+beneath the type and the demo veil. The catchable copy defects remain fixed: no
+decorative chapter numbers, no player chrome, no load curtain, and the
+functional labels are set in the text face.
 
 `impeccable` reports four hard-offset-shadow advisories and one marquee warning
 on `index.html`. The offsets are the proof sheet's lapis registration motif; the
@@ -114,12 +116,12 @@ remain waived with reasons in `.impeccable/config.json`.
 
 ## The copy, and why it reads like this
 
-The page is checked against [Wikipedia's *Signs of AI writing*](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing):
-no negative parallelisms (*not X, but Y*), no rhetorical rule of three, no
-"-ing" analysis tails, no puffery about significance, no em dashes (zero in
-`index.html`), no words from the overused-vocabulary list. Every claim is a
-number the app can be tested against. Enumerations that survive are real
-inventories: the three paintings that ship, the algorithm families that exist.
+The page follows the site's own voice rules: no negative parallelisms (*not X,
+but Y*), no rhetorical rule of three, no "-ing" analysis tails, no puffery about
+significance, no em dashes (zero in `index.html`), and no words from the
+overused-vocabulary list. Every claim is a number the app can be tested against.
+Enumerations that survive are real inventories: the three paintings that ship,
+the algorithm families that exist.
 
 ## Motion
 
