@@ -40,13 +40,21 @@
      is cropped to a stripe, and the paintings in this one are the point. The
      file follows the landscape encode's name, with "phone" before "scrub"
      (assets/film-scrub.mp4 -> assets/film-phone-scrub.mp4), so the page still
-     carries one source and the portrait encode is the only new asset. */
+     carries one source and the portrait encode is the only new film asset. */
 
   function filmSource() {
     var src = video.getAttribute('data-src');
     if (!src) return null;
     if (!window.matchMedia('(orientation: portrait)').matches) return src;
     return src.replace(/-scrub\./, '-phone-scrub.');
+  }
+
+  function filmPoster() {
+    var poster = video.getAttribute('data-poster-phone');
+    if (!poster || !window.matchMedia('(orientation: portrait)').matches) {
+      return video.getAttribute('poster');
+    }
+    return poster;
   }
 
   /* ================= the film follows the scroll ================= */
@@ -86,6 +94,7 @@
 
   if (canScrub && video) {
     /* the file is only asked for once we know this visitor can run it */
+    video.poster = filmPoster();
     video.preload = 'auto';
     video.src = filmSource();
     video.addEventListener('loadeddata', flush);

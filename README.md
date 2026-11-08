@@ -16,8 +16,10 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
 | `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
-| `assets/film-scrub.mp4` | The film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
-| `assets/poster.jpg` | Its poster frame, used as the `og:image` and as the stage's first frame |
+| `assets/film-scrub.mp4` | The landscape film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
+| `assets/film-phone-scrub.mp4` | The portrait cut for phones. 40 s, 720 × 1280, h264, 24 fps, 8.1 MB, keyed every 12 frames. The 1080 × 1920 master is rendered from `mograph-phone.html` with `--phone` |
+| `assets/poster.jpg` | Its landscape poster frame, used as the `og:image` and as the stage's first frame |
+| `assets/film-phone-poster.jpg` | The portrait poster, used by a portrait stage and its still fallback |
 | `assets/shot-webdemo.png` | The web demo's console at 1440 × 900, used as its poster and framed shot |
 | `assets/proof-*.png` | Proofs from the app's own engine |
 | `404.html` | The missing-plate not-found page: giant misregistered 404, dark proof frame, paper notes |
@@ -36,16 +38,24 @@ manager, no server. GitHub Pages serves this folder as it is.
 - **There is no second player.** The film cannot be restarted, replayed or
   scrubbed with a widget, on purpose: one control surface, one film. The
   masthead's section links move the page; the film stays with the scroll.
-- **A second encode feeds the stage.** Scrubbing means seeking, and seeking an
-  ordinary h264 file means decoding from the last keyframe, which stutters when
-  the playhead jumps. `assets/film-scrub.mp4` is 720p with a keyframe every 12
-  frames (`-g 12 -sc_threshold 0`), so every half second is independently
-  decodable:
+- **Two encodes feed the stage, one per shape.** Scrubbing means seeking, and
+  seeking an ordinary h264 file means decoding from the last keyframe, which
+  stutters when the playhead jumps. `assets/film-scrub.mp4` is the landscape
+  720p file; `assets/film-phone-scrub.mp4` is the portrait 720 × 1280 cut. Both
+  key every 12 frames (`-g 12 -sc_threshold 0`), so every half second is
+  independently decodable. A portrait window asks for the portrait file:
   ```bash
+  # landscape
   ffmpeg -i <app>/publicity/out/dither-studio-mograph-silent.mp4 -an \
     -vf "scale=1280:720:flags=lanczos" \
     -c:v libx264 -preset slow -crf 32 -g 12 -keyint_min 12 \
     -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-scrub.mp4
+
+  # portrait, from the phone page's master
+  ffmpeg -i <app>/publicity/out/dither-studio-mograph-phone-silent.mp4 -an \
+    -vf "scale=720:1280:flags=lanczos" \
+    -c:v libx264 -preset slow -crf 32 -g 12 -keyint_min 12 \
+    -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-phone-scrub.mp4
   ```
 - **The proof sheet is the second room.** After the dark film, the page turns to
   ivory paper: a giant ghost `PROOF`, oversized catalogue numbers and a sideways
@@ -72,11 +82,14 @@ manager, no server. GitHub Pages serves this folder as it is.
   repository; this site does not rebuild it, and its files are not requested
   until the link is used. Unlike the rest of the page, it cannot draw without a
   connection.
-- **Reduced motion** unpins the stage into a readable list, removes the video,
+- **Reduced motion** unpins the stage into a readable list, hides the video,
   and leaves every caption in the flow.
-- **Phones get the poster, not the film.** Under 900 px, or on a coarse pointer,
-  the stage unpins into the same readable list, the video element is removed,
-  and the film is never requested, so a phone does not download the 8.4 MB encode.
+- **Phones get the portrait cut.** A portrait window pins the stage and scrubs
+  `assets/film-phone-scrub.mp4`, so the paintings keep their composition instead
+  of being cropped from a 16:9 frame. The portrait poster is the first frame
+  while the film loads and the still fallback when it does not. Reduced motion
+  and save-data still get the poster and the captions in flow, with no video
+  requested.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
 no cookies, no analytics and no third-party fonts. Labels are set in the text
@@ -144,16 +157,16 @@ every heading do not, so they were removed, along with the counting numbers.
 
 ## The film's source
 
-The film is not recorded. It is one HTML page in the app's repository,
-`publicity/mograph.html`, where every frame is a function of time;
-`render-mograph.js` seeks it frame by frame in Playwright and encodes the result
-with ffmpeg.
+The film is not recorded. It is one HTML page in the app's repository, with a
+portrait companion on the same clock. `render-mograph.js` seeks each frame in
+Playwright and encodes the result with ffmpeg.
 
 ```bash
 # in the app's repository
-node publicity/render-mograph.js             # writes publicity/out/dither-studio-mograph-silent.mp4
-# export the silent poster to <this repo>/assets/poster.jpg, then rebuild the
-# scrub encode with the ffmpeg line above
+node publicity/render-mograph.js --notext          # 1920 × 1080 master
+node publicity/render-mograph.js --phone --notext  # 1080 × 1920 master
+# copy the poster frames, then build the two scrub encodes with the ffmpeg
+# lines above
 ```
 
 Re-render it whenever the app's interface changes, or the film will show a

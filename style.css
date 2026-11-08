@@ -333,6 +333,13 @@ body.no-js .beat {
 .stage[data-mode="still"] .beat:last-child,
 body.no-js .beat:last-child { margin-bottom: 0; }
 
+.stage[data-mode="still"] .beat,
+body.no-js .beat {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
 /* ---------- the claim, with the ask ---------- */
 
 .claim {
@@ -764,6 +771,16 @@ html.motion h2[data-clip] { clip-path: inset(0 0 108% 0); }
 @media (max-width: 430px) {
   .masthead__nav a[href="#stage"] { display: none; }
   .masthead__nav a { font-size: 12px; }
+}
+
+/* the poster follows the stage's shape: a phone should not see a 16:9 crop
+   when the film is held back */
+@media (orientation: portrait) {
+  .stage[data-mode="still"]::before,
+  body.no-js .stage::before {
+    aspect-ratio: 9 / 16;
+    background-image: url(assets/film-phone-poster.jpg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
