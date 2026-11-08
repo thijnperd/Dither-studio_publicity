@@ -258,7 +258,9 @@
       demoSet('loading');
       demoFrame = document.createElement('iframe');
       demoFrame.title = 'Dither Studio web demo';
-      demoFrame.src = demoUrl;
+      // The embedded console drops its own masthead and splash; the window
+      // around it already carries the title, and the start card was the wait.
+      demoFrame.src = demoUrl + (demoUrl.indexOf('?') === -1 ? '?' : '&') + 'embed=1';
       demoFrame.loading = 'eager';
       demoFrame.setAttribute('allow', 'clipboard-read; clipboard-write');
       demoFrame.addEventListener('load', function () {
