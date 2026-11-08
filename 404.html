@@ -6,43 +6,14 @@
 <title>Nothing at this address · Dither Studio</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="style.css">
-<style>
-  .notfound {
-    min-height: 100dvh;
-    max-width: 1100px;
-    margin-inline: auto;
-    padding: clamp(1.5rem, 6vw, 5rem);
-    display: grid;
-    grid-template-columns: minmax(150px, 0.32fr) minmax(0, 1fr);
-    gap: clamp(2rem, 6vw, 6rem);
-    align-items: center;
-    align-content: center;
-  }
-  .notfound__mote { width: min(100%, 190px); margin: 0; }
-  .notfound__mote img { display: block; width: 100%; height: auto; }
-  .notfound__body { max-width: 600px; }
-  .notfound__body .opening__lede { margin-top: 1.4rem; }
-  @media (max-width: 720px) {
-    .notfound { grid-template-columns: 1fr; align-content: start; gap: 2rem; padding-top: 4rem; }
-    .notfound__mote { width: 140px; }
-  }
-</style>
 </head>
 <body>
-<main class="opening notfound" aria-labelledby="notfound-title">
-  <figure class="notfound__mote">
-    <img src="mascot/mote-master.svg" width="512" height="512" alt="Mote, the press apprentice, still looking for the missing frame.">
-  </figure>
-  <div class="notfound__body">
-    <h1 id="notfound-title">This frame<br>was dithered<br>to nothing.</h1>
-    <p class="opening__lede">Mote checked twice. The address you asked for is not part of this page. The film is one click away.</p>
-    <p style="margin-top: 2rem;">
-      <a class="sub" href="./">Back to the film</a>
-    </p>
-    <p style="margin-top: 0.8rem;">
-      <a class="sub" href="mascot/">Meet the apprentice</a>
-    </p>
-  </div>
+<main class="opening" style="min-height: 100dvh; align-content: center; display: grid;">
+  <h1>This frame<br>was dithered<br>to nothing.</h1>
+  <p class="opening__lede">The address you asked for is not part of this page. The film is one click away.</p>
+  <p style="margin-top: 2rem;">
+    <a class="sub" href="./">Back to the film</a>
+  </p>
 </main>
 </body>
 </html>

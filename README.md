@@ -19,8 +19,7 @@ manager, no server. GitHub Pages serves this folder as it is.
 | `assets/film-scrub.mp4` | The film on the page. 40 s, 1280 × 720, h264, 24 fps, 8.4 MB, keyed every 12 frames. The 1920 × 1080 master lives in the app's `publicity/out/` |
 | `assets/poster.jpg` | Its poster frame, used as the `og:image` and as the stage's first frame |
 | `assets/proof-*.png` | Two proofs from the app's own engine |
-| `404.html` | The designed not-found page, with Mote doing the looking |
-| `mascot/` | Mote, the press apprentice: master SVG, CSS-animated copy, transparent PNGs, character notes and the character-file page |
+| `404.html` | The designed not-found page |
 
 ## How the page works
 

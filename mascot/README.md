@@ -26,7 +26,7 @@ The promise is one line: **every mark is a decision.**
 | **Face** | Two square ink eyes, a small smile, two lapis freckles |
 | **Trade** | A slate printer's apron with a lapis registration cross; a lapis loupe |
 | **Loose part** | One out-of-register pixel, forever floating near the bite |
-| **Home** | The quiet surfaces: 404, colophon, docs, empty states, stickers |
+| **Home** | This unlisted character file. No navigation, no 404, no colophon, no sitemap. |
 
 ### Three traits
 
@@ -117,11 +117,21 @@ Rejected directions:
 |---|---|
 | Masthead, hero, app icon, favicon | **The God** |
 | Launch film | **The God / the press** |
-| 404, colophon, docs, empty states, stickers | **Mote** |
+| This unlisted page (URL only) | **Mote** |
 | Loading screen | Neither; the press is working |
 
 Mote must never replace the mark, the hero image or the app icon. It is an
 apprentice, not a second brand.
+
+## Hidden by design
+
+This page is unlisted. It is not linked from the film, the 404, the colophon, the
+main README, or any navigation. `index.html` carries
+`noindex, nofollow, noarchive`. The URL is the only door.
+
+GitHub Pages is static, so this is unlisted, not access-controlled: anyone who
+has the exact URL can open it. If the page needs a real lock, that requires a
+server or an authentication layer.
 
 ## Files
 
