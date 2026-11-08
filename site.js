@@ -1,8 +1,8 @@
 /* Dither Studio publicity site.
    The page opens on the film. Scroll is the only control surface: no player, no
    timeline, no readout, and the film under the type is the app's own dither.
-   Phones, reduced-motion and save-data get the poster and the captions in flow
-   rather than a download they cannot scrub. */
+   Reduced motion and save-data get the poster and the captions in flow; a phone
+   gets the portrait encode and scrubs with the same scroll. */
 
 (function () {
   'use strict';
@@ -26,25 +26,35 @@
   var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var coarse = window.matchMedia('(pointer: coarse)').matches;
-  var narrow = window.matchMedia('(max-width: 900px)').matches;
   var thrifty = !!(navigator.connection && navigator.connection.saveData);
-  var canScrub = hasScroll && !reduce && !coarse && !narrow && !thrifty;
+  /* a phone can hold this: the stage pins and the scroll is the playhead there
+     too. Only a visitor who asked for less motion, or who is on a metered
+     connection, still gets the poster. */
+  var canScrub = hasScroll && !reduce && !thrifty;
   var mode = canScrub ? 'scrub' : 'still';
 
   if (stage) stage.setAttribute('data-mode', mode);
 
-  /* a phone gets the poster and the captions in flow, not a dormant video
-     element carrying a source it will never play */
-  if (!canScrub && video) {
-    video.removeAttribute('src');
-    video.remove();
+  /* ================= the encode for this shape of window =================
+     A portrait window wants the portrait cut: a 16:9 film covering a 9:16 stage
+     is cropped to a stripe, and the paintings in this one are the point. The
+     file follows the landscape encode's name, with "phone" before "scrub"
+     (assets/film-scrub.mp4 -> assets/film-phone-scrub.mp4), so the page still
+     carries one source and the portrait encode is the only new asset. */
+
+  function filmSource() {
+    var src = video.getAttribute('data-src');
+    if (!src) return null;
+    if (!window.matchMedia('(orientation: portrait)').matches) return src;
+    return src.replace(/-scrub\./, '-phone-scrub.');
   }
 
   /* ================= the film follows the scroll ================= */
 
   var want = null;    /* the time the scroll has asked for */
   var queued = 0;
+  var pinTrigger = null;
+  var degraded = false;
 
   function flush() {
     queued = 0;
@@ -62,12 +72,25 @@
     if (!queued) queued = window.requestAnimationFrame(flush);
   }
 
+  /* an encode that is absent or refuses to load must not leave a black stage:
+     the page falls back to the poster and the captions in flow, which is the
+     cut a visitor without the file would otherwise have got anyway */
+  function degrade() {
+    if (degraded) return;
+    degraded = true;
+    mode = 'still';
+    if (stage) stage.setAttribute('data-mode', mode);
+    if (pinTrigger) { pinTrigger.kill(); pinTrigger = null; }
+    if (hint) hint.classList.add('is-gone');
+  }
+
   if (canScrub && video) {
     /* the file is only asked for once we know this visitor can run it */
     video.preload = 'auto';
-    video.src = video.getAttribute('data-src');
+    video.src = filmSource();
     video.addEventListener('loadeddata', flush);
     video.addEventListener('seeked', flush);
+    video.addEventListener('error', degrade);
     video.pause();
   }
 
@@ -82,16 +105,14 @@
 
   /* ================= captions ride the film ================= */
 
-  var pinTrigger = null;
-
-  if (canScrub) {
+  if (canScrub && !degraded) {
     var perSecond = 100 / DURATION;
     var life = function (seconds) { return seconds * perSecond; };
     var FADE = 0.9;             /* seconds of film a caption takes to come and go */
 
     /* [in, out] in seconds of film, each inside the shot it describes:
-       hook 0–5.2, spark 5.2–9, turn 9–15, gods 15–22.2, press 22.2–30,
-       many 30–35, and the mark from 35 with no caption over it */
+       hook 0-5.2, spark 5.2-9, turn 9-15, gods 15-22.2, press 22.2-30,
+       many 30-35, and the mark from 35 with no caption over it */
     var CAPTIONS = [
       [2.6, 5.0],
       [5.6, 8.8],
