@@ -406,7 +406,7 @@ a { color: var(--ink); }
 
 @media (hover: hover) and (pointer: fine) {
   .missing__loupe { display: block; }
-  .missing__plate { cursor: crosshair; }
+  .missing__frame { cursor: zoom-in; }
   .back:hover { color: var(--lapis-deep); }
 }
 
@@ -447,5 +447,5 @@ a { color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
   .missing__loupe { transition: none; }
-  .missing__plate { cursor: default; }
+  .missing__frame { cursor: default; }
 }

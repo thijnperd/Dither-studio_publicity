@@ -75,22 +75,24 @@
 
 <script>
 (() => {
-  const plate = document.querySelector('.missing__plate');
+  const frame = document.querySelector('.missing__frame');
   const loupe = document.querySelector('[data-loupe]');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  if (!plate || !loupe || !fine.matches) return;
+  if (!frame || !loupe || !fine.matches) return;
 
   const hide = () => loupe.classList.remove('is-visible');
-  plate.addEventListener('pointermove', (event) => {
-    const rect = plate.getBoundingClientRect();
+  const show = (event) => {
+    const rect = frame.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
     const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
     loupe.style.setProperty('--x', event.clientX + 'px');
     loupe.style.setProperty('--y', event.clientY + 'px');
     loupe.style.backgroundPosition = (x * 100).toFixed(2) + '% ' + (y * 100).toFixed(2) + '%';
     loupe.classList.add('is-visible');
-  }, { passive: true });
-  plate.addEventListener('pointerleave', hide);
+  };
+  frame.addEventListener('pointerenter', show, { passive: true });
+  frame.addEventListener('pointermove', show, { passive: true });
+  frame.addEventListener('pointerleave', hide);
   window.addEventListener('scroll', hide, { passive: true });
 })();
 </script>
