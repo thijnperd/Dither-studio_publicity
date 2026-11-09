@@ -137,18 +137,19 @@ beneath the type and the demo veil. The catchable copy defects remain fixed: no
 decorative chapter numbers, no player chrome, no load curtain, and no eyebrow
 kickers; the mono is reserved for labels, captions and data.
 
-`impeccable` exits 0 with four hard-offset-shadow advisories on `index.html`:
-they are the proof sheet's lapis registration offsets, kept on purpose rather
-than neutralised. The marquee warning disappeared with the catalogue ticker.
-The filter and tally labels now meet the 11 px floor, the bar note clears WCAG AA
-contrast, and the brand faces and clamp-padding false positives remain waived
-with reasons in `.impeccable/config.json`.
+`impeccable` exits 0 with four hard-offset-shadow advisories on `index.html`
+and one on `404.html`: they are the proof sheet's lapis registration offsets,
+kept on purpose rather than neutralised. The catalogue and 404 marquees are
+gone. The filter and tally labels now meet the 11 px floor, the 404 rail, frame
+tags and byline clear it, the bar note clears WCAG AA contrast, and the brand
+faces, cream paper and clamp-padding false positives remain waived with reasons
+in `.impeccable/config.json`.
 
 ## The copy, and why it reads like this
 
 The page follows the site's own voice rules: no negative parallelisms (*not X,
 but Y*), no rhetorical rule of three, no "-ing" analysis tails, no puffery about
-significance, no em dashes (zero in `index.html`), and no words from the
+significance, no em dashes in the prose (the shelf’s temporary loading mark is a dash), and no words from the
 overused-vocabulary list. Every claim is a number the app can be tested against.
 Enumerations that survive are real inventories: the three paintings that ship,
 the algorithm families that exist.

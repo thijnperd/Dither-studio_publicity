@@ -23,6 +23,15 @@
         ],
         "createdAt": "2026-11-08T10:16:29.873Z",
         "reason": "The section rule reads clamp() top padding as no inset; every flagged section carries 3.5-6rem above its first child."
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "404.html"
+        ],
+        "createdAt": "2026-11-09T09:25:26.711Z",
+        "reason": "The 404 is printed on Dither Studio's ivory paper stock; the near-black ink carries the contrast. This is the brand's paper, not a default cream surface."
       }
     ]
   }
