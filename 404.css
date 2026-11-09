@@ -347,14 +347,6 @@ a { color: var(--ink); }
   border-bottom: 1px solid var(--edge);
 }
 
-.eyebrow {
-  margin: 0 0 1rem;
-  color: var(--lapis-deep);
-  font: 500 9px/1 var(--mono);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .missing__copy h2 {
   max-width: 15ch;
   margin: 0 0 0.85rem;
@@ -363,7 +355,7 @@ a { color: var(--ink); }
   letter-spacing: -0.045em;
 }
 
-.missing__copy p:not(.eyebrow) {
+.missing__copy p {
   max-width: 44ch;
   color: var(--muted);
   font-size: 17px;
@@ -485,7 +477,7 @@ a { color: var(--ink); }
   .missing__aside { font-size: 8px; }
   .missing__notes { padding: 2.4rem 0; gap: 1.6rem; }
   .missing__copy h2 { font-size: clamp(2.3rem, 11vw, 3.3rem); }
-  .missing__copy p:not(.eyebrow) { font-size: 16px; }
+  .missing__copy p { font-size: 16px; }
   .missing__quote { font-size: clamp(1.6rem, 7.6vw, 2.1rem); }
   .colophon { align-items: flex-start; flex-direction: column; gap: 0.5rem; padding-bottom: 2.4rem; }
 }

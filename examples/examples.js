@@ -34,6 +34,7 @@
   var grid = document.getElementById('shelf-grid');
   var note = document.getElementById('shelf-status');
   var count = document.getElementById('shelf-count');
+  var countNote = document.getElementById('shelf-count-note');
   var filters = Array.prototype.slice.call(document.querySelectorAll('.examples__filters [data-filter]'));
   if (!section || !grid || !note) return;
 
@@ -42,6 +43,32 @@
   var total = 0;
   var loaded = false;
   var loading = false;
+
+  /* The wall is a rhythm, not a uniform card grid: a wide lead plate, a narrow
+     companion, three small plates, then the same idea mirrored, and a final
+     pair. The loader applies it to the visible items, so a filter cannot leave
+     holes where a hidden file used to be. */
+  var RHYTHM = [
+    'lead', 'side',
+    'third', 'third', 'third',
+    'side', 'lead',
+    'third', 'third', 'third',
+    'half', 'half'
+  ];
+
+  function visibleItems() {
+    return Array.prototype.slice.call(grid.children).filter(function (item) {
+      return !item.hidden;
+    });
+  }
+
+  function applyLayout() {
+    visibleItems().forEach(function (item, index) {
+      item.setAttribute('data-layout', RHYTHM[index % RHYTHM.length]);
+      var plateIndex = item.querySelector('.shelf__index');
+      if (plateIndex) plateIndex.textContent = (index < 9 ? '0' : '') + (index + 1);
+    });
+  }
 
   function weight(bytes) {
     if (!bytes) return '';
@@ -92,7 +119,8 @@
       grid.textContent = '';
       note.hidden = false;
       note.textContent = 'The shelf is empty. Drop a still or a clip into examples/ and push it.';
-      if (count) count.textContent = '';
+      if (count) count.textContent = '—';
+      if (countNote) countNote.textContent = 'the folder is empty';
       return;
     }
 
@@ -101,11 +129,7 @@
       if (button.getAttribute('data-filter') === 'motion') button.hidden = !hasMotion;
     });
     if (!hasMotion && currentFilter === 'motion') {
-      currentFilter = 'all';
-      grid.setAttribute('data-filter', 'all');
-      filters.forEach(function (button) {
-        button.setAttribute('aria-pressed', String(button.getAttribute('data-filter') === 'all'));
-      });
+      show('all');
     }
 
     grid.textContent = '';
@@ -153,21 +177,32 @@
 
       var meta = document.createElement('span');
       meta.className = 'shelf__meta';
+
+      var index = document.createElement('span');
+      index.className = 'shelf__index';
+      index.setAttribute('aria-hidden', 'true');
+
+      var copy = document.createElement('span');
+      copy.className = 'shelf__copy';
+
       var name = document.createElement('b');
       name.textContent = title;
       var spec = document.createElement('span');
       spec.className = 'shelf__spec';
       spec.textContent = extension(file.name) + ' · ' + weight(file.size);
-      meta.appendChild(name);
-      meta.appendChild(spec);
+      copy.appendChild(name);
+      copy.appendChild(spec);
 
       var line = fileCaption(file.name);
       if (line) {
         var noteLine = document.createElement('span');
         noteLine.className = 'shelf__note';
         noteLine.textContent = line;
-        meta.appendChild(noteLine);
+        copy.appendChild(noteLine);
       }
+
+      meta.appendChild(index);
+      meta.appendChild(copy);
 
       /* once the browser knows the pixels, the caption can say how many */
       media.addEventListener(kind === 'motion' ? 'loadedmetadata' : 'load', function () {
@@ -189,28 +224,37 @@
     grid.appendChild(shelf);
     note.textContent = '';
     note.hidden = true;
+    applyLayout();
     updateCount();
   }
 
   function updateCount() {
-    if (!count) return;
-    var shown = currentFilter === 'all'
-      ? total
-      : grid.querySelectorAll('[data-kind="' + currentFilter + '"]').length;
-    count.textContent = currentFilter === 'all'
-      ? total + (total === 1 ? ' proof' : ' proofs') + ' on the shelf'
-      : shown + ' of ' + total + ' shown';
+    var shown = visibleItems().length;
+    if (count) count.textContent = String(currentFilter === 'all' ? total : shown);
+    if (countNote) {
+      countNote.textContent = currentFilter === 'all'
+        ? (total === 1 ? 'proof in the folder' : 'proofs in the folder')
+        : 'of ' + total + ' proofs shown';
+    }
+  }
+
+  function show(filterName) {
+    currentFilter = filterName;
+    grid.setAttribute('data-filter', currentFilter);
+    Array.prototype.forEach.call(grid.children, function (item) {
+      item.hidden = currentFilter !== 'all' && item.getAttribute('data-kind') !== currentFilter;
+    });
+    filters.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-filter') === currentFilter));
+    });
+    applyLayout();
+    updateCount();
   }
 
   function filter() {
     filters.forEach(function (button) {
       button.addEventListener('click', function () {
-        currentFilter = button.getAttribute('data-filter');
-        grid.setAttribute('data-filter', currentFilter);
-        filters.forEach(function (other) {
-          other.setAttribute('aria-pressed', String(other === button));
-        });
-        updateCount();
+        show(button.getAttribute('data-filter'));
       });
     });
   }
@@ -237,6 +281,8 @@
     setBusy(false);
     note.hidden = false;
     note.textContent = '';
+    if (count) count.textContent = '—';
+    if (countNote) countNote.textContent = 'the folder could not be read';
     note.appendChild(document.createTextNode('The shelf could not be read (' + error.message + '). '));
     var link = document.createElement('a');
     link.href = 'https://github.com/' + REPO + '/tree/main/' + DIR;
@@ -250,6 +296,8 @@
     setBusy(true);
     note.hidden = false;
     note.textContent = 'Reading the shelf…';
+    if (count) count.textContent = '—';
+    if (countNote) countNote.textContent = 'reading the folder';
 
     readCaptions().then(function (map) {
       CAPTIONS = map && typeof map === 'object' ? map : {};

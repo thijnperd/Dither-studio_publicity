@@ -370,7 +370,7 @@
       if (menuLabel) menuLabel.textContent = next ? 'Close' : 'Menu';
       document.body.classList.toggle('menu-open', next);
       var pageMain = document.querySelector('main');
-      var pageFooter = document.querySelector('.colophon');
+      var pageFooter = document.querySelector('.byline');
       if (pageMain) pageMain.toggleAttribute('inert', next);
       if (pageFooter) pageFooter.toggleAttribute('inert', next);
     };
@@ -402,11 +402,10 @@
 
   function syncMotionButtons() {
     motionButtons.forEach(function (button) {
-      button.setAttribute('aria-pressed', String(reduce));
-      button.setAttribute('aria-label', reduce
-        ? 'Turn motion back on; reloads the page'
-        : 'Reduce motion; reloads the page');
-      button.textContent = reduce ? 'Use motion' : 'Reduce motion';
+      button.setAttribute('aria-checked', String(reduce));
+      button.setAttribute('title', reduce
+        ? 'Motion is reduced. Turn it off; reloads the page.'
+        : 'Motion is on. Reduce it; reloads the page.');
     });
   }
 

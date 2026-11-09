@@ -11,8 +11,8 @@ manager, no server. GitHub Pages serves this folder as it is.
 | Path | What it is |
 |---|---|
 | `index.html` | The page: the poster-first film, the on-demand web demo, the feature plates, the proof shelf and one-page examples library, the offline ledger, the installation sheet and the download band |
-| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF`; also the paper proof sheet, the one-page examples shelf, the mobile menu, the catalogue ticker, the cursor loupe and the ivory installation notes |
-| `site.js` | The scroll stage and its deferred film, the section state, the scroll reveals, the GSAP layer, the mobile menu, the stored motion preference, the proof loupe, the rail's arrow controls and live count, and the loader that opens the existing web demo on request |
+| `style.css` | The film's own palette, to the hex: ground `#0B0D12`, press `#121722`, lapis `#7E93BE`, ivory `#EFEADF`; also the paper proof sheet, the specimen-wall examples, the mobile menu, the cursor loupe and the ivory installation notes |
+| `site.js` | The scroll stage and its deferred film, the section state, the scroll reveals, the GSAP layer, the mobile menu, the stored reduce-motion switch, the proof loupe, the rail's arrow controls and live count, and the loader that opens the existing web demo on request |
 | `assets/mark-64.png` | The film's mark, the God from *The Creation of Adam*, at 64 px: the masthead logo, in the rounded tile the close card gives it |
 | `assets/mark-192.png` | The same mark at 192 px, as the Apple touch icon |
 | `assets/mark.svg` | The mark condensed to the 32 grid and one bit, as rect runs: the favicon and the tab icon |
@@ -65,7 +65,7 @@ manager, no server. GitHub Pages serves this folder as it is.
     -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart assets/film-phone-scrub.mp4
   ```
 - **The proof sheet is the second room.** After the dark film, the page turns to
-  ivory paper: a giant ghost `PROOF`, oversized catalogue numbers and a sideways
+  ivory paper: oversized catalogue numbers and a sideways
   rail of proofs with hard lapis offsets. Four proofs keep their own aspect
   ratios on one scroll-snapping rail; the first two are console proofs, the last
   two come from `examples/`. The rail is focusable, draggable and keyboard
@@ -80,7 +80,8 @@ manager, no server. GitHub Pages serves this folder as it is.
 - **The last act is a product file, not another essay.** The page returns to the
   dark console for a zero ledger: no accounts, no uploads, no network calls. Then
   the installation notes print on ivory paper, set as a numbered sheet with the
-  build caveats and file sizes. The closing `TAKE` carries the download.
+  build caveats and file sizes. The closing download band carries the download,
+  then a one-line byline closes the page.
 - **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 24 palettes, 13 effects, 11 tone maps, 21 presets.
 - **The 404 carries the same print-room idea.** A missing plate is a blank
   sheet: a misregistered 404, a dark proof frame, a paper note and one way back.
@@ -95,9 +96,12 @@ manager, no server. GitHub Pages serves this folder as it is.
   until the link is used. Unlike the rest of the page, it cannot draw without a
   connection.
 - **Reduced motion** follows the system preference by default, and the
-  masthead has a stored `Reduce motion` option. Either one unpins the stage into
-  a readable list, hides the video, and leaves every caption in the flow. The
-  choice survives a reload and is read in the head before the page paints.
+  masthead carries a `Reduce motion` switch beside the section links. Turning it
+  on stores `reduce`; turning it off stores `full` over the system preference.
+  Either state unpins the stage into a readable list, hides the video, and
+  leaves every caption in the flow. The choice survives a reload and is read in
+  the head before the page paints; the switch reloads so the stage resets
+  cleanly.
 - **Phones get the portrait cut.** A portrait window pins the stage and scrubs
   `assets/film-phone-scrub.mp4`, so the paintings keep their composition instead
   of being cropped from a 16:9 frame. The portrait poster is the first frame
@@ -107,8 +111,8 @@ manager, no server. GitHub Pages serves this folder as it is.
   captions in flow, with no video requested.
 
 GSAP and ScrollTrigger come from jsDelivr; everything else is local. There are
-no cookies, no analytics and no third-party fonts. Labels are set in the text
-face, not in monospace.
+no cookies, no analytics and no third-party fonts. Body copy is set in Instrument
+Sans; labels, captions and data use IBM Plex Mono.
 
 ## Copy and design checks
 
@@ -124,23 +128,21 @@ node ~/.claude/skills/kill-ai-slop/scripts/scan.mjs .
 npx impeccable detect --json index.html
 ```
 
-The copy scanner reports 32 hits across five families, all of them the shared
-print-room vocabulary rather than copy or structure defects: the paper dot
-texture on 404/examples/Mascot, press-label eyebrows, display tracking read as
+The copy scanner reports 24 hits across four deliberate families: the paper dot
+texture on 404/examples/Mascot and the specimen wall, display tracking read as
 “full-sentence headline”, the circular loupe read as glassmorphism, and the
 mono face used for labels and data. The three gradient exceptions already carry
 scoped ignore comments in `style.css`: the spotlight over the film, the scrim
 beneath the type and the demo veil. The catchable copy defects remain fixed: no
-decorative chapter numbers, no player chrome, no load curtain, and the
-functional labels are set in the text face.
+decorative chapter numbers, no player chrome, no load curtain, and no eyebrow
+kickers; the mono is reserved for labels, captions and data.
 
-`impeccable` reports four hard-offset-shadow advisories and one marquee warning
-on `index.html`. The offsets are the proof sheet's lapis registration motif; the
-catalogue strip is decorative, pauses on hover and is removed under reduced
-motion. The two real findings from this pass were fixed: the rail counter is
-11 px rather than 10 px, and the rail instruction is sentence case rather than
-a 98-character all-caps line. The brand faces and clamp-padding false positives
-remain waived with reasons in `.impeccable/config.json`.
+`impeccable` exits 0 with four hard-offset-shadow advisories on `index.html`:
+they are the proof sheet's lapis registration offsets, kept on purpose rather
+than neutralised. The marquee warning disappeared with the catalogue ticker.
+The filter and tally labels now meet the 11 px floor, the bar note clears WCAG AA
+contrast, and the brand faces and clamp-padding false positives remain waived
+with reasons in `.impeccable/config.json`.
 
 ## The copy, and why it reads like this
 
@@ -169,7 +171,7 @@ every heading do not, so they were removed, along with the counting numbers.
   `@media (hover: hover) and (pointer: fine)`; every pressable element answers
   with `scale(0.98)`.
 - `prefers-reduced-motion` still unpins the stage into a readable list. The
-  stored motion toggle overrides the system preference in either direction; the
+  stored motion switch overrides the system preference in either direction; the
   film's encode is deferred until the intro actually starts.
 
 ## The film's source
@@ -234,8 +236,12 @@ old links. Drop stills (png, jpg, webp, gif, avif) or clips (mp4, webm, mov)
 into that folder and push: the loader reads the folder through GitHub's contents
 API, so there is no manifest to edit and no list that can fall out of step. It
 waits until the shelf is near the viewport before it asks for the listing or any
-image. The section is a paper contact sheet with Stills/Motion filters that
-appear only for kinds that exist. Curated display titles live in
+image. The section is a specimen wall, not a uniform card grid: a wide lead
+plate, a narrow companion, three smaller plates, the same rhythm mirrored, and
+a closing pair. The loader assigns that rhythm to the visible items, so the
+Stills/Motion filters (shown only for kinds that exist) reflow without holes.
+The head carries the live count; the cards carry an index, a crop of the plate
+and a link to the full file. Curated display titles live in
 `examples/examples.js`; a new file still appears with its file name as the
 title. Each card reports the real pixel size once the browser has loaded it.
 GitHub refuses files over 100 MB; keep clips short.

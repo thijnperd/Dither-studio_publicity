@@ -185,14 +185,6 @@ img { max-width: 100%; }
 
 .hero__copy { padding-bottom: 0.6rem; }
 
-.eyebrow {
-  margin-bottom: 1.15rem;
-  color: var(--lapis-deep);
-  font: 500 9px/1 var(--mono);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .hero h1 {
   margin-left: -0.07em;
   color: var(--ink);
@@ -360,8 +352,6 @@ img { max-width: 100%; }
 .creed__inner {
   padding: clamp(4rem, 9vh, 7rem) 0;
 }
-
-.creed .eyebrow { color: var(--lapis); }
 
 .creed h2 {
   max-width: 13ch;
