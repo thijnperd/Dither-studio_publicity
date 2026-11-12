@@ -95,6 +95,7 @@
   var total = 0;
   var loaded = false;
   var loading = false;
+  var railMoved = false;
 
   function visibleItems() {
     return Array.prototype.slice.call(grid.children).filter(function (item) {
@@ -166,6 +167,7 @@
     total = list.length;
     loaded = true;
     loading = false;
+    railMoved = false;
     setBusy(false);
 
     if (!total) {
@@ -284,11 +286,18 @@
     if (controls) controls.hidden = false;
     /* The images arrive after the cards do, and the browser can keep its own
        scroll anchor while the rail's height settles. Put the first plate back
-       under the left edge once that frame has run, not just before it. */
-    window.requestAnimationFrame(function () {
-      grid.scrollLeft = 0;
-      updateRail();
-    });
+       under the left edge once that frame has run, and once more after the
+       first images have decoded. A touch or a wheel means the visitor owns the
+       rail now; these late resets must not fight them. */
+    window.requestAnimationFrame(settleRail);
+    window.setTimeout(settleRail, 600);
+    window.setTimeout(settleRail, 1400);
+  }
+
+  function settleRail() {
+    if (railMoved) return;
+    grid.scrollLeft = 0;
+    updateRail();
   }
 
   function updateCount() {
@@ -328,6 +337,7 @@
   }
 
   function moveRail(delta) {
+    railMoved = true;
     var items = visibleItems();
     if (!items.length) return;
     var pad = parseFloat(window.getComputedStyle(grid).paddingLeft) || 0;
@@ -449,6 +459,9 @@
 
   if (controls && railPrev && railNext) {
     var railQueued = 0;
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (type) {
+      grid.addEventListener(type, function () { railMoved = true; }, { passive: true, once: true });
+    });
     railPrev.addEventListener('click', function () { moveRail(-1); });
     railNext.addEventListener('click', function () { moveRail(1); });
     grid.addEventListener('scroll', function () {
