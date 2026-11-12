@@ -10,7 +10,7 @@
   var DIR = 'examples';
   var IMAGE = /\.(avif|gif|jpe?g|png|webp)$/i;
   var VIDEO = /\.(mp4|mov|webm)$/i;
-  var CACHE_KEY = 'dither:shelf:v2';
+  var CACHE_KEY = 'dither:shelf:v3';
   var CACHE_MS = 60000;
 
   /* Curated display names for the files already in the folder. A new file
@@ -27,7 +27,55 @@
     'oedipus-the-answer': 'The answer',
     'orator-cyanotype': 'The orator, cyanotype',
     'thor-the-strike': 'Thor, the strike',
-    'thor-thermal-cam': 'Thor, thermal'
+    'thor-thermal-cam': 'Thor, thermal',
+    'oedipus-sweetie-16': 'Oedipus, Sweetie 16',
+    'thor-endesga-strike': 'Thor, Endesga strike',
+    'oedipus-nord-riddle': 'Oedipus, Nord',
+    'oedipus-nord-wing': 'The wing, Nord',
+    'council-sweetie-16': 'The Council, Sweetie 16',
+    'council-endesga-court': 'The Council, Endesga court',
+    'thor-oxide-rust': 'Thor, oxide',
+    'thor-kaleido-mask': 'Thor, kaleidoscope',
+    'oedipus-starfield': 'Oedipus, starfield',
+    'oedipus-selenium-wing': 'The wing, selenium',
+    'oedipus-tape-touch': 'The touch, tape',
+    'oedipus-channel-roll': 'The touch, channel roll',
+    'council-ripple-swirl': 'The Council, swirl'
+  };
+
+  /* The 0.3.0 set leads the shelf. It is a curated order, not a date sort:
+     GitHub returns the folder by name, so without this the new plates would be
+     scattered through the older proofs. */
+  var NEW_FILES = {
+    'oedipus-sweetie-16': true,
+    'thor-endesga-strike': true,
+    'oedipus-nord-riddle': true,
+    'oedipus-nord-wing': true,
+    'council-sweetie-16': true,
+    'council-endesga-court': true,
+    'thor-oxide-rust': true,
+    'thor-kaleido-mask': true,
+    'oedipus-starfield': true,
+    'oedipus-selenium-wing': true,
+    'oedipus-tape-touch': true,
+    'oedipus-channel-roll': true,
+    'council-ripple-swirl': true
+  };
+
+  var NEW_ORDER = {
+    'council-sweetie-16': 0,
+    'thor-kaleido-mask': 1,
+    'oedipus-sweetie-16': 2,
+    'thor-endesga-strike': 3,
+    'oedipus-nord-wing': 4,
+    'council-ripple-swirl': 5,
+    'oedipus-nord-riddle': 6,
+    'council-endesga-court': 7,
+    'oedipus-selenium-wing': 8,
+    'oedipus-tape-touch': 9,
+    'oedipus-channel-roll': 10,
+    'oedipus-starfield': 11,
+    'thor-oxide-rust': 12
   };
 
   var section = document.getElementById('examples');
@@ -35,6 +83,10 @@
   var note = document.getElementById('shelf-status');
   var count = document.getElementById('shelf-count');
   var countNote = document.getElementById('shelf-count-note');
+  var controls = document.querySelector('[data-shelf-controls]');
+  var railPrev = document.querySelector('[data-shelf-prev]');
+  var railNext = document.querySelector('[data-shelf-next]');
+  var railCount = document.querySelector('[data-shelf-count]');
   var filters = Array.prototype.slice.call(document.querySelectorAll('.examples__filters [data-filter]'));
   if (!section || !grid || !note) return;
 
@@ -44,30 +96,31 @@
   var loaded = false;
   var loading = false;
 
-  /* The wall is a rhythm, not a uniform card grid: a wide lead plate, a narrow
-     companion, three small plates, then the same idea mirrored, and a final
-     pair. The loader applies it to the visible items, so a filter cannot leave
-     holes where a hidden file used to be. */
-  var RHYTHM = [
-    'lead', 'side',
-    'third', 'third', 'third',
-    'side', 'lead',
-    'third', 'third', 'third',
-    'half', 'half'
-  ];
-
   function visibleItems() {
     return Array.prototype.slice.call(grid.children).filter(function (item) {
       return !item.hidden;
     });
   }
 
-  function applyLayout() {
+  function numberItems() {
     visibleItems().forEach(function (item, index) {
-      item.setAttribute('data-layout', RHYTHM[index % RHYTHM.length]);
       var plateIndex = item.querySelector('.shelf__index');
       if (plateIndex) plateIndex.textContent = (index < 9 ? '0' : '') + (index + 1);
     });
+  }
+
+  function baseName(name) {
+    return name.replace(/\.[^.]+$/, '');
+  }
+
+  function isNew(name) {
+    return !!NEW_FILES[baseName(name)];
+  }
+
+  function newRank(name) {
+    var key = baseName(name);
+    return NEW_FILES[key] && Object.prototype.hasOwnProperty.call(NEW_ORDER, key)
+      ? NEW_ORDER[key] : 99;
   }
 
   function weight(bytes) {
@@ -171,8 +224,8 @@
       plate.appendChild(media);
 
       var tag = document.createElement('span');
-      tag.className = 'shelf__tag';
-      tag.textContent = kind === 'motion' ? 'Motion' : 'Still';
+      tag.className = 'shelf__tag' + (isNew(file.name) ? ' is-new' : '');
+      tag.textContent = isNew(file.name) ? '0.3.0' : (kind === 'motion' ? 'Motion' : 'Still');
       plate.appendChild(tag);
 
       var meta = document.createElement('span');
@@ -224,8 +277,18 @@
     grid.appendChild(shelf);
     note.textContent = '';
     note.hidden = true;
-    applyLayout();
+    grid.scrollLeft = 0;
+    numberItems();
     updateCount();
+    updateRail();
+    if (controls) controls.hidden = false;
+    /* The images arrive after the cards do, and the browser can keep its own
+       scroll anchor while the rail's height settles. Put the first plate back
+       under the left edge once that frame has run, not just before it. */
+    window.requestAnimationFrame(function () {
+      grid.scrollLeft = 0;
+      updateRail();
+    });
   }
 
   function updateCount() {
@@ -238,17 +301,62 @@
     }
   }
 
+  /* The shelf is one row that snaps, not a wall that lengthens the page. These
+     controls move the same scroll container the finger and trackpad move, and
+     the count follows whichever card is nearest the left edge. */
+  function updateRail() {
+    if (!controls || !railPrev || !railNext || !railCount) return;
+    var items = visibleItems();
+    if (!items.length) {
+      controls.hidden = true;
+      return;
+    }
+    controls.hidden = false;
+    var pad = parseFloat(window.getComputedStyle(grid).paddingLeft) || 0;
+    var start = grid.getBoundingClientRect().left + pad;
+    var nearest = 0;
+    var best = Infinity;
+    items.forEach(function (item, index) {
+      var distance = Math.abs(item.getBoundingClientRect().left - start);
+      if (distance < best) { best = distance; nearest = index; }
+    });
+    railPrev.disabled = nearest === 0;
+    railNext.disabled = nearest === items.length - 1;
+    railCount.textContent = (nearest < 9 ? '0' : '') + (nearest + 1) + ' / ' +
+      (items.length < 10 ? '0' : '') + items.length;
+    railCount.setAttribute('aria-label', 'Proof ' + (nearest + 1) + ' of ' + items.length);
+  }
+
+  function moveRail(delta) {
+    var items = visibleItems();
+    if (!items.length) return;
+    var pad = parseFloat(window.getComputedStyle(grid).paddingLeft) || 0;
+    var start = grid.getBoundingClientRect().left + pad;
+    var nearest = 0;
+    var best = Infinity;
+    items.forEach(function (item, index) {
+      var distance = Math.abs(item.getBoundingClientRect().left - start);
+      if (distance < best) { best = distance; nearest = index; }
+    });
+    var target = items[Math.max(0, Math.min(items.length - 1, nearest + delta))];
+    var left = grid.scrollLeft + target.getBoundingClientRect().left - grid.getBoundingClientRect().left - pad;
+    var reduce = document.documentElement.getAttribute('data-motion') === 'reduce';
+    grid.scrollTo({ left: left, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
   function show(filterName) {
     currentFilter = filterName;
     grid.setAttribute('data-filter', currentFilter);
     Array.prototype.forEach.call(grid.children, function (item) {
       item.hidden = currentFilter !== 'all' && item.getAttribute('data-kind') !== currentFilter;
     });
+    grid.scrollLeft = 0;
     filters.forEach(function (button) {
       button.setAttribute('aria-pressed', String(button.getAttribute('data-filter') === currentFilter));
     });
-    applyLayout();
+    numberItems();
     updateCount();
+    updateRail();
   }
 
   function filter() {
@@ -323,9 +431,12 @@
             .sort(function (a, b) {
               /* stills first, then clips; within each, the file name groups a
                  painting's proofs together and keeps 2 before 10 */
+              var newA = newRank(a.name);
+              var newB = newRank(b.name);
               var clipA = VIDEO.test(a.name) ? 1 : 0;
               var clipB = VIDEO.test(b.name) ? 1 : 0;
-              return clipA - clipB || a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
+              return newA - newB || clipA - clipB ||
+                a.name.localeCompare(b.name, 'en', { numeric: true, sensitivity: 'base' });
             });
           try {
             sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), files: files }));
@@ -334,6 +445,26 @@
         })
         .catch(failed);
     });
+  }
+
+  if (controls && railPrev && railNext) {
+    var railQueued = 0;
+    railPrev.addEventListener('click', function () { moveRail(-1); });
+    railNext.addEventListener('click', function () { moveRail(1); });
+    grid.addEventListener('scroll', function () {
+      if (railQueued) return;
+      railQueued = window.requestAnimationFrame(function () {
+        railQueued = 0;
+        updateRail();
+      });
+    }, { passive: true });
+    window.addEventListener('resize', function () {
+      if (railQueued) return;
+      railQueued = window.requestAnimationFrame(function () {
+        railQueued = 0;
+        updateRail();
+      });
+    }, { passive: true });
   }
 
   filter();

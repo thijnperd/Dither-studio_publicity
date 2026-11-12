@@ -285,7 +285,7 @@
             <span class="examples__tally-num" id="shelf-count">…</span>
             <span class="examples__tally-label" id="shelf-count-note">reading the folder</span>
           </p>
-          <p>Every still and clip in <code>examples/</code> appears here, newest additions included, with no list to keep in step. <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">Open the folder</a>.</p>
+          <p>Every still and clip in <code>examples/</code> appears here, the 0.3.0 plates leading the shelf, with no list to keep in step. <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">Open the folder</a>.</p>
         </div>
       </div>
       <div class="examples__bar">
@@ -294,9 +294,16 @@
           <button type="button" data-filter="still" aria-pressed="false">Stills</button>
           <button type="button" data-filter="motion" aria-pressed="false">Motion</button>
         </div>
-        <p class="examples__bar-note">Each plate opens the full file</p>
+        <div class="examples__bar-tools">
+          <p class="examples__bar-note">Drag or swipe · each plate opens the full file</p>
+          <div class="examples__controls" data-shelf-controls hidden>
+            <button type="button" data-shelf-prev aria-controls="shelf-grid" aria-label="Previous proof">←</button>
+            <span class="examples__count" data-shelf-count aria-live="polite" aria-atomic="true">01 / 25</span>
+            <button type="button" data-shelf-next aria-controls="shelf-grid" aria-label="Next proof">→</button>
+          </div>
+        </div>
       </div>
-      <ul class="examples__grid" id="shelf-grid" data-filter="all" aria-labelledby="examples-title"></ul>
+      <ul class="examples__grid" id="shelf-grid" data-filter="all" aria-labelledby="examples-title" tabindex="0"></ul>
       <p class="examples__status" id="shelf-status">Reading the shelf…</p>
       <noscript>
         <p class="examples__status">The shelf is read by a script, which your browser has turned off. The files are in <a href="https://github.com/thijnperd/Dither-studio_publicity/tree/main/examples">the examples folder</a>.</p>
