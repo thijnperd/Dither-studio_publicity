@@ -78,11 +78,11 @@ manager, no server. GitHub Pages serves this folder as it is.
   listing through GitHub's contents API. The files are served from this site;
   `examples/index.html` redirects old links to `#examples`.
 - **The last act is a product file, not another essay.** The page returns to the
-  dark console for a zero ledger: no accounts, no uploads, no network calls. Then
+  dark console for a zero ledger: no accounts, no uploads, no tracking. Then
   the installation notes print on ivory paper, set as a numbered sheet with the
   build caveats and file sizes. The closing download band carries the download,
   then a one-line byline closes the page.
-- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 24 palettes, 13 effects, 11 tone maps, 21 presets.
+- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 27 palettes, 15 effects, 13 tone maps, 25 presets.
 - **The 404 carries the same print-room idea.** A missing plate is a blank
   sheet: a misregistered 404, a dark proof frame, a paper note and one way back.
   It is public and `noindex`, and it does not link to the unlisted character file.
