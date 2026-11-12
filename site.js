@@ -262,7 +262,7 @@
     el.textContent = platformLabel;
   });
 
-  /* the sizes are facts from the 0.3.0 release (bump with desktop/package.json):
+  /* the sizes are facts from the 0.3.1 release (bump with desktop/package.json):
      Windows 108 MB, macOS 124 MB on Apple silicon and 127 MB on Intel. The
      markup carries the Windows figure; only a Mac needs a different one. */
   if (isPhone) {
@@ -271,7 +271,7 @@
     });
   } else if (isMac) {
     Array.prototype.forEach.call(document.querySelectorAll('.js-meta'), function (el) {
-      el.textContent = 'Version 0.3.0 · 124 to 127 MB · free';
+      el.textContent = 'Version 0.3.1 · 124 to 127 MB · free';
     });
   }
 

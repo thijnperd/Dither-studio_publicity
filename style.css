@@ -642,6 +642,10 @@ body.no-js .beat {
 /* ---------- byline ---------- */
 
 .byline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   max-width: 1180px;
   margin: 0 auto;
   padding: clamp(1.7rem, 4vh, 2.6rem) var(--gutter) clamp(2.2rem, 5vh, 3.2rem);
@@ -649,10 +653,32 @@ body.no-js .beat {
 }
 
 .byline p {
-  margin: 0;
+  margin: 0 auto 0 0;
   color: var(--muted);
   font: 400 13px/1.7 var(--mono);
 }
+
+.byline__github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+  transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+
+.byline__github:focus-visible {
+  color: var(--ivory);
+  border-color: var(--lapis);
+  outline: 2px solid var(--lapis);
+  outline-offset: 3px;
+}
+
+.byline__github svg { display: block; }
 
 /* ---------- motion: the page sets itself as it is read ----------
    The head adds .motion only when motion is allowed, so a page with no script,
@@ -723,6 +749,7 @@ html[data-motion="reduce"] * { animation-duration: 0.001ms !important; transitio
   .masthead__take:hover { background: #fff; }
   .button:hover { background: #fff; }
   .sub:hover { color: var(--ivory); border-bottom-color: var(--lapis); }
+  .byline__github:hover { color: var(--ivory); border-color: var(--lapis); }
 }
 
 /* ---------- the examples shelf ---------- */
