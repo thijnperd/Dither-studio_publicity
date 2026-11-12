@@ -622,7 +622,7 @@ body.no-js .beat {
   font: 500 18px/1 var(--sans);
   transition: transform 140ms var(--ease-out), background 140ms var(--ease-out);
 }
-.button:active { transform: scale(0.99); }
+.button:active { transform: scale(0.97); }
 
 .button__meta {
   font: 400 12.5px/1 var(--mono);

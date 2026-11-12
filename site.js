@@ -271,7 +271,7 @@
     });
   } else if (isMac) {
     Array.prototype.forEach.call(document.querySelectorAll('.js-meta'), function (el) {
-      el.textContent = 'Version 0.2.5 · 124–127 MB · free';
+      el.textContent = 'Version 0.2.5 · 124 to 127 MB · free';
     });
   }
 

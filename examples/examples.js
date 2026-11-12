@@ -119,7 +119,7 @@
       grid.textContent = '';
       note.hidden = false;
       note.textContent = 'The shelf is empty. Drop a still or a clip into examples/ and push it.';
-      if (count) count.textContent = '—';
+      if (count) count.textContent = '…';
       if (countNote) countNote.textContent = 'the folder is empty';
       return;
     }
@@ -281,7 +281,7 @@
     setBusy(false);
     note.hidden = false;
     note.textContent = '';
-    if (count) count.textContent = '—';
+    if (count) count.textContent = '…';
     if (countNote) countNote.textContent = 'the folder could not be read';
     note.appendChild(document.createTextNode('The shelf could not be read (' + error.message + '). '));
     var link = document.createElement('a');
@@ -296,7 +296,7 @@
     setBusy(true);
     note.hidden = false;
     note.textContent = 'Reading the shelf…';
-    if (count) count.textContent = '—';
+    if (count) count.textContent = '…';
     if (countNote) countNote.textContent = 'reading the folder';
 
     readCaptions().then(function (map) {
