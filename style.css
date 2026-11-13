@@ -2187,3 +2187,49 @@ html[data-motion="reduce"] .examples__grid .shelf__link:hover .shelf__plate vide
 }
 
 body.no-js .examples__tally { display: none; }
+
+/* ---------- plugins ---------- */
+
+.panel--full { grid-template-columns: minmax(0, 1fr); }
+.panel--full .panel__body { max-width: 100%; }
+.panel--full .panel__body > p { max-width: 68ch; }
+
+.plugin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.2rem, 3vw, 2.2rem);
+  margin-top: 2rem;
+}
+
+.plugin-card {
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.plugin-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+  line-height: 1.05;
+}
+
+.plugin-card p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+.panel--full .plugin-note {
+  max-width: 72ch;
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 400 13px/1.6 var(--mono);
+}
+
+@media (max-width: 900px) {
+  .plugin-grid { grid-template-columns: 1fr; gap: 1.3rem; }
+  .plugin-card p { max-width: 60ch; }
+}

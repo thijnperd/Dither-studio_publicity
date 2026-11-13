@@ -82,7 +82,7 @@ manager, no server. GitHub Pages serves this folder as it is.
   the installation notes print on ivory paper, set as a numbered sheet with the
   build caveats and file sizes. The closing download band carries the download,
   then a one-line byline closes the page.
-- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 27 palettes, 15 effects, 13 tone maps, 25 presets.
+- **The counts** above the shelf are the app's catalogue lengths: 46 algorithms, 30 palettes, 17 effects, 13 tone maps, 25 presets.
 - **The 404 carries the same print-room idea.** A missing plate is a blank
   sheet: a misregistered 404, a dark proof frame, a paper note and one way back.
   It is public and `noindex`, and it does not link to the unlisted character file.

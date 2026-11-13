@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Dither Studio: the press, the film, the proof</title>
-<meta name="description" content="A dithering press for Windows and macOS, with the web build running in the browser. 46 algorithms, 27 palettes, text mode and video. It runs offline.">
+<meta name="description" content="A dithering press for Windows and macOS, with the web build running in the browser. 46 algorithms, 30 palettes, plugins, text mode and video. It runs offline.">
 <meta name="theme-color" content="#0B0D12">
 <meta name="author" content="Thijn Köhne">
 <link rel="canonical" href="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Dither Studio">
 <meta property="og:title" content="Dither Studio">
-<meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 27 palettes, and a text mode. Try the web demo in the page.">
+<meta property="og:description" content="Every mark placed by an algorithm. 46 of them, 30 palettes, plugins, and a text mode. Try the web demo in the page.">
 <meta property="og:url" content="https://thijnperd.github.io/Dither-studio_publicity/">
 <meta property="og:image" content="https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg">
 <meta property="og:image:width" content="1920">
@@ -54,7 +54,7 @@
 <link rel="apple-touch-icon" href="assets/mark-192.png">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Dither Studio","author":{"@type":"Person","name":"Thijn Köhne"},"applicationCategory":"GraphicsApplication","operatingSystem":"Windows, macOS","softwareVersion":"0.3.1","description":"An offline dithering press: 46 algorithms, 27 palettes, text mode and video, drawing every mark from a palette's own entries.","url":"https://thijnperd.github.io/Dither-studio_publicity/","downloadUrl":"https://github.com/thijnperd/dither-studio/releases/latest","image":"https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Dither Studio","author":{"@type":"Person","name":"Thijn Köhne"},"applicationCategory":"GraphicsApplication","operatingSystem":"Windows, macOS","softwareVersion":"0.5.1","description":"An offline dithering press: 46 algorithms, 30 palettes, plugins, text mode and video, drawing every mark from a palette's own entries.","url":"https://thijnperd.github.io/Dither-studio_publicity/","downloadUrl":"https://github.com/thijnperd/dither-studio/releases/latest","image":"https://thijnperd.github.io/Dither-studio_publicity/assets/poster.jpg","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
 </script>
 </head>
 <body class="no-js">
@@ -73,6 +73,7 @@
   <nav class="masthead__nav" id="site-menu" aria-label="Sections">
     <a href="#stage">Film</a>
     <a href="#press">Demo</a>
+    <a href="#plugins">Plugins</a>
     <a href="#proofs">Proofs</a>
     <a href="#examples">Examples</a>
     <button class="motion-toggle" type="button" data-motion-toggle role="switch" aria-checked="false" title="Reloads the page">
@@ -138,7 +139,7 @@
     <div class="claim__take" data-reveal>
       <a class="button" id="download" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
-        <span class="button__meta js-meta">Version 0.3.1 · 108 MB · free</span>
+        <span class="button__meta js-meta">Version 0.5.1 · 108 MB · free</span>
       </a>
       <a class="claim__demo" href="#press">Try the web demo <span aria-hidden="true">→</span></a>
       <p class="claim__fine">Windows and macOS. The build is unsigned, so the system asks once. It draws the same with the cable out.</p>
@@ -149,7 +150,7 @@
   <section class="demo" id="press" aria-labelledby="demo-title" data-demo data-state="idle">
     <div class="demo__head">
       <h2 id="demo-title" data-clip>Try the press before you take it.</h2>
-      <p class="demo__lede" data-reveal>The web build, one click away. Same 46 algorithms and 27 palettes as the desktop app, with no install and nothing uploaded. <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Open it in its own tab</a> if you would rather keep it.</p>
+      <p class="demo__lede" data-reveal>The web build, one click away. Same 46 algorithms and 30 palettes as the desktop app, with no install and nothing uploaded. <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Open it in its own tab</a> if you would rather keep it.</p>
     </div>
 
     <div class="demo__window">
@@ -170,7 +171,7 @@
         </div>
       </div>
       <div class="demo__bar demo__bar--foot">
-        <span>46 algorithms / 27 palettes / 15 effects</span>
+        <span>46 algorithms / 30 palettes / 17 effects</span>
         <a href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Open in a new tab</a>
       </div>
     </div>
@@ -212,6 +213,28 @@
     </figure>
   </section>
 
+  <section class="panel panel--full" id="plugins" aria-labelledby="plugins-title">
+    <div class="panel__body">
+      <h2 id="plugins-title" data-clip>Plugins are packages, not scripts.</h2>
+      <p data-reveal>File ▸ Plugin Manager installs declarative JSON packages that switch on a built-in tool or add recipes and inks. Installed packages stay on the machine, and nothing inside one can run.</p>
+      <div class="plugin-grid">
+        <article class="plugin-card" data-reveal>
+          <h3>Ink Extractor</h3>
+          <p>Pulls a limited palette from the open image through four extraction methods, then hands it to the normal palette importer.</p>
+        </article>
+        <article class="plugin-card" data-reveal>
+          <h3>Shape Press</h3>
+          <p>Adds barcode, cross-stitch, halftone and bitmap shapes to the effect stack, hidden until its package is installed.</p>
+        </article>
+        <article class="plugin-card" data-reveal>
+          <h3>Color Scheme Maker</h3>
+          <p>Drafts lockable inks with harmony rules, a Lospec or pasted palette, image seeding, a contrast meter and tone/hue sorting. Saved schemes can be renamed, reopened or deleted from File ▸ Manage Color Schemes; the result can leave as a palette pack.</p>
+        </article>
+      </div>
+      <p class="plugin-note" data-reveal>The bundled catalogue has seven packages: three tools and four preset packs. The Presets picker keeps the built-in recipes first and gives each installed pack its own heading. Preset and palette packs add recipes or inks, and a pack exported by one Dither Studio installs from a file in another. Removing a pack takes its heading and entries with it.</p>
+    </div>
+  </section>
+
   <section class="proofs" id="proofs" aria-labelledby="proofs-title">
     <div class="proofs__inner">
     <div class="proofs__head">
@@ -221,8 +244,8 @@
 
     <dl class="stats" aria-label="Catalogues in the app">
       <div data-reveal><dt>Algorithms</dt><dd>46</dd></div>
-      <div data-reveal><dt>Palettes</dt><dd>27</dd></div>
-      <div data-reveal><dt>Effects</dt><dd>15</dd></div>
+      <div data-reveal><dt>Palettes</dt><dd>30</dd></div>
+      <div data-reveal><dt>Effects</dt><dd>17</dd></div>
       <div data-reveal><dt>Tone maps</dt><dd>13</dd></div>
       <div data-reveal><dt>Presets</dt><dd>25</dd></div>
     </dl>
@@ -337,7 +360,7 @@
           <span class="fact__num">0</span>
           <div>
             <h3>Tracking</h3>
-            <p>No fonts, no analytics, no licence check. The installed app checks GitHub for a new release (and downloads one only when you approve it); your images are never sent anywhere. The web demo above loads only when you start it.</p>
+            <p>No fonts, no analytics, no licence check. The installed app checks GitHub for a new release (and downloads one only when you approve it), and one Lospec palette when you ask it to import one; your images are never sent anywhere. The web demo above loads only when you start it.</p>
           </div>
         </div>
       </div>
@@ -376,12 +399,12 @@
     <div class="take__actions" data-reveal>
       <a class="button" href="https://github.com/thijnperd/dither-studio/releases/latest">
         <span class="js-platform">Download for Windows</span>
-        <span class="button__meta js-meta">Version 0.3.1 · 108 MB · free</span>
+        <span class="button__meta js-meta">Version 0.5.1 · 108 MB · free</span>
       </a>
       <a class="sub" href="https://github.com/thijnperd/dither-studio/releases">Other builds: portable exe, macOS disk image</a>
       <a class="sub" href="https://thijnperd.github.io/dither-studio/" target="_blank" rel="noopener">Try the web demo first</a>
     </div>
-    <p class="take__fine" data-reveal>There is no server in this product. The installed app checks the public GitHub release page for updates, and otherwise works from your disk; the web demo above loads only when you start it.</p>
+    <p class="take__fine" data-reveal>There is no server in this product. The installed app checks the public GitHub release page for updates, and the Lospec palette you ask it to import, and otherwise works from your disk; the web demo above loads only when you start it.</p>
     <p class="device-note">Desktop app only: Windows and macOS. It does not run on phones or tablets.</p>
   </section>
 
